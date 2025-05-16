@@ -24,7 +24,7 @@ class ForgotPasswordController extends BaseController
             throw new \Exception($validator->messages()->first(), JsonResponse::HTTP_BAD_REQUEST);
         }
 
-        $user = User::whereEmail($request->input('email'))->whereNotAdmin()->firstOrFail();
+        $user = User::whereEmail($request->input('email'))->notSuperAdmin()->firstOrFail();
 
         if (! $user->hasVerifiedEmail()) {
             throw new \Exception('Your email address is not verified.');
@@ -58,7 +58,7 @@ class ForgotPasswordController extends BaseController
             throw new \Exception($validator->messages()->first(), JsonResponse::HTTP_BAD_REQUEST);
         }
 
-        $user = User::whereEmail($request->input('email'))->whereNotAdmin()->firstOrFail();
+        $user = User::whereEmail($request->input('email'))->notSuperAdmin()->firstOrFail();
 
         if (! $user->hasVerifiedEmail()) {
             throw new \Exception('Your email address is not verified.');

@@ -4,12 +4,10 @@ use App\Http\Controllers\API as Controllers;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest', 'throttle:5,1')->group(function () {
-    Route::post('/register', [Controllers\Auth\RegisterController::class, 'register']);
-    Route::post('/register/otp/resend', [Controllers\Auth\RegisterController::class, 'resendOtp']);
-    Route::post('/register/otp/verify', [Controllers\Auth\RegisterController::class, 'verifyOtp']);
-
+    // Login route
     Route::post('/login', [Controllers\Auth\LoginController::class, 'login']);
 
+    // Forgot password routes
     Route::post('/forgot-password', [Controllers\Auth\ForgotPasswordController::class, 'sendOtp']);
     Route::post('/forgot-password/update', [Controllers\Auth\ForgotPasswordController::class, 'updatePassword']);
 });
@@ -24,5 +22,6 @@ Route::middleware('auth:sanctum', 'verified', 'suspended')->group(function () {
         Route::post('/password/change', [Controllers\Profile\PasswordController::class, 'change']);
     });
 
+    // Logout route
     Route::post('/logout', [Controllers\Auth\LoginController::class, 'logout']);
 });
