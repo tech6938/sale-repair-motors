@@ -8,9 +8,6 @@ Route::fallback(function () {
 });
 
 Route::middleware('guest')->group(function () {
-    Route::get('register', [Controllers\Auth\RegisteredUserController::class, 'create'])->name('register');
-    Route::post('register', [Controllers\Auth\RegisteredUserController::class, 'store'])->middleware('throttle:5,1');
-
     Route::get('login', [Controllers\Auth\AuthenticatedSessionController::class, 'create'])->name('login');
     Route::post('login', [Controllers\Auth\AuthenticatedSessionController::class, 'store'])->middleware('throttle:3,1');
 
