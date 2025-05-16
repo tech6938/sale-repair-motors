@@ -28,7 +28,6 @@ return new class extends Migration
             // System fields
             $table->string('status', 12)->default(User::STATUS_ACTIVE);
             $table->text('admin_comments')->nullable();
-            $table->timestamp('email_verified_at')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

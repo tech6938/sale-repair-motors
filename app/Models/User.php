@@ -10,15 +10,13 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Builder;
 use App\Notifications\OtpEmailNotification;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Notifications\PasswordResetNotification;
 use App\Notifications\InvitationEmailNotification;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use App\Notifications\EmailVerificationNotification;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class User extends Authenticatable implements MustVerifyEmail
+class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable, HasRoles, HasApiTokens, HasUuid, Timestamps;
@@ -90,13 +88,6 @@ class User extends Authenticatable implements MustVerifyEmail
         }
 
         return '<span class="badge">Unknown</span>';
-    }
-
-    public function getEmailVerificationBadgeAttribute()
-    {
-        return !empty($this->email_verified_at)
-            ? '<span class="badge bg-success">Yes</span>'
-            : '<span class="badge bg-danger">No</span>';
     }
 
     public function scopeInvited(Builder $query)
@@ -192,11 +183,6 @@ class User extends Authenticatable implements MustVerifyEmail
     public function sendPasswordResetNotification($token)
     {
         $this->notify(new PasswordResetNotification($token));
-    }
-
-    public function sendEmailVerificationNotification()
-    {
-        $this->notify(new EmailVerificationNotification());
     }
 
     public function sendInvitationEmailNotification()

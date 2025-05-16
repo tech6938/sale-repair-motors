@@ -38,7 +38,6 @@ class UserSeeder extends Seeder
             'email' => 'superadmin@domain.com',
             'password' => '12345678',
             'status' => User::STATUS_ACTIVE,
-            'email_verified_at' => now(),
             'created_at' => now(),
         ]);
 
@@ -67,7 +66,6 @@ class UserSeeder extends Seeder
                 'password' => $this->password,
                 'phone' => '12345679' . str_pad($i, 2, '0', STR_PAD_LEFT),
                 'status' => 'active',
-                'email_verified_at' => now(),
                 'created_at' => now(),
             ];
         }
@@ -91,7 +89,6 @@ class UserSeeder extends Seeder
                 'password' => $this->password,
                 'phone' => '12345680' . str_pad($i, 2, '0', STR_PAD_LEFT),
                 'status' => 'active',
-                'email_verified_at' => now(),
                 'created_at' => now(),
             ];
         }

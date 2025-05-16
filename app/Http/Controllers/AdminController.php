@@ -212,10 +212,6 @@ class AdminController extends Controller implements HasMiddleware
             return $record->address ? addEllipsis(ucfirst($record->address)) : canEmpty($record->address);
         });
 
-        $dt->addColumn('is_email_verified', function ($record) {
-            return $record->email_verification_badge;
-        });
-
         $dt->addColumn('status', function ($record) {
             return $record->status_badge;
         });
@@ -263,7 +259,7 @@ class AdminController extends Controller implements HasMiddleware
 
         $dt->addIndexColumn();
 
-        $dt->rawColumns(['actions', 'name', 'phone', 'address', 'is_email_verified', 'status', 'comments', 'created', 'updated']);
+        $dt->rawColumns(['actions', 'name', 'phone', 'address', 'status', 'comments', 'created', 'updated']);
 
         return $dt->make(true);
     }

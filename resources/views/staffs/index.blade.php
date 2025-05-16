@@ -40,7 +40,6 @@
                             <th><span class="sub-text">Name</span></th>
                             <th><span class="sub-text">Phone</span></th>
                             <th><span class="sub-text">Address</span></th>
-                            <th><span class="sub-text">Is Email Verified?</span></th>
                             <th><span class="sub-text">Status</span></th>
                             <th><span class="sub-text">Comments</span></th>
                             <th><span class="sub-text">Created</span></th>
@@ -82,10 +81,6 @@
                 {
                     data: 'address',
                     name: 'address'
-                },
-                {
-                    data: 'is_email_verified',
-                    name: 'is_email_verified'
                 },
                 {
                     data: 'status',
