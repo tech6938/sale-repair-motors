@@ -26,10 +26,6 @@ class ForgotPasswordController extends BaseController
 
         $user = User::whereEmail($request->input('email'))->notSuperAdmin()->firstOrFail();
 
-        if (! $user->hasVerifiedEmail()) {
-            throw new \Exception('Your email address is not verified.');
-        }
-
         if ($user->isSuspended()) {
             throw new UnauthorizedException('It looks like your account has been terminated for an indefinite period.');
         }
@@ -59,10 +55,6 @@ class ForgotPasswordController extends BaseController
         }
 
         $user = User::whereEmail($request->input('email'))->notSuperAdmin()->firstOrFail();
-
-        if (! $user->hasVerifiedEmail()) {
-            throw new \Exception('Your email address is not verified.');
-        }
 
         if ($user->isSuspended()) {
             throw new UnauthorizedException('It looks like your account has been terminated for an indefinite period.');

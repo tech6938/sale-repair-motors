@@ -27,10 +27,6 @@ class LoginController extends BaseController
 
         $user = User::whereEmail($request->input('email'))->notSuperAdmin()->firstOrFail();
 
-        if (! $user->hasVerifiedEmail()) {
-            throw new \Exception('Your email address is not verified.');
-        }
-
         // We can handle these checks manually here since we don't have an auth user at this point
         if ($user->isSuspended()) {
             throw new UnauthorizedException('It looks like your account has been terminated for an indefinite period.');

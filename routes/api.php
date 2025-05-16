@@ -12,7 +12,7 @@ Route::middleware('guest', 'throttle:5,1')->group(function () {
     Route::post('/forgot-password/update', [Controllers\Auth\ForgotPasswordController::class, 'updatePassword']);
 });
 
-Route::middleware('auth:sanctum', 'verified', 'suspended')->group(function () {
+Route::middleware('auth:sanctum', 'suspended')->group(function () {
     // Profile routes
     Route::group(['prefix' => 'profile'], function () {
         Route::get('/', [Controllers\Profile\ProfileController::class, 'view']);

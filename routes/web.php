@@ -22,7 +22,7 @@ Route::middleware('auth')->group(function () {
     Route::post('logout', [Controllers\Auth\AuthenticatedSessionController::class, 'destroy'])->name('logout');
 });
 
-Route::middleware('auth', 'verified', 'suspended')->group(function () {
+Route::middleware('auth', 'suspended')->group(function () {
     // Dashboard routes
     Route::get('dashboard', [Controllers\DashboardController::class, 'index'])->name('dashboard');
 
