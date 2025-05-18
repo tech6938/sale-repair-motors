@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Staffs;
 
+use Illuminate\Validation\Rules\Password;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StaffStoreRequest extends FormRequest
@@ -24,6 +25,7 @@ class StaffStoreRequest extends FormRequest
         return [
             'name' => 'required|string|max:50',
             'email' => 'required|email|max:255|unique:users,email',
+            'password' => ['required', 'confirmed', Password::defaults()],
         ];
     }
 }

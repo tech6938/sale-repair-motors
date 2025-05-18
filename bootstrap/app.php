@@ -42,7 +42,7 @@ return Application::configure(basePath: dirname(__DIR__))
     })
     ->withExceptions(function (Exceptions $exceptions) {
         $exceptions->render(function (NotFoundHttpException $e, Request $request) {
-            if ($request->is('api*')) {
+            if ($request->is('api*') || $request->expectsJson()) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Record not found.',
@@ -75,7 +75,15 @@ return Application::configure(basePath: dirname(__DIR__))
             ]);
         });
 
-        $exceptions->render(function (UnauthorizedException $e) {
+        $exceptions->render(function (UnauthorizedException $e, Request $request) {
+            if ($request->is('api*')) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Unauthorized',
+                    'data' => []
+                ], JsonResponse::HTTP_UNAUTHORIZED);
+            }
+
             return redirect()->route('profile.index');
         });
 
@@ -85,7 +93,7 @@ return Application::configure(basePath: dirname(__DIR__))
                     'success' => false,
                     'message' => $e->getMessage(),
                     'data' => []
-                ], JsonResponse::HTTP_UNAUTHORIZED);
+                ], JsonResponse::HTTP_BAD_REQUEST);
             }
         });
     })->create();

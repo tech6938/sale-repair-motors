@@ -2,26 +2,27 @@
 
 namespace App\Models;
 
+use Illuminate\Http\Request;
 use App\Models\Concerns\HasUuid;
 use Laravel\Sanctum\HasApiTokens;
 use App\Models\Concerns\Timestamps;
+use App\Models\Concerns\HasOwnership;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Builder;
 use App\Notifications\OtpEmailNotification;
 use App\Notifications\PasswordResetNotification;
-use App\Notifications\InvitationEmailNotification;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable, HasRoles, HasApiTokens, HasUuid, Timestamps;
+    use HasFactory, Notifiable, HasRoles, HasApiTokens, HasUuid, Timestamps, HasOwnership;
 
-    public const STATUS_INVITED = 'invited';
     public const STATUS_ACTIVE = 'active';
     public const STATUS_SUSPENDED = 'suspended';
 
@@ -31,6 +32,7 @@ class User extends Authenticatable
 
     protected $fillable = [
         'uuid',
+        'owner_id',
 
         // Personal info
         'name',
@@ -63,6 +65,16 @@ class User extends Authenticatable
         return $this->hasMany(Setting::class);
     }
 
+    public function ownerships(): HasMany
+    {
+        return $this->hasMany(User::class, 'owner_id');
+    }
+
+    public function owner(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'owner_id');
+    }
+
     public function getAvatarThumbnailUrlAttribute()
     {
         return $this->avatar ? Storage::disk('public')->url('thumbnails/' . $this->avatar) : null;
@@ -75,10 +87,6 @@ class User extends Authenticatable
 
     public function getStatusBadgeAttribute()
     {
-        if ($this->status == self::STATUS_INVITED) {
-            return '<span class="badge bg-warning">Invited</span>';
-        }
-
         if ($this->status == self::STATUS_ACTIVE) {
             return '<span class="badge bg-success">Active</span>';
         }
@@ -88,11 +96,6 @@ class User extends Authenticatable
         }
 
         return '<span class="badge">Unknown</span>';
-    }
-
-    public function scopeInvited(Builder $query)
-    {
-        return $query->where('status', self::STATUS_INVITED);
     }
 
     public function scopeActive(Builder $query)
@@ -122,12 +125,27 @@ class User extends Authenticatable
 
     public function scopeNotSuperAdmin(Builder $query)
     {
-        return $query->whereHas('roles', fn($q) => $q->whereIn('name', self::getRoles()));
+        return $query->whereHas('roles', fn($q) => $q->whereIn('name', [self::ROLE_ADMIN, self::ROLE_STAFF]));
     }
 
-    public function isInvited()
+    public function scopeApplyFilters(Builder $query)
     {
-        return $this->status === self::STATUS_INVITED;
+        if (request()->has('search')) {
+            $search = trim(request()->input('search'));
+            $keywords = explode(' ', $search);
+
+            $query->where(function ($query) use ($keywords) {
+                foreach ($keywords as $word) {
+                    $query->orWhere('name', 'like', "%$word%")
+                        ->orWhere('email', 'like', "%$word%")
+                        ->orWhere('phone', 'like', "%$word%")
+                        ->orWhere('address', 'like', "%$word%")
+                        ->orWhere('status', 'like', "%$word%");
+                }
+            });
+        }
+
+        return $query;
     }
 
     public function isActive()
@@ -138,11 +156,6 @@ class User extends Authenticatable
     public function isSuspended()
     {
         return $this->status === self::STATUS_SUSPENDED;
-    }
-
-    public function hasCompleteProfile()
-    {
-        return $this->status !== self::STATUS_INVITED;
     }
 
     public function isSuperAdmin()
@@ -160,34 +173,9 @@ class User extends Authenticatable
         return $this->hasRole(self::ROLE_STAFF);
     }
 
-    public static function getStatuses(?string $separator = '|')
-    {
-        if (!$separator) {
-            return [self::STATUS_INVITED, self::STATUS_ACTIVE, self::STATUS_SUSPENDED];
-        }
-
-        return implode($separator, [self::STATUS_INVITED, self::STATUS_ACTIVE, self::STATUS_SUSPENDED]);
-    }
-
-    public static function getRoles(?string $separator = null, bool $includeSuperAdmin = false)
-    {
-        $roles = [self::ROLE_ADMIN, self::ROLE_STAFF];
-
-        if ($includeSuperAdmin) {
-            $roles[] = self::ROLE_SUPER_ADMIN;
-        }
-
-        return $separator ? implode($separator, $roles) : $roles;
-    }
-
     public function sendPasswordResetNotification($token)
     {
         $this->notify(new PasswordResetNotification($token));
-    }
-
-    public function sendInvitationEmailNotification()
-    {
-        $this->notify(new InvitationEmailNotification());
     }
 
     public function sendOtpEmailNotification($otp)

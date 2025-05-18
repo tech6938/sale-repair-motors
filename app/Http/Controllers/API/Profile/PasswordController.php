@@ -2,28 +2,14 @@
 
 namespace App\Http\Controllers\API\Profile;
 
-use App\Models\User;
-use App\Traits\FileUploader;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use App\Http\Resources\User\UserResource;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\API\BaseController;
-use Illuminate\Routing\Controllers\Middleware;
-use Illuminate\Routing\Controllers\HasMiddleware;
 
-class PasswordController extends BaseController implements HasMiddleware
+class PasswordController extends BaseController
 {
-
-    public static function middleware(): array
-    {
-        return [
-            new Middleware('role:' . User::getRoles(separator: '|'), only: ['view', 'update']),
-        ];
-    }
-
     /**
      * Update logged in user profile
      *

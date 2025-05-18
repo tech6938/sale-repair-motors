@@ -33,6 +33,7 @@ class UserSeeder extends Seeder
     private function createSuperAdmin(): void
     {
         $superAdmin = User::create([
+            'owner_id' => 1,
             'uuid' => '8f7783ec56',
             'name' => 'Super Admin',
             'email' => 'superadmin@domain.com',
@@ -60,6 +61,7 @@ class UserSeeder extends Seeder
 
         for ($i = 1; $i <= 3; $i++) {
             $admins[] = [
+                'owner_id' => 1,
                 'uuid' => getUuid(),
                 'name' => 'Admin ' . $i,
                 'email' => 'admin' . $i . '@domain.com',
@@ -83,6 +85,7 @@ class UserSeeder extends Seeder
 
         for ($i = 1; $i <= 3; $i++) {
             $staffs[] = [
+                'owner_id' => 1,
                 'uuid' => getUuid(),
                 'name' => 'Staff ' . $i,
                 'email' => 'staff' . $i . '@domain.com',

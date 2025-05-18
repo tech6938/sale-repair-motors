@@ -6,7 +6,6 @@ use Illuminate\View\View;
 use App\Traits\FileUploader;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -39,13 +38,9 @@ class AvatarController extends Controller
                 auth()->user()->avatar
             );
 
-            DB::beginTransaction();
-
             auth()->user()->update([
                 'avatar' => $path,
             ]);
-
-            DB::commit();
 
             return $this->jsonResponse([
                 'message' => 'Avatar updated successfully.',
@@ -54,7 +49,6 @@ class AvatarController extends Controller
                 ]
             ]);
         } catch (\Exception $e) {
-            DB::rollBack();
             return $this->jsonResponse($e->getMessage(), $e->getCode());
         }
     }

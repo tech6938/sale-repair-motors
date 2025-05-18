@@ -24,4 +24,18 @@ Route::middleware('auth:sanctum', 'suspended')->group(function () {
 
     // Logout route
     Route::post('/logout', [Controllers\Auth\LoginController::class, 'logout']);
+
+    // Admin routes
+    Route::get('/admins', [Controllers\AdminController::class, 'list']);
+    Route::post('/admins', [Controllers\AdminController::class, 'store']);
+    Route::get('/admins/{admin}', [Controllers\AdminController::class, 'show']);
+    Route::post('/admins/{admin}', [Controllers\AdminController::class, 'update']);
+    Route::delete('/admins/{admin}', [Controllers\AdminController::class, 'destroy']);
+
+    // Staff routes
+    Route::get('/staffs', [Controllers\StaffController::class, 'list']);
+    Route::post('/staffs', [Controllers\StaffController::class, 'store']);
+    Route::get('/staffs/{staff}', [Controllers\StaffController::class, 'show']);
+    Route::post('/staffs/{staff}', [Controllers\StaffController::class, 'update']);
+    Route::delete('/staffs/{staff}', [Controllers\StaffController::class, 'destroy']);
 });

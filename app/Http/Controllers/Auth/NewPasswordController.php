@@ -47,13 +47,6 @@ class NewPasswordController extends Controller
                     'remember_token' => Str::random(60),
                 ])->save();
 
-                // If the user is invited, we will mark it as activated
-                if ($user->isInvited()) {
-                    $user->update([
-                        'status' => User::STATUS_ACTIVE,
-                    ]);
-                }
-
                 event(new PasswordReset($user));
             }
         );

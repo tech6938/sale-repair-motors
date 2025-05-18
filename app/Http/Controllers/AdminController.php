@@ -9,21 +9,11 @@ use Yajra\DataTables\DataTables;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use App\Services\DataTableActionLinksService;
-use Illuminate\Routing\Controllers\Middleware;
-use Illuminate\Routing\Controllers\HasMiddleware;
 use App\Http\Requests\Admins\AdminStoreRequest;
 use App\Http\Requests\Admins\AdminUpdateRequest;
-use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 
-class AdminController extends Controller implements HasMiddleware
+class AdminController extends Controller
 {
-    public static function middleware(): array
-    {
-        return [
-            new Middleware('role:' . User::ROLE_SUPER_ADMIN),
-        ];
-    }
-
     /**
      * Display a listing of the resource.
      */
@@ -51,42 +41,16 @@ class AdminController extends Controller implements HasMiddleware
             $admin = User::create([
                 'name' => $request->input('name'),
                 'email' => $request->input('email'),
-                'password' => getUuid(32),
-                'status' => User::STATUS_INVITED,
-                'updated_at' => null,
+                'password' => $request->input('password'),
             ]);
-
-            $admin->markEmailAsVerified();
 
             $admin->assignRole(User::ROLE_ADMIN);
 
-            // Send the invite
-            $admin->sendInvitationEmailNotification();
-
             DB::commit();
 
-            return $this->jsonResponse(['message' => 'Invitation has been sent successfully.']);
+            return $this->jsonResponse(['message' => 'Admin has been created successfully.']);
         } catch (\Exception $e) {
             DB::rollBack();
-            return $this->jsonResponse($e->getMessage(), $e->getCode());
-        }
-    }
-
-    /**
-     * Resend invitation link in case of previously undelivered link
-     */
-    public function resendInvitation(User $admin)
-    {
-        try {
-            if (!$admin->isInvited()) {
-                throw new BadRequestException('Unable to resend the invitation. Try reloading the page.');
-            }
-
-            // Send the invite
-            $admin->sendInvitationEmailNotification();
-
-            return $this->jsonResponse(['message' => 'Invitation sent successfully.']);
-        } catch (\Exception $e) {
             return $this->jsonResponse($e->getMessage(), $e->getCode());
         }
     }
@@ -104,10 +68,6 @@ class AdminController extends Controller implements HasMiddleware
      */
     public function edit(User $admin): View
     {
-        if (! $admin->hasCompleteProfile()) {
-            throw new BadRequestException('Unable to update the specified resource.');
-        }
-
         return view('admins.modals.edit', compact('admin'));
     }
 
@@ -117,10 +77,6 @@ class AdminController extends Controller implements HasMiddleware
     public function update(AdminUpdateRequest $request, User $admin): JsonResponse
     {
         try {
-            if (! $admin->hasCompleteProfile()) {
-                throw new BadRequestException('Unable to update the specified resource.');
-            }
-
             DB::beginTransaction();
 
             $admin->update([
@@ -143,10 +99,6 @@ class AdminController extends Controller implements HasMiddleware
     public function destroy(User $admin)
     {
         try {
-            if ($admin->id === auth()->user()->id) {
-                throw new BadRequestException('Unable to delete the specified resource.');
-            }
-
             DB::beginTransaction();
 
             $admin->delete();
@@ -173,7 +125,7 @@ class AdminController extends Controller implements HasMiddleware
      */
     public function dataTable(Request $request): JsonResponse
     {
-        $dt = DataTables::of(User::admin());
+        $dt = DataTables::of(User::ownedByUser()->admin()->with('owner')->latest());
 
         $dt->filter(function ($query) use ($request) {
             if (empty($request->input('search'))) return;
@@ -192,13 +144,43 @@ class AdminController extends Controller implements HasMiddleware
             });
         });
 
+        if (auth()->user()->isSuperAdmin()) {
+            $dt->addColumn('owner', function ($record) {
+                if ($record->owner->id == auth()->user()->id) {
+                    return '<div class="user-card">
+                                <div class="user-avatar ' . getRandomColorClass() . '">
+                                    ' . getAvatarHtml($record->owner) . '
+                                </div>
+                                <div class="user-info">
+                                    <span class="tb-lead">' . $record->owner->name . '</span>
+                                    <span>' . $record->owner->email . '</span>
+                                </div>
+                            </div>';
+                }
+
+                return '<div class="user-card">
+                        <div class="user-avatar ' . getRandomColorClass() . ' d-none d-sm-flex">
+                            ' . getAvatarHtml($record->owner) . '
+                        </div>
+                        <div class="user-info">
+                            <a href="' . route('admins.show', $record->owner->uuid) . '" async-modal async-modal-size="lg">
+                                <span class="tb-lead text-danger">' . $record->owner->name . '</span>
+                            </a>
+                            <span>' . $record->owner->email . '</span>
+                        </div>
+                    </div>';
+            });
+        }
+
         $dt->addColumn('name', function ($record) {
             return '<div class="user-card">
                         <div class="user-avatar ' . getRandomColorClass() . ' d-none d-sm-flex">
                             ' . getAvatarHtml($record) . '
                         </div>
                         <div class="user-info">
-                            <span class="tb-lead">' . $record->name . '</span>
+                            <a href="' . route('admins.show', $record->uuid) . '" async-modal async-modal-size="lg">
+                                <span class="tb-lead text-danger">' . $record->name . '</span>
+                            </a>
                             <span>' . $record->email . '</span>
                         </div>
                     </div>';
@@ -235,16 +217,7 @@ class AdminController extends Controller implements HasMiddleware
 
         $dt->addColumn('actions', function ($record) {
             $links = [
-                ['action' => 'update', 'shouldRender' => $record->hasCompleteProfile()],
-                [
-                    'action' => 'custom',
-                    'shouldRender' => $record->isInvited(),
-                    'url' => route('admins.resend-invitation', $record->uuid),
-                    'attributes' => 'confirm-btn data-method="post" data-datatable="#admins-dt" data-message="Do you really want to resend invitation email"',
-                    'icon' => 'reload',
-                    'buttonText' => 'Resend Invitation',
-                    'syncResponse' => true,
-                ],
+                ['action' => 'update'],
                 ['action' => 'view', 'modalSize' => 'lg'],
                 ['action' => 'delete', 'shouldRender' => $record->id !== auth()->user()->id],
             ];
@@ -259,7 +232,7 @@ class AdminController extends Controller implements HasMiddleware
 
         $dt->addIndexColumn();
 
-        $dt->rawColumns(['actions', 'name', 'phone', 'address', 'status', 'comments', 'created', 'updated']);
+        $dt->rawColumns(['actions', 'owner', 'name', 'phone', 'address', 'status', 'comments', 'created', 'updated']);
 
         return $dt->make(true);
     }

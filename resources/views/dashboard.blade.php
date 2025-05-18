@@ -17,6 +17,9 @@
                     </div>
                     <div class="nk-tb-list mt-n2">
                         <div class="nk-tb-item nk-tb-head">
+                            @if (auth()->user()->isSuperAdmin())
+                                <div class="nk-tb-col"><span>Owner</span></div>
+                            @endif
                             <div class="nk-tb-col"><span>Name</span></div>
                             <div class="nk-tb-col tb-col-md"><span>Phone</span></div>
                             <div class="nk-tb-col"><span>Status</span></div>
@@ -26,13 +29,34 @@
                         </div>
                         @forelse ($latestAdmins as $latestAdmin)
                             <div class="nk-tb-item">
+                                @if (auth()->user()->isSuperAdmin())
+                                    <div class="nk-tb-col tb-col-sm">
+                                        <div class="user-card">
+                                            <div class="user-avatar {{ getRandomColorClass() }}">
+                                                {!! getAvatarHtml($latestAdmin->owner) !!}
+                                            </div>
+                                            <div class="user-info">
+                                                @if (auth()->user()->id === $latestAdmin->owner->id)
+                                                    <span class="tb-lead">{{ $latestAdmin->owner->name }}</span>
+                                                @else
+                                                    <a href="{{ route('admins.show', $latestAdmin->owner->uuid) }}" async-modal async-modal-size="lg">
+                                                        <span class="tb-lead text-danger">{{ $latestAdmin->owner->name }}</span>
+                                                    </a>
+                                                @endif
+                                                <span>{{ $latestAdmin->owner->email }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endif
                                 <div class="nk-tb-col tb-col-sm">
                                     <div class="user-card">
                                         <div class="user-avatar {{ getRandomColorClass() }}">
                                             {!! getAvatarHtml($latestAdmin) !!}
                                         </div>
                                         <div class="user-info">
-                                            <span class="tb-lead">{{ $latestAdmin->name }}</span>
+                                            <a href="{{ route('admins.show', $latestAdmin->uuid) }}" async-modal async-modal-size="lg">
+                                                <span class="tb-lead text-danger">{{ $latestAdmin->name }}</span>
+                                            </a>
                                             <span>{{ $latestAdmin->email }}</span>
                                         </div>
                                     </div>
@@ -116,6 +140,9 @@
                     </div>
                     <div class="nk-tb-list mt-n2">
                         <div class="nk-tb-item nk-tb-head">
+                            @if (auth()->user()->isSuperAdmin())
+                                <div class="nk-tb-col"><span>Owner</span></div>
+                            @endif
                             <div class="nk-tb-col"><span>Name</span></div>
                             <div class="nk-tb-col tb-col-md"><span>Phone</span></div>
                             <div class="nk-tb-col"><span>Status</span></div>
@@ -125,13 +152,34 @@
                         </div>
                         @forelse ($latestStaffs as $latestStaff)
                             <div class="nk-tb-item">
+                                @if (auth()->user()->isSuperAdmin())
+                                    <div class="nk-tb-col tb-col-sm">
+                                        <div class="user-card">
+                                            <div class="user-avatar {{ getRandomColorClass() }}">
+                                                {!! getAvatarHtml($latestStaff->owner) !!}
+                                            </div>
+                                            <div class="user-info">
+                                                @if (auth()->user()->id === $latestStaff->owner->id)
+                                                    <span class="tb-lead">{{ $latestStaff->owner->name }}</span>
+                                                @else
+                                                    <a href="{{ route('admins.show', $latestStaff->owner->uuid) }}" async-modal async-modal-size="lg">
+                                                        <span class="tb-lead text-danger">{{ $latestStaff->owner->name }}</span>
+                                                    </a>
+                                                @endif
+                                                <span>{{ $latestStaff->owner->email }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endif
                                 <div class="nk-tb-col tb-col-sm">
                                     <div class="user-card">
                                         <div class="user-avatar {{ getRandomColorClass() }}">
                                             {!! getAvatarHtml($latestStaff) !!}
                                         </div>
                                         <div class="user-info">
-                                            <span class="tb-lead">{{ $latestStaff->name }}</span>
+                                            <a href="{{ route('staffs.show', $latestStaff->uuid) }}" async-modal async-modal-size="lg">
+                                                <span class="tb-lead text-danger">{{ $latestStaff->name }}</span>
+                                            </a>
                                             <span>{{ $latestStaff->email }}</span>
                                         </div>
                                     </div>
@@ -149,8 +197,8 @@
                                         @if (empty($latestStaff->staff_comments))
                                             {!! canEmpty($latestStaff->staff_comments) !!}
                                         @else
-                                            <a href="{{ route('staffs.comments', $latestStaff->uuid) }}" class="btn btn-icon btn-sm btn-light" async-modal data-bs-toggle="tooltip"
-                                                title="View Comments" data-method="post">
+                                            <a href="{{ route('staffs.comments', $latestStaff->uuid) }}" class="btn btn-icon btn-sm btn-light" async-modal
+                                                data-bs-toggle="tooltip" title="View Comments" data-method="post">
                                                 <em class="icon ni ni-comments"></em>
                                             </a>
                                         @endif

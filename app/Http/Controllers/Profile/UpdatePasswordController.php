@@ -11,11 +11,19 @@ use App\Http\Requests\Profile\PasswordUpdateRequest;
 
 class UpdatePasswordController extends Controller
 {
+    /**
+     * Display the user's password update form.
+     */
     public function edit(): View
     {
         return view('profile.modals.password');
     }
 
+    /**
+     * Update the user's password.
+     *
+     * @param  \App\Http\Requests\Profile\PasswordUpdateRequest  $request
+     */
     public function update(PasswordUpdateRequest $request): JsonResponse
     {
         try {

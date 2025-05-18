@@ -19,7 +19,7 @@
                                 <div class="form-group">
                                     <a href="{{ route('staffs.create') }}" class="form-control btn btn-primary" async-modal>
                                         <em class="icon ni ni-plus"></em>
-                                        <span>Invite New Staff</span>
+                                        <span>Create New Staff</span>
                                     </a>
                                 </div>
                             </li>
@@ -37,6 +37,9 @@
                     <thead>
                         <tr class="nk-tb-item nk-tb-head">
                             <th><span class="sub-text">#</span></th>
+                            @if (auth()->user()->isSuperAdmin())
+                                <th><span class="sub-text">Owner</span></th>
+                            @endif
                             <th><span class="sub-text">Name</span></th>
                             <th><span class="sub-text">Phone</span></th>
                             <th><span class="sub-text">Address</span></th>
@@ -55,6 +58,59 @@
 
 @push('scripts')
     <script>
+        let columns = [{
+                data: 'DT_RowIndex',
+                name: 'uuid',
+                orderable: false,
+                searchable: false
+            },
+            {
+                data: 'name',
+                name: 'name'
+            },
+            {
+                data: 'phone',
+                name: 'phone'
+            },
+            {
+                data: 'address',
+                name: 'address'
+            },
+            {
+                data: 'status',
+                name: 'status'
+            },
+            {
+                data: 'comments',
+                name: 'comments',
+                searchable: false
+            },
+            {
+                data: 'created',
+                name: 'created',
+                searchable: false
+            },
+            {
+                data: 'updated',
+                name: 'updated',
+                searchable: false
+            },
+            {
+                data: 'actions',
+                name: 'actions',
+                searchable: false
+            },
+        ];
+
+        @if (auth()->user()->isSuperAdmin())
+            columns.splice(1, 0, {
+                data: 'owner',
+                name: 'owner',
+                orderable: false,
+                searchable: false
+            });
+        @endif
+
         let dt = $('#staffs-dt').DataTable({
             processing: true,
             serverSide: true,
@@ -64,49 +120,7 @@
             ajax: {
                 url: "{{ route('staffs.datatable') }}",
             },
-            columns: [{
-                    data: 'DT_RowIndex',
-                    name: 'uuid',
-                    orderable: false,
-                    searchable: false
-                },
-                {
-                    data: 'name',
-                    name: 'name'
-                },
-                {
-                    data: 'phone',
-                    name: 'phone'
-                },
-                {
-                    data: 'address',
-                    name: 'address'
-                },
-                {
-                    data: 'status',
-                    name: 'status'
-                },
-                {
-                    data: 'comments',
-                    name: 'comments',
-                    searchable: false
-                },
-                {
-                    data: 'created',
-                    name: 'created',
-                    searchable: false
-                },
-                {
-                    data: 'updated',
-                    name: 'updated',
-                    searchable: false
-                },
-                {
-                    data: 'actions',
-                    name: 'actions',
-                    searchable: false
-                },
-            ],
+            columns: columns,
         });
     </script>
 @endpush

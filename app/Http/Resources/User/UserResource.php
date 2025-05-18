@@ -15,7 +15,7 @@ class UserResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return [
+        $data = [
             'id' => $this->uuid,
             'name' => $this->name,
             'email' => $this->email,
@@ -30,5 +30,11 @@ class UserResource extends JsonResource
             'updated_at' => $this->updated_at?->toDateTimeString(),
             'role' => $this->isAdmin() ? User::ROLE_ADMIN : User::ROLE_STAFF,
         ];
+
+        if (auth()->user()->isAdmin()) {
+            $data['admin_comments'] = $this->admin_comments;
+        }
+
+        return $data;
     }
 }

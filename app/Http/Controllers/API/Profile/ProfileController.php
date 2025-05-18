@@ -2,26 +2,15 @@
 
 namespace App\Http\Controllers\API\Profile;
 
-use App\Models\User;
 use App\Traits\FileUploader;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\DB;
 use App\Http\Resources\User\UserResource;
 use App\Http\Controllers\API\BaseController;
-use Illuminate\Routing\Controllers\Middleware;
-use Illuminate\Routing\Controllers\HasMiddleware;
 
-class ProfileController extends BaseController implements HasMiddleware
+class ProfileController extends BaseController
 {
     use FileUploader;
-
-    public static function middleware(): array
-    {
-        return [
-            new Middleware('role:' . User::getRoles(separator: '|'), only: ['view', 'update']),
-        ];
-    }
 
     /**
      * Return logged in user profile details
@@ -59,16 +48,12 @@ class ProfileController extends BaseController implements HasMiddleware
             );
         }
 
-        DB::beginTransaction();
-
         auth()->user()->update([
             'name' => $request->input('name'),
             'avatar' => $path,
             'phone' => $request->input('phone', auth()->user()->phone),
             'address' => $request->input('address'),
         ]);
-
-        DB::commit();
 
         return $this->apiResponse(
             'Profile updated successfully.',

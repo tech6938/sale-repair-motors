@@ -24,35 +24,24 @@
             <div class="nk-sidebar-menu" data-simplebar>
 
                 <ul class="nk-menu">
-                    @role(\App\Models\User::getRoles('|'))
-                        <li class="nk-menu-item">
-                            <a href="{{ route('profile.index') }}" class="nk-menu-link">
-                                <span class="nk-menu-icon"><em class="icon ni ni-user-alt"></em></span>
-                                <span class="nk-menu-text">Profile</span>
-                            </a>
-                        </li>
-                    @endrole
-
-                    @role(\App\Models\User::ROLE_SUPER_ADMIN)
-                        <li class="nk-menu-item">
-                            <a href="{{ route('dashboard') }}" class="nk-menu-link">
-                                <span class="nk-menu-icon"><em class="icon ni ni-dashboard-fill"></em></span>
-                                <span class="nk-menu-text">Dashboard</span>
-                            </a>
-                        </li>
-                        <li class="nk-menu-item">
-                            <a href="{{ route('admins.index') }}" class="nk-menu-link">
-                                <span class="nk-menu-icon"><em class="icon ni ni-users-fill"></em></span>
-                                <span class="nk-menu-text">Admins</span>
-                            </a>
-                        </li>
-                        <li class="nk-menu-item">
-                            <a href="{{ route('staffs.index') }}" class="nk-menu-link">
-                                <span class="nk-menu-icon"><em class="icon ni ni-user-list-fill"></em></span>
-                                <span class="nk-menu-text">Staffs</span>
-                            </a>
-                        </li>
-                    @endrole
+                    <li class="nk-menu-item">
+                        <a href="{{ route('dashboard') }}" class="nk-menu-link">
+                            <span class="nk-menu-icon"><em class="icon ni ni-dashboard-fill"></em></span>
+                            <span class="nk-menu-text">Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nk-menu-item">
+                        <a href="{{ route('admins.index') }}" class="nk-menu-link">
+                            <span class="nk-menu-icon"><em class="icon ni ni-users-fill"></em></span>
+                            <span class="nk-menu-text">Admins</span>
+                        </a>
+                    </li>
+                    <li class="nk-menu-item">
+                        <a href="{{ route('staffs.index') }}" class="nk-menu-link">
+                            <span class="nk-menu-icon"><em class="icon ni ni-user-list-fill"></em></span>
+                            <span class="nk-menu-text">Staffs</span>
+                        </a>
+                    </li>
                 </ul>
 
             </div>

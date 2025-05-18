@@ -2,9 +2,8 @@
 
 namespace App\Providers;
 
-use Illuminate\Http\Request;
-use Illuminate\Cache\RateLimiting\Limit;
-use Illuminate\Support\Facades\RateLimiter;
+use App\Models\User;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 
 class RouteServiceProvider extends ServiceProvider
@@ -24,5 +23,21 @@ class RouteServiceProvider extends ServiceProvider
     public function boot(): void
     {
         parent::boot();
+
+        Route::bind('admin', function ($uuid) {
+            return User::whereUuid($uuid)
+                ->whereNot('uuid', auth()->user()->uuid)
+                ->ownedByUser()
+                ->admin()
+                ->firstOrFail();
+        });
+
+        Route::bind('staff', function ($uuid) {
+            return User::whereUuid($uuid)
+                ->whereNot('uuid', auth()->user()->uuid)
+                ->ownedByUser()
+                ->staff()
+                ->firstOrFail();
+        });
     }
 }

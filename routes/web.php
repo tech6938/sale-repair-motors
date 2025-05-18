@@ -46,7 +46,6 @@ Route::middleware('auth', 'suspended')->group(function () {
 
     // Admins routes
     Route::group(['prefix' => 'admins', 'as' => 'admins.'], function () {
-        Route::post('resend-invitation/{admin}', [Controllers\AdminController::class, 'resendInvitation'])->name('resend-invitation');
         Route::post('comments/{admin}', [Controllers\AdminController::class, 'comments'])->name('comments');
         Route::get('datatable', [Controllers\AdminController::class, 'dataTable'])->name('datatable');
         Route::resource('/', Controllers\AdminController::class)->parameters(['' => 'admin']);
@@ -54,7 +53,6 @@ Route::middleware('auth', 'suspended')->group(function () {
 
     // Staffs routes
     Route::group(['prefix' => 'staffs', 'as' => 'staffs.'], function () {
-        Route::post('resend-invitation/{staff}', [Controllers\StaffController::class, 'resendInvitation'])->name('resend-invitation');
         Route::post('comments/{staff}', [Controllers\StaffController::class, 'comments'])->name('comments');
         Route::get('datatable', [Controllers\StaffController::class, 'dataTable'])->name('datatable');
         Route::resource('/', Controllers\StaffController::class)->parameters(['' => 'staff']);
