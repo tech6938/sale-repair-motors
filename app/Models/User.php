@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Http\Request;
 use App\Models\Concerns\HasUuid;
 use Laravel\Sanctum\HasApiTokens;
 use App\Models\Concerns\Timestamps;
@@ -53,12 +52,11 @@ class User extends Authenticatable
         'remember_token',
     ];
 
-    protected function casts(): array
-    {
-        return [
-            'password' => 'hashed',
-        ];
-    }
+    protected $casts = [
+        'status' => 'boolean',
+        'email_verified_at' => 'datetime',
+        'password' => 'hashed',
+    ];
 
     public function settings(): HasMany
     {
@@ -73,6 +71,11 @@ class User extends Authenticatable
     public function owner(): BelongsTo
     {
         return $this->belongsTo(User::class, 'owner_id');
+    }
+
+    public function inspections()
+    {
+        return $this->hasMany(Inspection::class);
     }
 
     public function getAvatarThumbnailUrlAttribute()
