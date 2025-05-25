@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\InspectionChecklist;
 use App\Models\User;
 use App\Models\Vehicle;
 use Illuminate\Support\Facades\Route;
@@ -45,6 +46,11 @@ class RouteServiceProvider extends ServiceProvider
             return Vehicle::whereUuid($uuid)
                 ->managedByUser()
                 ->with(['inspections', 'user'])
+                ->firstOrFail();
+        });
+
+        Route::bind('checklist', function ($uuid) {
+            return InspectionChecklist::whereUuid($uuid)
                 ->firstOrFail();
         });
     }
