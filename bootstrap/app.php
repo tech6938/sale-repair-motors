@@ -46,7 +46,7 @@ return Application::configure(basePath: dirname(__DIR__))
                 return response()->json([
                     'success' => false,
                     'message' => 'Record not found.',
-                    'data' => []
+                    'data' => null
                 ], JsonResponse::HTTP_NOT_FOUND);
             }
         });
@@ -56,7 +56,7 @@ return Application::configure(basePath: dirname(__DIR__))
                 return response()->json([
                     'success' => false,
                     'message' => 'Unauthorized',
-                    'data' => []
+                    'data' => null
                 ], JsonResponse::HTTP_UNAUTHORIZED);
             }
         });
@@ -66,7 +66,7 @@ return Application::configure(basePath: dirname(__DIR__))
                 return response()->json([
                     'success' => false,
                     'message' => $e->getMessage(),
-                    'data' => []
+                    'data' => null
                 ], JsonResponse::HTTP_UNAUTHORIZED);
             }
 
@@ -80,7 +80,7 @@ return Application::configure(basePath: dirname(__DIR__))
                 return response()->json([
                     'success' => false,
                     'message' => 'Unauthorized',
-                    'data' => []
+                    'data' => null
                 ], JsonResponse::HTTP_UNAUTHORIZED);
             }
 
@@ -92,7 +92,7 @@ return Application::configure(basePath: dirname(__DIR__))
                 return response()->json([
                     'success' => false,
                     'message' => $e->getMessage(),
-                    'data' => []
+                    'data' => null
                 ], JsonResponse::HTTP_BAD_REQUEST);
             }
         });

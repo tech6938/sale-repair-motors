@@ -38,4 +38,11 @@ Route::middleware('auth:sanctum', 'suspended')->group(function () {
     Route::get('/staffs/{staff}', [Controllers\StaffController::class, 'show']);
     Route::post('/staffs/{staff}', [Controllers\StaffController::class, 'update']);
     Route::delete('/staffs/{staff}', [Controllers\StaffController::class, 'destroy']);
+
+    // Vehicle routes
+    Route::get('/vehicles', [Controllers\VehicleController::class, 'list']);
+    Route::post('/vehicles', [Controllers\VehicleController::class, 'store']);
+    Route::get('/vehicles/{vehicle}', [Controllers\VehicleController::class, 'show']);
+    Route::post('/vehicles/{vehicle}', [Controllers\VehicleController::class, 'update']);
+    Route::delete('/vehicles/{vehicle}', [Controllers\VehicleController::class, 'destroy']);
 });

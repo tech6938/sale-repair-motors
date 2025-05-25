@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\User;
+use App\Models\Vehicle;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 
@@ -37,6 +38,13 @@ class RouteServiceProvider extends ServiceProvider
                 ->whereNot('uuid', auth()->user()->uuid)
                 ->ownedByUser()
                 ->staff()
+                ->firstOrFail();
+        });
+
+        Route::bind('vehicle', function ($uuid) {
+            return Vehicle::whereUuid($uuid)
+                ->managedByUser()
+                ->with(['inspections', 'user'])
                 ->firstOrFail();
         });
     }

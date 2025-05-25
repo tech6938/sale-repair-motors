@@ -5,7 +5,6 @@ namespace App\Models;
 use App\Models\Concerns\HasUuid;
 use Laravel\Sanctum\HasApiTokens;
 use App\Models\Concerns\Timestamps;
-use App\Models\Concerns\HasOwnership;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Notifications\Notifiable;
@@ -20,7 +19,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable, HasRoles, HasApiTokens, HasUuid, Timestamps, HasOwnership;
+    use HasFactory, Notifiable, HasRoles, HasApiTokens, HasUuid, Timestamps;
 
     public const STATUS_ACTIVE = 'active';
     public const STATUS_SUSPENDED = 'suspended';
@@ -57,6 +56,17 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            if (auth()->check()) {
+                $model->owner_id = auth()->user()->id;
+            }
+        });
+    }
 
     public function settings(): HasMany
     {
@@ -99,6 +109,14 @@ class User extends Authenticatable
         }
 
         return '<span class="badge">Unknown</span>';
+    }
+
+    public function scopeOwnedByUser(Builder $query): Builder
+    {
+        return $query->when(
+            !auth()->user()->isSuperAdmin(),
+            fn($query) => $query->where('owner_id', auth()->user()->id)
+        );
     }
 
     public function scopeActive(Builder $query)

@@ -14,7 +14,7 @@ class BaseController extends Controller
      *
      * @return void
      */
-    public function apiResponse($message, $statusCode, $data = []): JsonResponse
+    public function apiResponse($message, $statusCode, $data = null): JsonResponse
     {
         $statusCode = is_int($statusCode) && $statusCode > 99 ? $statusCode : 500;
 
