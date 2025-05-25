@@ -28,7 +28,7 @@ class StaffController extends BaseController implements HasMiddleware
      */
     public function list()
     {
-        $staffs = User::ownedByUser()
+        $staffs = User::managedByUser()
             ->staff()
             ->applyFilters()
             ->paginate(request()->input('page_size', $this->perPage));

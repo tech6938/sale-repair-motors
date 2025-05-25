@@ -38,7 +38,7 @@
                         <tr class="nk-tb-item nk-tb-head">
                             <th><span class="sub-text">#</span></th>
                             @if (auth()->user()->isSuperAdmin())
-                                <th><span class="sub-text">Owner</span></th>
+                                <th><span class="sub-text">Manager</span></th>
                             @endif
                             <th><span class="sub-text">Name</span></th>
                             <th><span class="sub-text">Phone</span></th>
@@ -104,8 +104,8 @@
 
         @if (auth()->user()->isSuperAdmin())
             columns.splice(1, 0, {
-                data: 'owner',
-                name: 'owner',
+                data: 'manager',
+                name: 'manager',
                 orderable: false,
                 searchable: false
             });

@@ -28,7 +28,7 @@ class RouteServiceProvider extends ServiceProvider
         Route::bind('admin', function ($uuid) {
             return User::whereUuid($uuid)
                 ->whereNot('uuid', auth()->user()->uuid)
-                ->ownedByUser()
+                ->managedByUser()
                 ->admin()
                 ->firstOrFail();
         });
@@ -36,7 +36,7 @@ class RouteServiceProvider extends ServiceProvider
         Route::bind('staff', function ($uuid) {
             return User::whereUuid($uuid)
                 ->whereNot('uuid', auth()->user()->uuid)
-                ->ownedByUser()
+                ->managedByUser()
                 ->staff()
                 ->firstOrFail();
         });

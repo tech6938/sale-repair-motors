@@ -30,7 +30,7 @@ class User extends Authenticatable
 
     protected $fillable = [
         'uuid',
-        'owner_id',
+        'user_id',
 
         // Personal info
         'name',
@@ -63,7 +63,7 @@ class User extends Authenticatable
 
         static::creating(function ($model) {
             if (auth()->check()) {
-                $model->owner_id = auth()->user()->id;
+                $model->user_id = auth()->user()->id;
             }
         });
     }
@@ -73,14 +73,14 @@ class User extends Authenticatable
         return $this->hasMany(Setting::class);
     }
 
-    public function ownerships(): HasMany
+    public function users(): HasMany
     {
-        return $this->hasMany(User::class, 'owner_id');
+        return $this->hasMany(User::class);
     }
 
-    public function owner(): BelongsTo
+    public function manager(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'owner_id');
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     public function vehicles(): HasMany
@@ -111,11 +111,11 @@ class User extends Authenticatable
         return '<span class="badge">Unknown</span>';
     }
 
-    public function scopeOwnedByUser(Builder $query): Builder
+    public function scopeManagedByUser(Builder $query): Builder
     {
         return $query->when(
             !auth()->user()->isSuperAdmin(),
-            fn($query) => $query->where('owner_id', auth()->user()->id)
+            fn($query) => $query->where('user_id', auth()->user()->id)
         );
     }
 

@@ -9,11 +9,11 @@ class DashboardController extends Controller
     public function index()
     {
         return view('dashboard', [
-            'adminsCount' => User::ownedByUser()->admin()->count(),
-            'latestAdmins' => User::ownedByUser()->admin()->latest()->limit(5)->get(),
+            'adminsCount' => User::managedByUser()->admin()->count(),
+            'latestAdmins' => User::managedByUser()->admin()->latest()->limit(5)->get(),
 
-            'staffsCount' => User::ownedByUser()->staff()->count(),
-            'latestStaffs' => User::ownedByUser()->staff()->latest()->limit(5)->get(),
+            'staffsCount' => User::managedByUser()->staff()->count(),
+            'latestStaffs' => User::managedByUser()->staff()->latest()->limit(5)->get(),
         ]);
     }
 }

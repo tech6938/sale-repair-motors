@@ -125,7 +125,7 @@ class AdminController extends Controller
      */
     public function dataTable(Request $request): JsonResponse
     {
-        $dt = DataTables::of(User::ownedByUser()->admin()->with('owner')->latest());
+        $dt = DataTables::of(User::managedByUser()->admin()->with('manager')->latest());
 
         $dt->filter(function ($query) use ($request) {
             if (empty($request->input('search'))) return;
@@ -145,28 +145,28 @@ class AdminController extends Controller
         });
 
         if (auth()->user()->isSuperAdmin()) {
-            $dt->addColumn('owner', function ($record) {
-                if ($record->owner->id == auth()->user()->id) {
+            $dt->addColumn('manager', function ($record) {
+                if ($record->manager->id == auth()->user()->id) {
                     return '<div class="user-card">
                                 <div class="user-avatar ' . getRandomColorClass() . '">
-                                    ' . getAvatarHtml($record->owner) . '
+                                    ' . getAvatarHtml($record->manager) . '
                                 </div>
                                 <div class="user-info">
-                                    <span class="tb-lead">' . $record->owner->name . '</span>
-                                    <span>' . $record->owner->email . '</span>
+                                    <span class="tb-lead">' . $record->manager->name . '</span>
+                                    <span>' . $record->manager->email . '</span>
                                 </div>
                             </div>';
                 }
 
                 return '<div class="user-card">
                         <div class="user-avatar ' . getRandomColorClass() . ' d-none d-sm-flex">
-                            ' . getAvatarHtml($record->owner) . '
+                            ' . getAvatarHtml($record->manager) . '
                         </div>
                         <div class="user-info">
-                            <a href="' . route('admins.show', $record->owner->uuid) . '" async-modal async-modal-size="lg">
-                                <span class="tb-lead text-danger">' . $record->owner->name . '</span>
+                            <a href="' . route('admins.show', $record->manager->uuid) . '" async-modal async-modal-size="lg">
+                                <span class="tb-lead text-danger">' . $record->manager->name . '</span>
                             </a>
-                            <span>' . $record->owner->email . '</span>
+                            <span>' . $record->manager->email . '</span>
                         </div>
                     </div>';
             });
@@ -232,7 +232,7 @@ class AdminController extends Controller
 
         $dt->addIndexColumn();
 
-        $dt->rawColumns(['actions', 'owner', 'name', 'phone', 'address', 'status', 'comments', 'created', 'updated']);
+        $dt->rawColumns(['actions', 'manager', 'name', 'phone', 'address', 'status', 'comments', 'created', 'updated']);
 
         return $dt->make(true);
     }
