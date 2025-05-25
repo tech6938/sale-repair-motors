@@ -6,11 +6,10 @@ use App\Models\Concerns\HasUuid;
 use App\Models\Concerns\Timestamps;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ChecklistItem extends Model
 {
-    use HasFactory, SoftDeletes, HasUuid, Timestamps;
+    use HasFactory, HasUuid, Timestamps;
 
     public const ITEM_TYPE_IMAGE = 'image';
     public const ITEM_TYPE_VIDEO = 'video';

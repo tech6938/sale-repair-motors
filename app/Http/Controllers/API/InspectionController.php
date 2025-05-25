@@ -45,11 +45,10 @@ class InspectionController extends BaseController implements HasMiddleware
 
     public function items(Vehicle $vehicle, InspectionChecklist $checklist)
     {
-        return 'yes';
         return $this->apiResponse(
             'Checklist items fetched successfully.',
             JsonResponse::HTTP_OK,
-            ChecklistItem::whereChecklistId($checklist->id)->get()
+            ChecklistItem::whereInspectionChecklistId($checklist->id)->get()
         );
     }
 }
