@@ -73,9 +73,9 @@ class User extends Authenticatable
         return $this->belongsTo(User::class, 'owner_id');
     }
 
-    public function inspections()
+    public function vehicles(): HasMany
     {
-        return $this->hasMany(Inspection::class);
+        return $this->hasMany(Vehicle::class);
     }
 
     public function getAvatarThumbnailUrlAttribute()

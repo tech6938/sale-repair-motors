@@ -16,7 +16,6 @@ class Inspection extends Model
 
     protected $fillable = [
         'id',
-        'user_id',
         'vehicle_id',
         'inspection_type_id',
         'uuid',
@@ -29,11 +28,6 @@ class Inspection extends Model
         'started_at' => 'datetime',
         'completed_at' => 'datetime',
     ];
-
-    public function inspector()
-    {
-        return $this->belongsTo(User::class);
-    }
 
     public function vehicle()
     {

@@ -6,12 +6,15 @@ use App\Models\Concerns\HasUuid;
 use App\Models\Concerns\Timestamps;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Vehicle extends Model
 {
     use HasFactory, HasUuid, Timestamps;
 
     protected $fillable = [
+        'user_by',
         'id',
         'uuid',
         'make',
@@ -29,7 +32,12 @@ class Vehicle extends Model
         'price' => 'float',
     ];
 
-    public function inspections()
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function inspections(): HasMany
     {
         return $this->hasMany(Inspection::class);
     }

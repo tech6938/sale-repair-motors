@@ -17,7 +17,6 @@ return new class extends Migration
             $table->string('uuid', 16)->unique();
 
             $table->string('label');
-            $table->string('value');
 
             $table->timestamps();
         });

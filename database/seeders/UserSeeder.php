@@ -5,7 +5,6 @@ namespace Database\Seeders;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Schema;
 
 class UserSeeder extends Seeder
 {
@@ -16,10 +15,6 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        Schema::disableForeignKeyConstraints();
-        User::truncate();
-        Schema::enableForeignKeyConstraints();
-
         $this->password = Hash::make('12345678');
 
         $this->createSuperAdmin();
@@ -59,7 +54,7 @@ class UserSeeder extends Seeder
     {
         $admins = [];
 
-        for ($i = 1; $i <= 3; $i++) {
+        for ($i = 1; $i <= 1; $i++) {
             $admins[] = [
                 'owner_id' => 1,
                 'uuid' => getUuid(),
@@ -81,11 +76,13 @@ class UserSeeder extends Seeder
 
     private function createStaffs(): void
     {
+        $admin1 = User::where('email', 'admin1@domain.com')->firstOrFail();
+
         $staffs = [];
 
         for ($i = 1; $i <= 3; $i++) {
             $staffs[] = [
-                'owner_id' => 1,
+                'owner_id' => $admin1->id,
                 'uuid' => getUuid(),
                 'name' => 'Staff ' . $i,
                 'email' => 'staff' . $i . '@domain.com',

@@ -14,7 +14,6 @@ return new class extends Migration
     {
         Schema::create('inspections', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->foreignId('vehicle_id')->constrained('vehicles')->cascadeOnDelete();
             $table->foreignId('inspection_type_id')->constrained('inspection_types')->cascadeOnDelete();
             $table->string('uuid', 16)->unique();

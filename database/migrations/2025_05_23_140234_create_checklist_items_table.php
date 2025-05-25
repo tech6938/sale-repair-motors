@@ -21,8 +21,8 @@ return new class extends Migration
             $table->string('item_type');
             $table->integer('display_order');
             $table->boolean('is_required')->default(true);
-            $table->integer('min');
-            $table->integer('max');
+            $table->integer('min')->nullable();
+            $table->integer('max')->nullable();
 
             $table->timestamps();
         });

@@ -16,7 +16,6 @@ class ItemOption extends Model
         'checklist_item_id',
         'uuid',
         'label',
-        'value',
     ];
 
     public function checklistItem()
