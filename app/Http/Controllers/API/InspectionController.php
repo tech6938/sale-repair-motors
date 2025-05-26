@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Resources\Checklist\ChecklistCollection;
+use App\Http\Resources\ChecklistItem\ChecklistItemCollection;
 use App\Models\User;
 use App\Models\Vehicle;
 use Illuminate\Http\JsonResponse;
@@ -45,10 +46,21 @@ class InspectionController extends BaseController implements HasMiddleware
 
     public function items(Vehicle $vehicle, InspectionChecklist $checklist)
     {
+        $items = ChecklistItem::whereInspectionChecklistId($checklist->id)
+            ->with(
+                'inspectionChecklist.inspectionChecklistResults',
+                fn($q) => $q->whereHas(
+                    'inspection.vehicle',
+                    fn($q) => $q->where('id', $vehicle->id)
+                )
+            )
+            ->ordered()
+            ->get();
+
         return $this->apiResponse(
             'Checklist items fetched successfully.',
             JsonResponse::HTTP_OK,
-            ChecklistItem::whereInspectionChecklistId($checklist->id)->get()
+            new ChecklistItemCollection($items)
         );
     }
 }
