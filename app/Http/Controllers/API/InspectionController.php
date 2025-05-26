@@ -54,6 +54,7 @@ class InspectionController extends BaseController implements HasMiddleware
                     fn($q) => $q->where('id', $vehicle->id)
                 )
             )
+            ->with('itemOptions')
             ->ordered()
             ->get();
 

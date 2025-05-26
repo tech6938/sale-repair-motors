@@ -23,8 +23,16 @@ class ChecklistItemResource extends JsonResource
             'is_required' => $this->is_required,
             'min' => $this->min,
             'max' => $this->max,
-            'created_at' => $this->created_at->toDateTimeString(),
-            'updated_at' => $this->updated_at?->toDateTimeString(),
+            'created_at' => $this->createdAt(),
+            'updated_at' => strip_tags($this->updatedAt()),
+            'itemOptions' => empty($this->itemOptions) ? [] : $this->itemOptions->map(function ($itemOption) {
+                return [
+                    'id' => $itemOption->uuid,
+                    'label' => $itemOption->label,
+                    'created_at' => $this->createdAt(),
+                    'updated_at' => strip_tags($this->updatedAt()),
+                ];
+            })->toArray(),
         ];
     }
 }
