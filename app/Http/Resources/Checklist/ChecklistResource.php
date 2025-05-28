@@ -20,11 +20,12 @@ class ChecklistResource extends JsonResource
             'title' => $this->title,
             'description' => $this->description,
             'is_required' => $this->is_required,
-            'status' => $this->inspection_checklist_results
-                ? InspectionChecklistResult::STATUS_COMPLETED
-                : InspectionChecklistResult::STATUS_INCOMPLETE,
-            'created_at' => $this->created_at->toDateTimeString(),
-            'updated_at' => $this->updated_at?->toDateTimeString(),
+            'display_order' => $this->display_order,
+            'status' => $this->inspectionChecklistResults()?->first()?->status === InspectionChecklistResult::STATUS_COMPLETED
+                ? 'completed'
+                : 'incomplete',
+            'created_at' => $this->createdAt(),
+            'updated_at' => strip_tags($this->updatedAt()),
         ];
     }
 }

@@ -26,8 +26,8 @@ class UserResource extends JsonResource
             'phone' => $this->phone,
             'address' => $this->address,
             'status' => $this->status,
-            'created_at' => $this->created_at->toDateTimeString(),
-            'updated_at' => $this->updated_at?->toDateTimeString(),
+            'created_at' => $this->createdAt(),
+            'updated_at' => strip_tags($this->updatedAt()),
             'role' => $this->isAdmin() ? User::ROLE_ADMIN : User::ROLE_STAFF,
         ];
 

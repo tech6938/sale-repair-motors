@@ -55,4 +55,24 @@ class InspectionChecklist extends Model
     {
         return $query->orderBy('display_order');
     }
+
+    public function isPreviousChecklistCompleted(Vehicle $vehicle): bool
+    {
+        if ($this->display_order <= 1) {
+            return true;
+        }
+
+        $previousChecklist = InspectionChecklist::whereInspectionTypeId($this->inspectionType->id)
+            ->where('display_order', $this->display_order - 1)
+            ->whereHas(
+                'inspectionChecklistResults',
+                fn($q) => $q->whereHas(
+                    'inspection.vehicle',
+                    fn($q) => $q->where('id', $vehicle->id)
+                )
+            )
+            ->first();
+
+        return $previousChecklist?->inspectionChecklistResults()->first()?->status === InspectionChecklistResult::STATUS_COMPLETED;
+    }
 }

@@ -3,7 +3,6 @@
 namespace App\Http\Resources\ChecklistItem;
 
 use Illuminate\Http\Request;
-use App\Models\InspectionChecklistResult;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ChecklistItemResource extends JsonResource
@@ -25,12 +24,20 @@ class ChecklistItemResource extends JsonResource
             'max' => $this->max,
             'created_at' => $this->createdAt(),
             'updated_at' => strip_tags($this->updatedAt()),
-            'itemOptions' => empty($this->itemOptions) ? [] : $this->itemOptions->map(function ($itemOption) {
+            'itemOptions' => $this->itemOptions?->map(function ($itemOption) {
                 return [
                     'id' => $itemOption->uuid,
                     'label' => $itemOption->label,
                     'created_at' => $this->createdAt(),
                     'updated_at' => strip_tags($this->updatedAt()),
+                ];
+            })->toArray(),
+            'results' => $this->checklistItemResults?->map(function ($result) {
+                return [
+                    'id' => $result->uuid,
+                    'value' => $result->formattedValue,
+                    'created_at' => $result->createdAt(),
+                    'updated_at' => strip_tags($result->updatedAt()),
                 ];
             })->toArray(),
         ];

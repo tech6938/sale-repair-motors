@@ -4,8 +4,9 @@ namespace App\Models;
 
 use App\Models\Concerns\HasUuid;
 use App\Models\Concerns\Timestamps;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class ChecklistItemResult extends Model
 {
@@ -39,16 +40,19 @@ class ChecklistItemResult extends Model
     {
         $itemType = $this->checklistItem->item_type;
 
-        if (in_array($itemType, [ChecklistItem::ITEM_TYPE_SELECT, ChecklistItem::ITEM_TYPE_MULTISELECT])) {
-            $options = $this->checklistItem->itemOptions->pluck('label', 'value');
+        if ($itemType === ChecklistItem::ITEM_TYPE_NUMBER) {
+            return number_format($this->value, 2);
+        }
 
-            if ($itemType === ChecklistItem::ITEM_TYPE_SELECT) {
-                return $options[$this->value] ?? $this->value;
-            }
+        if ($itemType === ChecklistItem::ITEM_TYPE_IMAGE) {
+            return [
+                'thumbnail' => $this->value ? Storage::disk('public')->url('thumbnails/' . $this->value) : null,
+                'full' => $this->value ? Storage::disk('public')->url($this->value) : null,
+            ];
+        }
 
-            return collect($this->value)->map(function ($val) use ($options) {
-                return $options[$val] ?? $val;
-            })->implode(', ');
+        if ($itemType === ChecklistItem::ITEM_TYPE_VIDEO) {
+            return $this->value ? Storage::disk('public')->url($this->value) : null;
         }
 
         return $this->value;

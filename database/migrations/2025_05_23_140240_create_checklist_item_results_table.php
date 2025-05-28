@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('checklist_item_id')->constrained('checklist_items')->cascadeOnDelete();
             $table->string('uuid', 16)->unique();
 
-            $table->json('value');
+            $table->json('value')->nullable();
             $table->float('size')->nullable();
 
             $table->timestamps();

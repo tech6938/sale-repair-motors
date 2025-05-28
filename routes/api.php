@@ -46,7 +46,10 @@ Route::middleware('auth:sanctum', 'suspended')->group(function () {
     Route::post('/vehicles/{vehicle}', [Controllers\VehicleController::class, 'update']);
     Route::delete('/vehicles/{vehicle}', [Controllers\VehicleController::class, 'destroy']);
 
-    // Inspection routes
-    Route::get('/checklists/{vehicle}', [Controllers\InspectionController::class, 'checklist']);
-    Route::get('/checklists/{vehicle}/items/{checklist}', [Controllers\InspectionController::class, 'items']);
+    // Vehicle inspection routes
+    Route::group(['prefix' => 'vehicles/{vehicle}'], function () {
+        Route::get('/checklists', [Controllers\InspectionController::class, 'checklists']);
+        Route::get('/checklists/{checklist}', [Controllers\InspectionController::class, 'items']);
+        Route::post('/checklists-items/{checklistItem}', [Controllers\InspectionController::class, 'store']);
+    });
 });

@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\ChecklistItem;
 use App\Models\InspectionChecklist;
 use App\Models\User;
 use App\Models\Vehicle;
@@ -51,6 +52,11 @@ class RouteServiceProvider extends ServiceProvider
 
         Route::bind('checklist', function ($uuid) {
             return InspectionChecklist::whereUuid($uuid)
+                ->firstOrFail();
+        });
+
+        Route::bind('checklistItem', function ($uuid) {
+            return ChecklistItem::whereUuid($uuid)
                 ->firstOrFail();
         });
     }

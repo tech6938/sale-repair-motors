@@ -73,4 +73,9 @@ class Vehicle extends Model
 
         return $query;
     }
+
+    public function hasCompletedInspection(): bool
+    {
+        return $this->inspections()->where('status', Inspection::STATUS_COMPLETED)->exists();
+    }
 }

@@ -143,7 +143,7 @@ class InspectionChecklistSeeder extends Seeder
                     'description' => 'Select the options where leakage is detected',
                     'item_type' => ChecklistItem::ITEM_TYPE_MULTISELECT,
                     'display_order' => 1,
-                    'is_required' => true,
+                    'is_required' => false,
                     'created_at' => now(),
                     'options' => [
                         'Place 1 leakage area in vehicle',
@@ -163,7 +163,7 @@ class InspectionChecklistSeeder extends Seeder
                     'description' => 'Select the options for smell check',
                     'item_type' => ChecklistItem::ITEM_TYPE_MULTISELECT,
                     'display_order' => 1,
-                    'is_required' => true,
+                    'is_required' => false,
                     'created_at' => now(),
                     'options' => [
                         'Place 1 smell check',
@@ -183,7 +183,7 @@ class InspectionChecklistSeeder extends Seeder
                     'description' => 'Select the options for noise check',
                     'item_type' => ChecklistItem::ITEM_TYPE_MULTISELECT,
                     'display_order' => 1,
-                    'is_required' => true,
+                    'is_required' => false,
                     'created_at' => now(),
                     'options' => [
                         'Place 1 noise check',

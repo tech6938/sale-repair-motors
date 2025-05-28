@@ -22,14 +22,16 @@ class VehicleResource extends JsonResource
             'color' => $this->color,
             'price' => currency($this->price),
             'license_plate' => $this->license_plate,
-            'created_at' => $this->created_at->toDateTimeString(),
-            'updated_at' => $this->updated_at?->toDateTimeString(),
+            'created_at' => $this->createdAt(),
+            'updated_at' => strip_tags($this->updatedAt()),
             'inspections' => $this->inspections?->map(function ($inspection) {
                 return [
                     'id' => $inspection->uuid,
-                    'title' => $inspection->title,
-                    'created_at' => $inspection->created_at->toDateTimeString(),
-                    'updated_at' => $inspection->updated_at?->toDateTimeString(),
+                    'status' => $inspection->status,
+                    'started_at' => $inspection->started_at ? frontendDateTime($inspection->started_at) : null,
+                    'completed_at' => $inspection->completed_at ? frontendDateTime($inspection->completed_at) : null,
+                    'created_at' => $this->createdAt(),
+                    'updated_at' => strip_tags($this->updatedAt()),
                 ];
             }),
         ];
