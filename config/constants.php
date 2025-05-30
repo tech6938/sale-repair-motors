@@ -13,4 +13,7 @@ return [
 
     'max_image_size' => env('MAX_IMAGE_SIZE', 8192), // 8192 KB = 8 MB
     'max_video_size' => env('MAX_VIDEO_SIZE', 51200), // 51200 KB = 20 MB
+
+    'image_mimes' => env('IMAGE_MIMES', 'jpg,png,gif'),
+    'video_mimetypes' => env('VIDEO_MIMETYPES', 'video/mp4,video/quicktime,video/x-msvideo,video/x-flv,video/x-matroska'),
 ];

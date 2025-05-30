@@ -12,6 +12,7 @@ class ChecklistItem extends Model
     use HasFactory, HasUuid, Timestamps;
 
     public const ITEM_TYPE_IMAGE = 'image';
+    public const ITEM_TYPE_MULTI_IMAGE = 'multi_image';
     public const ITEM_TYPE_VIDEO = 'video';
     public const ITEM_TYPE_TEXT = 'text';
     public const ITEM_TYPE_NUMBER = 'number';

@@ -45,10 +45,28 @@ class ChecklistItemResult extends Model
         }
 
         if ($itemType === ChecklistItem::ITEM_TYPE_IMAGE) {
-            return [
-                'thumbnail' => $this->value ? Storage::disk('public')->url('thumbnails/' . $this->value) : null,
-                'full' => $this->value ? Storage::disk('public')->url($this->value) : null,
+            return empty($this->value) ? [] : [
+                'thumbnail' => Storage::disk('public')->url('thumbnails/' . $this->value),
+                'full' => Storage::disk('public')->url($this->value),
             ];
+        }
+
+        if ($itemType === ChecklistItem::ITEM_TYPE_MULTI_IMAGE) {
+            if (empty($this->value) || !is_array($this->value)) {
+                return [];
+            }
+
+            $result = [];
+            foreach ($this->value as $imgPath) {
+                if (empty($imgPath)) continue;
+
+                $result[] = [
+                    'thumbnail' => Storage::disk('public')->url('thumbnails/' . $imgPath),
+                    'full' => Storage::disk('public')->url($imgPath),
+                ];
+            }
+
+            return $result;
         }
 
         if ($itemType === ChecklistItem::ITEM_TYPE_VIDEO) {

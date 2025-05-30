@@ -86,9 +86,7 @@ class InspectionController extends BaseController implements HasMiddleware
             throw new \Exception('Please complete the previous checklist before proceeding.');
         }
 
-        $request->validate([
-            'value' => $this->getValidationRules($item),
-        ]);
+        $request->validate($this->getValidationRules($item));
 
         $inspectionType = InspectionType::first();
 
@@ -130,43 +128,63 @@ class InspectionController extends BaseController implements HasMiddleware
         );
     }
 
-    private function getValidationRules(ChecklistItem $item)
+    private function getValidationRules(ChecklistItem $item): array
     {
-        $rules = $item->is_required ? 'required' : 'nullable';
+        $requiredNullable = $item->is_required ? 'required' : 'nullable';
 
-        switch ($item->item_type) {
-            case 'image':
-                $rules .= '|file|mimes:jpg,png,gif|max:' . config('constants.max_image_size');
-                break;
-
-            case 'video':
-                $rules .= '|file|mimetypes:video/mp4,video/quicktime,video/x-msvideo,video/x-flv,video/x-matroska|max:' . config('constants.max_image_size');
-                break;
-
-            case 'text':
-                $rules .= '|string|max:1000';
-                break;
-
-            case 'number':
-                $rules .= '|numeric';
-                break;
-
-            case 'boolean':
-                $rules .= '|in:yes,no';
-                break;
-
-            case 'select':
-                $options = $item->itemOptions?->pluck('uuid')->toArray();
-                $rules .= '|in:' . implode(',', $options);
-                break;
-
-            case 'multiselect':
-                $options = $item->itemOptions?->pluck('uuid')->toArray();
-                $rules .= '|array|in:' . implode(',', $options);
-                break;
+        if ($item->item_type === ChecklistItem::ITEM_TYPE_IMAGE) {
+            return [
+                'value' => [$requiredNullable, 'file', 'mimes:' . config('constants.image_mimes'), 'max:' . config('constants.max_image_size')],
+            ];
         }
 
-        return $rules;
+        if ($item->item_type === ChecklistItem::ITEM_TYPE_MULTI_IMAGE) {
+            $min = $item->min ?? 1;
+            $max = $item->max ?? 5;
+
+            return [
+                'value' => [$requiredNullable, 'array', "min:$min", "max:$max"],
+                'value.*' => ['file', 'mimes:' . config('constants.image_mimes'), 'max:' . config('constants.max_image_size')],
+            ];
+        }
+
+        if ($item->item_type === ChecklistItem::ITEM_TYPE_VIDEO) {
+            return [
+                'value' => [$requiredNullable, 'file', 'mimetypes:' . config('constants.video_mimetypes'), 'max:' . config('constants.max_image_size')]
+            ];
+        }
+
+        if ($item->item_type === ChecklistItem::ITEM_TYPE_TEXT) {
+            return [
+                'value' => [$requiredNullable, 'string', 'max:1000']
+            ];
+        }
+
+        if ($item->item_type === ChecklistItem::ITEM_TYPE_NUMBER) {
+            return [
+                'value' => [$requiredNullable, 'numeric']
+            ];
+        }
+
+        if ($item->item_type === ChecklistItem::ITEM_TYPE_BOOLEAN) {
+            return [
+                'value' => [$requiredNullable, 'in:yes,no']
+            ];
+        }
+
+        if ($item->item_type === ChecklistItem::ITEM_TYPE_SELECT) {
+            return [
+                'value' => [$requiredNullable, 'in:' . implode(',', $item->itemOptions?->pluck('uuid')->toArray())]
+            ];
+        }
+
+        if ($item->item_type === ChecklistItem::ITEM_TYPE_MULTISELECT) {
+            return [
+                'value' => [$requiredNullable, 'array', 'in:' . implode(',', $item->itemOptions?->pluck('uuid')->toArray())]
+            ];
+        }
+
+        return ['value' => 'nullable'];
     }
 
     private function processValue(Request $request, ChecklistItem $item)
@@ -177,6 +195,19 @@ class InspectionController extends BaseController implements HasMiddleware
             }
 
             return $this->uploadPublicImage($request->file('value'), 'inspections', $item?->checklistItemResults()?->first()?->value);
+        }
+
+        if ($item->item_type === ChecklistItem::ITEM_TYPE_MULTI_IMAGE) {
+            if (empty($request->file('value')) || !is_array($request->file('value'))) {
+                return null;
+            }
+
+            $paths = [];
+            foreach ($request->file('value') as $file) {
+                $paths[] = $this->uploadPublicImage($file, 'inspections');
+            }
+
+            return $paths;
         }
 
         if ($item->item_type === ChecklistItem::ITEM_TYPE_VIDEO) {

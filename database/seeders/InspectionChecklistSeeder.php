@@ -81,11 +81,11 @@ class InspectionChecklistSeeder extends Seeder
                 ],
                 [
                     'title' => 'Add more photos',
-                    'description' => 'Add up to 5 more photos',
-                    'item_type' => ChecklistItem::ITEM_TYPE_IMAGE,
+                    'description' => 'Add up to 3 more photos',
+                    'item_type' => ChecklistItem::ITEM_TYPE_MULTI_IMAGE,
                     'display_order' => 9,
                     'is_required' => false,
-                    'max' => 5,
+                    'max' => 3,
                     'created_at' => now(),
                 ],
             ],
@@ -200,11 +200,11 @@ class InspectionChecklistSeeder extends Seeder
             'Pre-Test Diagnostic Scan' => [
                 [
                     'title' => 'Photos',
-                    'description' => 'Upload upto 8 scans',
-                    'item_type' => ChecklistItem::ITEM_TYPE_IMAGE,
+                    'description' => 'Upload upto 4 scans',
+                    'item_type' => ChecklistItem::ITEM_TYPE_MULTI_IMAGE,
                     'display_order' => 1,
                     'min' => 1,
-                    'max' => 8,
+                    'max' => 4,
                     'is_required' => true,
                     'created_at' => now(),
                 ],
@@ -232,11 +232,11 @@ class InspectionChecklistSeeder extends Seeder
             'Post-Test Diagnostic Scan' => [
                 [
                     'title' => 'Photos',
-                    'description' => 'Upload upto 8 scans',
-                    'item_type' => ChecklistItem::ITEM_TYPE_IMAGE,
+                    'description' => 'Upload upto 4 scans',
+                    'item_type' => ChecklistItem::ITEM_TYPE_MULTI_IMAGE,
                     'display_order' => 1,
                     'min' => 1,
-                    'max' => 8,
+                    'max' => 4,
                     'is_required' => true,
                     'created_at' => now(),
                 ],
@@ -265,11 +265,11 @@ class InspectionChecklistSeeder extends Seeder
             'Bodywork Damage Photos (only if present)' => [
                 [
                     'title' => 'Photos',
-                    'description' => 'Upload upto 8 photos',
-                    'item_type' => ChecklistItem::ITEM_TYPE_IMAGE,
+                    'description' => 'Upload upto 4 photos',
+                    'item_type' => ChecklistItem::ITEM_TYPE_MULTI_IMAGE,
                     'display_order' => 1,
                     'min' => 0,
-                    'max' => 8,
+                    'max' => 4,
                     'is_required' => false,
                     'created_at' => now(),
                 ],
@@ -286,7 +286,7 @@ class InspectionChecklistSeeder extends Seeder
                 [
                     'title' => 'Photos',
                     'description' => 'Upload upto 4 photos',
-                    'item_type' => ChecklistItem::ITEM_TYPE_IMAGE,
+                    'item_type' => ChecklistItem::ITEM_TYPE_MULTI_IMAGE,
                     'display_order' => 2,
                     'min' => 0,
                     'max' => 4,
