@@ -119,4 +119,8 @@ $(function () {
     $(document).on("init.dt", function (e, settings) {
         $('[data-bs-toggle="tooltip"]').tooltip();
     });
+
+    $(document).on('draw.dt', function () {
+        NioApp.Lightbox('.popup-image', 'image');
+    });
 });

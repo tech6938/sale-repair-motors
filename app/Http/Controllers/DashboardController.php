@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Inspection;
 use App\Models\User;
+use App\Models\Vehicle;
 
 class DashboardController extends Controller
 {
@@ -10,10 +12,11 @@ class DashboardController extends Controller
     {
         return view('dashboard', [
             'adminsCount' => User::applyRoleFilter()->admin()->count(),
-            'latestAdmins' => User::applyRoleFilter()->admin()->latest()->limit(5)->get(),
-
             'staffsCount' => User::applyRoleFilter()->staff()->count(),
-            'latestStaffs' => User::applyRoleFilter()->staff()->latest()->limit(5)->get(),
+            'inspectionsCount' => Vehicle::applyRoleFilter()->whereHas(
+                'inspections',
+                fn($q) => $q->where('status', Inspection::STATUS_COMPLETED)
+            )->count(),
         ]);
     }
 }

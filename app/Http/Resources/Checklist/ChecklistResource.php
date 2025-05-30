@@ -21,7 +21,7 @@ class ChecklistResource extends JsonResource
             'description' => $this->description,
             'is_required' => $this->is_required,
             'display_order' => $this->display_order,
-            'status' => $this->inspectionChecklistResults()?->first()?->status === InspectionChecklistResult::STATUS_COMPLETED
+            'status' => $this->inspectionChecklistResults?->first()?->status === InspectionChecklistResult::STATUS_COMPLETED
                 ? 'completed'
                 : 'incomplete',
             'created_at' => $this->createdAt(),

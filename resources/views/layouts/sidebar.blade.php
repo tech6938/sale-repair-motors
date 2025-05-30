@@ -42,6 +42,12 @@
                             <span class="nk-menu-text">Staffs</span>
                         </a>
                     </li>
+                    <li class="nk-menu-item">
+                        <a href="{{ route('inspections.index') }}" class="nk-menu-link">
+                            <span class="nk-menu-icon"><em class="icon ni ni-truck"></em></span>
+                            <span class="nk-menu-text">Inspections</span>
+                        </a>
+                    </li>
                 </ul>
 
             </div>

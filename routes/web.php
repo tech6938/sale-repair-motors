@@ -57,4 +57,10 @@ Route::middleware('auth', 'suspended')->group(function () {
         Route::get('datatable', [Controllers\StaffController::class, 'dataTable'])->name('datatable');
         Route::resource('/', Controllers\StaffController::class)->parameters(['' => 'staff']);
     });
+
+    // Inspections routes
+    Route::group(['prefix' => 'inspections', 'as' => 'inspections.'], function () {
+        Route::get('datatable', [Controllers\InspectionController::class, 'dataTable'])->name('datatable');
+        Route::resource('/', Controllers\InspectionController::class)->parameters(['' => 'inspection']);
+    });
 });

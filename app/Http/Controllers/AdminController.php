@@ -163,9 +163,11 @@ class AdminController extends Controller
                             ' . getAvatarHtml($record->manager) . '
                         </div>
                         <div class="user-info">
-                            <a href="' . route('admins.show', $record->manager->uuid) . '" async-modal async-modal-size="lg">
-                                <span class="tb-lead text-danger">' . $record->manager->name . '</span>
-                            </a>
+                            <span class="tb-lead">
+                                <a href="' . route('admins.show', $record->manager->uuid) . '" async-modal async-modal-size="lg">
+                                    ' . $record->manager->name . '
+                                </a>
+                            </span>
                             <span>' . $record->manager->email . '</span>
                         </div>
                     </div>';
@@ -178,9 +180,11 @@ class AdminController extends Controller
                             ' . getAvatarHtml($record) . '
                         </div>
                         <div class="user-info">
-                            <a href="' . route('admins.show', $record->uuid) . '" async-modal async-modal-size="lg">
-                                <span class="tb-lead text-danger">' . $record->name . '</span>
-                            </a>
+                            <span class="tb-lead">
+                                <a href="' . route('admins.show', $record->uuid) . '" async-modal async-modal-size="lg">
+                                    ' . $record->name . '
+                                </a>
+                            </span>
                             <span>' . $record->email . '</span>
                         </div>
                     </div>';
