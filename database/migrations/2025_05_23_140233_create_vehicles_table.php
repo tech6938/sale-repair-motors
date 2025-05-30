@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('make');
             $table->string('model');
             $table->integer('year');
+            $table->string('image')->nullable();
             $table->string('fuel_type');
             $table->text('address');
             $table->string('color');

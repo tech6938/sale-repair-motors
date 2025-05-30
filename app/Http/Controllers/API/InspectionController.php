@@ -151,7 +151,7 @@ class InspectionController extends BaseController implements HasMiddleware
 
         if ($item->item_type === ChecklistItem::ITEM_TYPE_VIDEO) {
             return [
-                'value' => [$requiredNullable, 'file', 'mimetypes:' . config('constants.video_mimetypes'), 'max:' . config('constants.max_image_size')]
+                'value' => [$requiredNullable, 'file', 'mimetypes:' . config('constants.video_mimetypes'), 'max:' . config('constants.max_video_size')]
             ];
         }
 

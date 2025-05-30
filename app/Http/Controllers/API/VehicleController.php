@@ -9,10 +9,13 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Controllers\Middleware;
 use App\Http\Resources\Vehicle\VehicleResource;
 use App\Http\Resources\Vehicle\VehicleCollection;
+use App\Traits\FileUploader;
 use Illuminate\Routing\Controllers\HasMiddleware;
 
 class VehicleController extends BaseController implements HasMiddleware
 {
+    use FileUploader;
+
     public static function middleware(): array
     {
         return [
@@ -50,6 +53,7 @@ class VehicleController extends BaseController implements HasMiddleware
             'make' => 'required|string|max:50',
             'model' => 'required|string|max:50',
             'year' => 'required|integer|min:1900|max:' . (int) date('Y'),
+            'image' => 'nullable|file|mimes:jpg,png,gif|max:10000', // 10000 KB ~= 10 MB
             'fuel_type' => 'required|string|in:gasoline,diesel,electric,hybrid',
             'address' => 'required|string|max:200',
             'color' => 'required|string|max:20',
@@ -62,11 +66,21 @@ class VehicleController extends BaseController implements HasMiddleware
             'license_plate.regex' => 'The license plate must contain only letters and numbers.',
         ]);
 
+        $path = null;
+
+        if ($request->hasFile('image')) {
+            $path = $this->uploadPublicImage(
+                $request->file('image'),
+                'vehicles',
+            );
+        }
+
         $vehicle = Vehicle::create([
             'user_id' => auth()->user()->id,
             'make' => $request->input('make'),
             'model' => $request->input('model'),
             'year' => $request->input('year'),
+            'image' => $path,
             'fuel_type' => $request->input('fuel_type'),
             'address' => $request->input('address'),
             'color' => $request->input('color'),
@@ -111,6 +125,7 @@ class VehicleController extends BaseController implements HasMiddleware
             'make' => 'sometimes|required|string|max:50',
             'model' => 'sometimes|required|string|max:50',
             'year' => 'sometimes|required|integer|min:1900|max:' . (int) date('Y'),
+            'image' => 'nullable|file|mimes:jpg,png,gif|max:10000', // 10000 KB ~= 10 MB
             'fuel_type' => 'sometimes|required|string|in:gasoline,diesel,electric,hybrid',
             'address' => 'sometimes|required|string|max:200',
             'color' => 'sometimes|required|string|max:20',
@@ -118,15 +133,26 @@ class VehicleController extends BaseController implements HasMiddleware
             'license_plate' => 'sometimes|required|string|max:20|regex:/^[A-Za-z0-9]+$/',
         ]);
 
+        $path = $vehicle->image;
+
+        if ($request->hasFile('image')) {
+            $path = $this->uploadPublicImage(
+                $request->file('image'),
+                'vehicles',
+                $vehicle->image
+            );
+        }
+
         $vehicle->update([
-            'make' => $request->input('make'),
-            'model' => $request->input('model'),
-            'year' => $request->input('year'),
-            'fuel_type' => $request->input('fuel_type'),
-            'address' => $request->input('address'),
-            'color' => $request->input('color'),
-            'price' => $request->input('price'),
-            'license_plate' => $request->input('license_plate'),
+            'make' => $request->input('make', $vehicle->make),
+            'model' => $request->input('model', $vehicle->model),
+            'year' => $request->input('year', $vehicle->year),
+            'image' => $path,
+            'fuel_type' => $request->input('fuel_type', $vehicle->fuel_type),
+            'address' => $request->input('address', $vehicle->address),
+            'color' => $request->input('color', $vehicle->color),
+            'price' => $request->input('price', $vehicle->price),
+            'license_plate' => $request->input('license_plate', $vehicle->license_plate),
         ]);
 
         return $this->apiResponse(
@@ -142,7 +168,11 @@ class VehicleController extends BaseController implements HasMiddleware
     public function destroy(Vehicle $vehicle)
     {
         if ($vehicle->inspections()?->count() > 0) {
-            throw new \Exception('Cannot update a veh$vehicle that has inspections.', JsonResponse::HTTP_FORBIDDEN);
+            throw new \Exception('Cannot update a vehicle that has inspections.', JsonResponse::HTTP_FORBIDDEN);
+        }
+
+        if ($vehicle->image) {
+            $this->removePublicImage($vehicle->image);
         }
 
         $vehicle->delete();

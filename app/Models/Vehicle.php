@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Concerns\HasUuid;
 use App\Models\Concerns\Timestamps;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -21,6 +22,7 @@ class Vehicle extends Model
         'make',
         'model',
         'year',
+        'image',
         'fuel_type',
         'address',
         'color',
@@ -81,5 +83,15 @@ class Vehicle extends Model
     public function hasCompletedInspection(): bool
     {
         return $this->inspections()->where('status', Inspection::STATUS_COMPLETED)->exists();
+    }
+
+    public function getImageThumbnailUrlAttribute()
+    {
+        return $this->image ? Storage::disk('public')->url('thumbnails/' . $this->image) : null;
+    }
+
+    public function getImageUrlAttribute()
+    {
+        return $this->image ? Storage::disk('public')->url($this->image) : null;
     }
 }
