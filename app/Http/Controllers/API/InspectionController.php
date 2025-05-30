@@ -25,7 +25,8 @@ class InspectionController extends BaseController implements HasMiddleware
     public static function middleware(): array
     {
         return [
-            new Middleware('role:' . User::ROLE_STAFF),
+            new Middleware('role:' . implode('|',  [User::ROLE_ADMIN, User::ROLE_STAFF]), only: ['checklists', 'items']),
+            new Middleware('role:' . User::ROLE_STAFF, only: ['store']),
         ];
     }
 

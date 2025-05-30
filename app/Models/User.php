@@ -111,7 +111,7 @@ class User extends Authenticatable
         return '<span class="badge">Unknown</span>';
     }
 
-    public function scopeManagedByUser(Builder $query): Builder
+    public function scopeApplyRoleFilter(Builder $query): Builder
     {
         return $query->when(
             !auth()->user()->isSuperAdmin(),
@@ -149,7 +149,7 @@ class User extends Authenticatable
         return $query->whereHas('roles', fn($q) => $q->whereIn('name', [self::ROLE_ADMIN, self::ROLE_STAFF]));
     }
 
-    public function scopeApplyFilters(Builder $query)
+    public function scopeApplyRequestFilters(Builder $query)
     {
         if (request()->has('search')) {
             $search = trim(request()->input('search'));

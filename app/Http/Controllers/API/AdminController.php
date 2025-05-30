@@ -28,9 +28,9 @@ class AdminController extends BaseController implements HasMiddleware
      */
     public function list()
     {
-        $admins = User::managedByUser()
+        $admins = User::applyRoleFilter()
             ->admin()
-            ->applyFilters()
+            ->applyRequestFilters()
             ->paginate(request()->input('page_size', $this->perPage));
 
         return $this->apiResponse(

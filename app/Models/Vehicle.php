@@ -43,15 +43,18 @@ class Vehicle extends Model
         return $this->hasMany(Inspection::class);
     }
 
-    public function scopeManagedByUser(Builder $query): Builder
+    public function scopeApplyRoleFilter(Builder $query): Builder
     {
         return $query->when(
-            !auth()->user()->isSuperAdmin(),
+            auth()->user()->isStaff(),
             fn($query) => $query->where('user_id', auth()->user()->id)
+        )->when(
+            auth()->user()->isAdmin(),
+            fn($query) => $query->whereIn('user_id', auth()->user()->users()->pluck('id')->toArray())
         );
     }
 
-    public function scopeApplyFilters(Builder $query)
+    public function scopeApplyRequestFilters(Builder $query)
     {
         if (request()->has('search')) {
             $search = trim(request()->input('search'));

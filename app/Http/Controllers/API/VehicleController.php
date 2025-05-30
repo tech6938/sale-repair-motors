@@ -28,8 +28,8 @@ class VehicleController extends BaseController implements HasMiddleware
      */
     public function list()
     {
-        $vehicles = Vehicle::managedByUser()
-            ->applyFilters()
+        $vehicles = Vehicle::applyRoleFilter()
+            ->applyRequestFilters()
             ->paginate(request()->input('page_size', $this->perPage));
 
         return $this->apiResponse(

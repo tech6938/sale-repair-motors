@@ -125,7 +125,7 @@ class AdminController extends Controller
      */
     public function dataTable(Request $request): JsonResponse
     {
-        $dt = DataTables::of(User::managedByUser()->admin()->with('manager')->latest());
+        $dt = DataTables::of(User::applyRoleFilter()->admin()->with('manager')->latest());
 
         $dt->filter(function ($query) use ($request) {
             if (empty($request->input('search'))) return;
