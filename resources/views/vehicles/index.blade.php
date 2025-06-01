@@ -1,12 +1,12 @@
 @extends('layouts.app')
 
-@section('title', 'Inspections Management')
+@section('title', 'Vehicles Management')
 
 @section('content')
     <div class="nk-block-head nk-block-head-sm">
         <div class="nk-block-between">
             <div class="nk-block-head-content">
-                <h3 class="nk-block-title page-title">Inspections Management</h3>
+                <h3 class="nk-block-title page-title">Vehicles Management</h3>
             </div>
         </div>
     </div>
@@ -14,19 +14,19 @@
     <div class="nk-block">
         <div class="card card-bordered card-preview">
             <div class="card-inner">
-                <table id="inspections-dt" class="table nowrap nk-tb-list nk-tb-ulist dataTable no-footer" width="100%">
+                <table id="vehicles-dt" class="table nowrap nk-tb-list nk-tb-ulist dataTable no-footer" width="100%">
                     <thead>
                         <tr class="nk-tb-item nk-tb-head">
                             <th><span class="sub-text">#</span></th>
-                            <th><span class="sub-text">Vehicle</span></th>
                             @if (auth()->user()->isSuperAdmin())
                                 <th><span class="sub-text">Manager</span></th>
                             @endif
-                            {{-- <th><span class="sub-text">Status</span></th>
-                            <th><span class="sub-text">Started At</span></th>
-                            <th><span class="sub-text">Completed At</span></th> --}}
-                            <th><span class="sub-text">Created</span></th>
-                            <th><span class="sub-text">Updated</span></th>
+                            <th><span class="sub-text">Vehicle</span></th>
+                            <th><span class="sub-text">Address</span></th>
+                            <th><span class="sub-text">Inspection Started At</span></th>
+                            <th><span class="sub-text">Inspection Completed At</span></th>
+                            <th><span class="sub-text">Vehicle Created</span></th>
+                            <th><span class="sub-text">Vehicle Updated</span></th>
                             <th class="text-right"><span class="sub-text">Actions</span></th>
                         </tr>
                     </thead>
@@ -49,6 +49,20 @@
                 name: 'vehicle'
             },
             {
+                data: 'address',
+                name: 'address'
+            },
+            {
+                data: 'started_at',
+                name: 'started_at',
+                searchable: false
+            },
+            {
+                data: 'completed_at',
+                name: 'completed_at',
+                searchable: false
+            },
+            {
                 data: 'created',
                 name: 'created',
                 searchable: false
@@ -66,7 +80,7 @@
         ];
 
         @if (auth()->user()->isSuperAdmin())
-            columns.splice(2, 0, {
+            columns.splice(1, 0, {
                 data: 'manager',
                 name: 'manager',
                 orderable: false,
@@ -74,14 +88,14 @@
             });
         @endif
 
-        let dt = $('#inspections-dt').DataTable({
+        let dt = $('#vehicles-dt').DataTable({
             processing: true,
             serverSide: true,
             scrollX: false,
             ordering: false,
             autoWidth: true,
             ajax: {
-                url: "{{ route('inspections.datatable') }}",
+                url: "{{ route('vehicles.datatable') }}",
             },
             columns: columns,
         });

@@ -5,18 +5,19 @@ namespace App\Http\Controllers\API;
 use App\Models\User;
 use App\Models\Vehicle;
 use App\Models\Inspection;
+use App\Traits\FileUploader;
 use Illuminate\Http\Request;
 use App\Models\ChecklistItem;
 use App\Models\InspectionType;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
+use App\Models\ChecklistItemResult;
 use App\Models\InspectionChecklist;
 use App\Models\InspectionChecklistResult;
 use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use App\Http\Resources\Checklist\ChecklistCollection;
 use App\Http\Resources\ChecklistItem\ChecklistItemCollection;
-use App\Traits\FileUploader;
 
 class InspectionController extends BaseController implements HasMiddleware
 {
@@ -109,7 +110,7 @@ class InspectionController extends BaseController implements HasMiddleware
             ]);
 
         // Process the value based on type
-        $value = $this->processValue($request, $item);
+        $value = $this->processValue($request, $vehicle, $item);
 
         $checklistResult->checklistItemResults()
             ->updateOrCreate([
@@ -188,14 +189,21 @@ class InspectionController extends BaseController implements HasMiddleware
         return ['value' => 'nullable'];
     }
 
-    private function processValue(Request $request, ChecklistItem $item)
+    private function processValue(Request $request, Vehicle $vehicle, ChecklistItem $item)
     {
+        $previousValue = ChecklistItemResult::whereHas('checklistItem', fn($q) => $q->where('id', $item->id))
+            ->whereHas(
+                'inspectionChecklistResult.inspection.vehicle',
+                fn($q) => $q->where('id', $vehicle->id)
+            )
+            ->first()?->value;
+
         if ($item->item_type === ChecklistItem::ITEM_TYPE_IMAGE) {
             if (empty($request->file('value'))) {
                 return null;
             }
 
-            return $this->uploadPublicImage($request->file('value'), 'inspections', $item?->checklistItemResults()?->first()?->value);
+            return $this->uploadPublicImage($request->file('value'), 'inspections', $previousValue);
         }
 
         if ($item->item_type === ChecklistItem::ITEM_TYPE_MULTI_IMAGE) {
@@ -208,6 +216,12 @@ class InspectionController extends BaseController implements HasMiddleware
                 $paths[] = $this->uploadPublicImage($file, 'inspections');
             }
 
+            if (!empty($previousValue) && is_array($previousValue)) {
+                foreach ($previousValue as $path) {
+                    $this->removePublicImage($path);
+                }
+            }
+
             return $paths;
         }
 
@@ -216,7 +230,7 @@ class InspectionController extends BaseController implements HasMiddleware
                 return null;
             }
 
-            return $this->uploadPublicFile($request->file('value'), 'inspections', $item?->checklistItemResults()?->first()?->value);
+            return $this->uploadPublicFile($request->file('value'), 'inspections', $previousValue);
         }
 
         if ($item->item_type === ChecklistItem::ITEM_TYPE_TEXT) {

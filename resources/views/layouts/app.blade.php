@@ -31,6 +31,8 @@
 <body class="nk-body bg-lighter npc-default has-sidebar {{ $isDarkMode ? 'dark-mode' : '' }}">
     <div class="nk-app-root">
         <div class="nk-main ">
+            @include('layouts.partials.full-screen-spinner')
+
             @include('layouts.sidebar')
 
             <div class="nk-wrap ">

@@ -52,3 +52,35 @@ td {
 .logo-img {
     margin-left: -6px;
 }
+
+.spinner-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: #0b0b0b;
+    opacity: .8;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1050;
+}
+
+.image-container {
+    max-width: 250px;
+    max-height: 250px;
+    overflow: hidden;
+    margin: 0 auto;
+    border-radius: 5%;
+}
+
+.image-container img {
+    object-fit: contain;
+    width: 100%;
+    height: auto;
+}
+
+.product-card {
+    height: auto;
+}

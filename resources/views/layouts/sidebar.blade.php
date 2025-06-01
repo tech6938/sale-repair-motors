@@ -43,9 +43,9 @@
                         </a>
                     </li>
                     <li class="nk-menu-item">
-                        <a href="{{ route('inspections.index') }}" class="nk-menu-link">
+                        <a href="{{ route('vehicles.index') }}" class="nk-menu-link">
                             <span class="nk-menu-icon"><em class="icon ni ni-truck"></em></span>
-                            <span class="nk-menu-text">Inspections</span>
+                            <span class="nk-menu-text">Vehicles</span>
                         </a>
                     </li>
                 </ul>

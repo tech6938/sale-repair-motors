@@ -58,9 +58,11 @@ Route::middleware('auth', 'suspended')->group(function () {
         Route::resource('/', Controllers\StaffController::class)->parameters(['' => 'staff']);
     });
 
-    // Inspections routes
-    Route::group(['prefix' => 'inspections', 'as' => 'inspections.'], function () {
-        Route::get('datatable', [Controllers\InspectionController::class, 'dataTable'])->name('datatable');
-        Route::resource('/', Controllers\InspectionController::class)->parameters(['' => 'inspection']);
+    // Vehicles routes
+    Route::group(['prefix' => 'vehicles', 'as' => 'vehicles.'], function () {
+        Route::get('datatable', [Controllers\VehicleController::class, 'dataTable'])->name('datatable');
+        Route::get('/', [Controllers\VehicleController::class, 'index'])->name('index');
+        Route::get('/{vehicle}', [Controllers\VehicleController::class, 'show'])->name('show');
+        Route::get('/{vehicle}/checklist/{checklist}', [Controllers\VehicleController::class, 'checklist'])->name('checklist');
     });
 });
