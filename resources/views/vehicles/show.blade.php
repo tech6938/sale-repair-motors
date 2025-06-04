@@ -14,6 +14,24 @@
                 </div>
                 <h3 class="nk-block-title page-title">{{ implode(' ', [$vehicle->make, $vehicle->model]) }} Details</h3>
             </div>
+
+            <div class="nk-block-head-content">
+                <div class="toggle-wrap nk-block-tools-toggle">
+                    <a href="javascript:void(0);" class="btn btn-icon btn-trigger toggle-expand me-n1" data-target="pageMenu">
+                        <em class="icon ni ni-more-v"></em>
+                    </a>
+                    <div class="toggle-expand-content" data-content="pageMenu">
+                        <ul class="nk-block-tools g-3">
+                            <li class="nk-block-tools-opt">
+                                <a href="{{ route('vehicles.export', $vehicle->uuid) }}" class="btn btn-primary" target="_blank">
+                                    <em class="icon ni ni-download"></em>
+                                    <span>Export PDF</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 

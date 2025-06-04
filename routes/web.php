@@ -63,6 +63,7 @@ Route::middleware('auth', 'suspended')->group(function () {
         Route::get('datatable', [Controllers\VehicleController::class, 'dataTable'])->name('datatable');
         Route::get('/', [Controllers\VehicleController::class, 'index'])->name('index');
         Route::get('/{vehicle}', [Controllers\VehicleController::class, 'show'])->name('show');
+        Route::get('/{vehicle}/export', [Controllers\VehicleController::class, 'export'])->name('export');
         Route::get('/{vehicle}/checklist/{checklist}', [Controllers\VehicleController::class, 'checklist'])->name('checklist');
     });
 });

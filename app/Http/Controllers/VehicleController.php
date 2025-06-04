@@ -7,6 +7,7 @@ use Illuminate\View\View;
 use App\Models\Inspection;
 use Illuminate\Http\Request;
 use App\Models\ChecklistItem;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Yajra\DataTables\DataTables;
 use Illuminate\Http\JsonResponse;
 use App\Models\InspectionChecklist;
@@ -51,6 +52,89 @@ class VehicleController extends Controller
             ->get();
 
         return view('vehicles.checklist', compact('vehicle', 'checklist', 'items'));
+    }
+
+    public function export(Vehicle $vehicle)
+    {
+        $inspection = $vehicle->inspections()
+            ->where('status', Inspection::STATUS_COMPLETED)
+            ->latest()
+            ->first();
+
+        if (empty($inspection)) {
+            return back()->withErrors(['error' => 'No completed inspection found for this vehicle.']);
+        }
+
+        $checklists = InspectionChecklist::whereInspectionTypeId($inspection->inspectionType->id)
+            ->with(
+                'checklistItems',
+                function ($q) use ($vehicle) {
+                    $q->whereHas(
+                        'checklistItemResults.inspectionChecklistResult.inspection.vehicle',
+                        fn($q) => $q->where('id', $vehicle->id)
+                    )
+                        ->with('checklistItemResults', fn($q) => $q->whereHas(
+                            'inspectionChecklistResult.inspection.vehicle',
+                            fn($q) => $q->where('id', $vehicle->id)
+                        ))
+                        ->with('itemOptions')
+                        ->ordered();
+                },
+            )
+            ->ordered()
+            ->get();
+
+        if ($checklists->isEmpty()) {
+            return back()->withErrors(['error' => 'No checklist templates found for this inspection type.']);
+        }
+
+        // Verify we have results for each checklist
+        foreach ($checklists as $checklist) {
+            if ($checklist->inspectionChecklistResults->isEmpty()) {
+                return back()->withErrors(['error' => "Missing results for checklist: {$checklist->name}"]);
+            }
+
+            // Verify we have results for all required items
+            $missingRequiredItems = $checklist->checklistItems()
+                ->where('is_required', true)
+                ->whereDoesntHave('checklistItemResults', function ($q) use ($inspection) {
+                    $q->whereHas('inspectionChecklistResult', fn($q) => $q->where('inspection_id', $inspection->id));
+                })
+                ->exists();
+
+            if ($missingRequiredItems) {
+                return back()->withErrors(['error' => "Missing required items in checklist: {$checklist->name}"]);
+            }
+        }
+
+        $pdf = PDF::loadView('pdfs.inspection', [
+            'vehicle' => $vehicle,
+            'inspection' => $inspection,
+            'checklists' => $checklists,
+        ]);
+
+        $pdf->setPaper('A4', 'portrait');
+        $pdf->render();
+
+        // Add page numbers
+        $canvas = $pdf->getCanvas();
+        $fontMetrics = $pdf->getFontMetrics();
+        $font = $fontMetrics->getFont('DejaVu Sans', 'normal');
+        $size = 10;
+
+        $canvas->page_text(
+            $canvas->get_width() - 70,
+            $canvas->get_height() - 30,
+            '{PAGE_NUM}/{PAGE_COUNT}',
+            $font,
+            $size
+        );
+
+        return $pdf->stream(sprintf(
+            'inspection-report-%s-%s.pdf',
+            $vehicle->uuid,
+            $inspection->completed_at->format('Y-m-d')
+        ));
     }
 
     /**
