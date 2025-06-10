@@ -24,7 +24,7 @@
         }
 
         .header img {
-            max-height: 55px;
+            max-height: 60px;
             width: auto;
             max-width: calc(210mm - 25mm - 25mm);
         }
@@ -101,7 +101,7 @@
 
 <body>
     <div class="header">
-        <img src="{{ base64File('assets/images/logo.png') }}" />
+        <img src="{{ base64File('assets/images/logo-dark.png') }}" />
     </div>
 
     <div class="footer">
