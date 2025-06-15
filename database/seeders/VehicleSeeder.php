@@ -12,18 +12,25 @@ class VehicleSeeder extends Seeder
     {
         $user = User::where('email', 'staff1@domain.com')->firstOrFail();
 
+        $fuelTypes = [
+            Vehicle::FUEL_TYPE_GASOLINE,
+            Vehicle::FUEL_TYPE_DIESEL,
+            Vehicle::FUEL_TYPE_ELECTRIC,
+            Vehicle::FUEL_TYPE_HYBRID,
+        ];
+
         $vehicles = [
             [
                 'user_id' => $user->id,
                 'uuid' => getUuid(),
                 'make' => 'Nissan',
-                'model' => 'Patrol',
+                'model' => 'Murano',
                 'year' => 2022,
-                'fuel_type' => 'Gasoline',
-                'address' => 'Houston, TX, USA',
+                'fuel_type' => fake()->randomElement($fuelTypes),
                 'color' => 'Black',
-                'price' => 25000.00,
                 'license_plate' => 'NIS2022',
+                'milage' => fake()->randomFloat(2, 1000, 50000),
+                'registration' => 'REG-NIS2022',
                 'created_at' => now(),
             ],
             [
@@ -32,11 +39,11 @@ class VehicleSeeder extends Seeder
                 'make' => 'Toyota',
                 'model' => 'Camry',
                 'year' => 2021,
-                'fuel_type' => 'Hybrid',
-                'address' => 'Dallas, TX, USA',
+                'fuel_type' => fake()->randomElement($fuelTypes),
                 'color' => 'Silver',
-                'price' => 22000.00,
                 'license_plate' => 'TOY2021',
+                'milage' => fake()->randomFloat(2, 1000, 50000),
+                'registration' => 'REG-TOY2021',
                 'created_at' => now(),
             ],
             [
@@ -45,11 +52,11 @@ class VehicleSeeder extends Seeder
                 'make' => 'Ford',
                 'model' => 'F-150',
                 'year' => 2023,
-                'fuel_type' => 'Diesel',
-                'address' => 'Austin, TX, USA',
+                'fuel_type' => fake()->randomElement($fuelTypes),
                 'color' => 'Blue',
-                'price' => 35000.00,
                 'license_plate' => 'FRD2023',
+                'milage' => fake()->randomFloat(2, 1000, 50000),
+                'registration' => 'REG-FRD2023',
                 'created_at' => now(),
             ],
             [
@@ -58,11 +65,11 @@ class VehicleSeeder extends Seeder
                 'make' => 'Chevrolet',
                 'model' => 'Tahoe',
                 'year' => 2020,
-                'fuel_type' => 'Gasoline',
-                'address' => 'San Antonio, TX, USA',
+                'fuel_type' => fake()->randomElement($fuelTypes),
                 'color' => 'White',
-                'price' => 32000.00,
                 'license_plate' => 'CHV2020',
+                'milage' => fake()->randomFloat(2, 1000, 50000),
+                'registration' => 'REG-CHV2020',
                 'created_at' => now(),
             ],
             [
@@ -71,11 +78,11 @@ class VehicleSeeder extends Seeder
                 'make' => 'Honda',
                 'model' => 'Accord',
                 'year' => 2022,
-                'fuel_type' => 'Gasoline',
-                'address' => 'El Paso, TX, USA',
+                'fuel_type' => fake()->randomElement($fuelTypes),
                 'color' => 'Red',
-                'price' => 24000.00,
                 'license_plate' => 'HND2022',
+                'milage' => fake()->randomFloat(2, 1000, 50000),
+                'registration' => 'REG-HND2022',
                 'created_at' => now(),
             ],
         ];

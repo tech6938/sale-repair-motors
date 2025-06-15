@@ -40,14 +40,7 @@
         <div class="card card-bordered card-preview">
             <div class="card-inner">
                 <div class="row">
-                    <div class="col-2 text-center">
-                        <div class="image-container">
-                            <a href="{{ $vehicle->image_url }}" class="popup-image">
-                                <img src="{{ $vehicle->image_thumbnail_url }}" onerror="_ie(this)" id="vehicle-image">
-                            </a>
-                        </div>
-                    </div>
-                    <div class="col-10">
+                    <div class="col-12">
                         <div class="nk-block">
 
                             {{-- Vehicle Title --}}
@@ -69,17 +62,9 @@
                                         <li class="py-1 px-3">
                                             <div class="data-col">
                                                 <div class="data-label">
-                                                    <h6>License Plate</h6>
+                                                    <h6>Fuel Type</h6>
                                                 </div>
-                                                <div class="data-value">{{ $vehicle->license_plate }}</div>
-                                            </div>
-                                        </li>
-                                        <li class="py-1 px-3">
-                                            <div class="data-col">
-                                                <div class="data-label">
-                                                    <h6>Address</h6>
-                                                </div>
-                                                <div class="data-value">{{ $vehicle->address }}</div>
+                                                <div class="data-value">{{ ucwords($vehicle->fuel_type) }}</div>
                                             </div>
                                         </li>
                                         <li class="py-1 px-3">
@@ -93,9 +78,25 @@
                                         <li class="py-1 px-3">
                                             <div class="data-col">
                                                 <div class="data-label">
-                                                    <h6>Fuel Type</h6>
+                                                    <h6>License Plate</h6>
                                                 </div>
-                                                <div class="data-value">{{ $vehicle->fuel_type }}</div>
+                                                <div class="data-value">{{ $vehicle->license_plate }}</div>
+                                            </div>
+                                        </li>
+                                        <li class="py-1 px-3">
+                                            <div class="data-col">
+                                                <div class="data-label">
+                                                    <h6>Milage</h6>
+                                                </div>
+                                                <div class="data-value">{{ $vehicle->milage }}</div>
+                                            </div>
+                                        </li>
+                                        <li class="py-1 px-3">
+                                            <div class="data-col">
+                                                <div class="data-label">
+                                                    <h6>Registration</h6>
+                                                </div>
+                                                <div class="data-value">{{ $vehicle->registration }}</div>
                                             </div>
                                         </li>
                                         <li class="py-1 px-3">

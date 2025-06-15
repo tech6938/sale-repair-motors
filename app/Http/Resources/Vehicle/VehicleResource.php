@@ -17,15 +17,11 @@ class VehicleResource extends JsonResource
         return [
             'id' => $this->uuid,
             'title' => implode(' ', [$this->make, $this->model, $this->year]),
-            'images' => [
-                'thumbnail' => $this->image_thumbnail_url,
-                'full' => $this->image_url,
-            ],
             'fuel_type' => $this->fuel_type,
-            'address' => $this->address,
             'color' => $this->color,
-            'price' => currency($this->price),
             'license_plate' => $this->license_plate,
+            'milage' => $this->milage,
+            'registration' => $this->registration,
             'created_at' => $this->createdAt(),
             'updated_at' => strip_tags($this->updatedAt()),
             'inspections' => $this->inspections?->map(function ($inspection) {

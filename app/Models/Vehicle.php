@@ -5,7 +5,6 @@ namespace App\Models;
 use App\Models\Concerns\HasUuid;
 use App\Models\Concerns\Timestamps;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -15,6 +14,11 @@ class Vehicle extends Model
 {
     use HasFactory, HasUuid, Timestamps;
 
+    const FUEL_TYPE_GASOLINE = 'gasoline';
+    const FUEL_TYPE_DIESEL = 'diesel';
+    const FUEL_TYPE_ELECTRIC = 'electric';
+    const FUEL_TYPE_HYBRID = 'hybrid';
+
     protected $fillable = [
         'id',
         'user_id',
@@ -22,17 +26,16 @@ class Vehicle extends Model
         'make',
         'model',
         'year',
-        'image',
         'fuel_type',
-        'address',
         'color',
-        'price',
         'license_plate',
+        'milage',
+        'registration',
     ];
 
     protected $casts = [
         'year' => 'integer',
-        'price' => 'float',
+        'milage' => 'float',
     ];
 
     public function user(): BelongsTo
@@ -69,10 +72,10 @@ class Vehicle extends Model
                         ->orWhere('model', 'like', "%$word%")
                         ->orWhere('year', 'like', "%$word%")
                         ->orWhere('fuel_type', 'like', "%$word%")
-                        ->orWhere('address', 'like', "%$word%")
                         ->orWhere('color', 'like', "%$word%")
-                        ->orWhere('price', 'like', "%$word%")
-                        ->orWhere('license_plate', 'like', "%$word%");
+                        ->orWhere('license_plate', 'like', "%$word%")
+                        ->orWhere('milage', 'like', "%$word%")
+                        ->orWhere('registration', 'like', "%$word%");
                 }
             });
         }
@@ -83,15 +86,5 @@ class Vehicle extends Model
     public function hasCompletedInspection(): bool
     {
         return $this->inspections()->where('status', Inspection::STATUS_COMPLETED)->exists();
-    }
-
-    public function getImageThumbnailUrlAttribute()
-    {
-        return $this->image ? Storage::disk('public')->url('thumbnails/' . $this->image) : null;
-    }
-
-    public function getImageUrlAttribute()
-    {
-        return $this->image ? Storage::disk('public')->url($this->image) : null;
     }
 }

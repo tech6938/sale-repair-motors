@@ -162,7 +162,7 @@ class VehicleController extends Controller
                         ->orWhere('model', 'like', "%$word%")
                         ->orWhere('color', 'like', "%$word%")
                         ->orWhere('year', 'like', "%$word%")
-                        ->orWhere('address', 'like', "%$word%");
+                        ->orWhere('license_plate', 'like', "%$word%");
                 }
             });
         });
@@ -199,9 +199,6 @@ class VehicleController extends Controller
 
         $dt->addColumn('vehicle', function ($record) {
             return '<span class="tb-product">
-                        <a href="' . $record->image_url . '" class="popup-image">
-                            <img src="' . getImageUrlByPath($record->image, true) . '" class="thumb" onerror="_ie(this)">
-                        </a>
                         <div class="user-info">
                             <span class="tb-lead">
                                 <a href="' . route('vehicles.show', $record->uuid) . '">
@@ -213,8 +210,8 @@ class VehicleController extends Controller
                     </span>';
         });
 
-        $dt->addColumn('address', function ($record) {
-            return $record->address;
+        $dt->addColumn('license_plate', function ($record) {
+            return $record->license_plate;
         });
 
         $dt->addColumn('started_at', function ($record) {
@@ -248,7 +245,7 @@ class VehicleController extends Controller
 
         $dt->addIndexColumn();
 
-        $dt->rawColumns(['actions', 'vehicle', 'address', 'started_at', 'completed_at', 'manager', 'created', 'updated']);
+        $dt->rawColumns(['actions', 'manager', 'vehicle', 'license_plate', 'started_at', 'completed_at', 'created', 'updated']);
 
         return $dt->make(true);
     }

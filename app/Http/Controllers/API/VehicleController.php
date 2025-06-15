@@ -9,12 +9,16 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Controllers\Middleware;
 use App\Http\Resources\Vehicle\VehicleResource;
 use App\Http\Resources\Vehicle\VehicleCollection;
-use App\Traits\FileUploader;
 use Illuminate\Routing\Controllers\HasMiddleware;
 
 class VehicleController extends BaseController implements HasMiddleware
 {
-    use FileUploader;
+    private $fuelTypes = [
+        Vehicle::FUEL_TYPE_GASOLINE,
+        Vehicle::FUEL_TYPE_DIESEL,
+        Vehicle::FUEL_TYPE_ELECTRIC,
+        Vehicle::FUEL_TYPE_HYBRID,
+    ];
 
     public static function middleware(): array
     {
@@ -53,39 +57,28 @@ class VehicleController extends BaseController implements HasMiddleware
             'make' => 'required|string|max:50',
             'model' => 'required|string|max:50',
             'year' => 'required|integer|min:1900|max:' . (int) date('Y'),
-            'image' => 'nullable|file|mimes:jpg,png,gif|max:10000', // 10000 KB ~= 10 MB
-            'fuel_type' => 'required|string|in:gasoline,diesel,electric,hybrid',
-            'address' => 'required|string|max:200',
+            'fuel_type' => 'required|string|in:' . implode(',', $this->fuelTypes),
             'color' => 'required|string|max:20',
-            'price' => 'required|integer|min:0',
-            'license_plate' => 'required|string|max:20|regex:/^[A-Za-z0-9]+$/',
+            'license_plate' => 'required|string|max:20',
+            'milage' => 'required|numeric',
+            'registration' => 'required|string|max:20',
         ], [
             'year.min' => 'The year must be greater than or equal to 1900.',
             'year.max' => 'The year must be less than or equal to ' . date('Y') . '.',
-            'fuel_type.in' => 'The fuel type must be gasoline, diesel, electric, or hybrid.',
-            'license_plate.regex' => 'The license plate must contain only letters and numbers.',
+            'fuel_type.in' => 'The fuel type must be ' . implode(', ', $this->fuelTypes) . '.',
         ]);
 
-        $path = null;
-
-        if ($request->hasFile('image')) {
-            $path = $this->uploadPublicImage(
-                $request->file('image'),
-                'vehicles',
-            );
-        }
 
         $vehicle = Vehicle::create([
             'user_id' => auth()->user()->id,
             'make' => $request->input('make'),
             'model' => $request->input('model'),
             'year' => $request->input('year'),
-            'image' => $path,
             'fuel_type' => $request->input('fuel_type'),
-            'address' => $request->input('address'),
             'color' => $request->input('color'),
-            'price' => $request->input('price'),
             'license_plate' => $request->input('license_plate'),
+            'milage' => $request->input('milage'),
+            'registration' => $request->input('registration'),
         ]);
 
         return $this->apiResponse(
@@ -125,34 +118,26 @@ class VehicleController extends BaseController implements HasMiddleware
             'make' => 'sometimes|required|string|max:50',
             'model' => 'sometimes|required|string|max:50',
             'year' => 'sometimes|required|integer|min:1900|max:' . (int) date('Y'),
-            'image' => 'nullable|file|mimes:jpg,png,gif|max:10000', // 10000 KB ~= 10 MB
-            'fuel_type' => 'sometimes|required|string|in:gasoline,diesel,electric,hybrid',
-            'address' => 'sometimes|required|string|max:200',
+            'fuel_type' => 'sometimes|string|in:' . implode(',', $this->fuelTypes),
             'color' => 'sometimes|required|string|max:20',
-            'price' => 'sometimes|required|integer|min:0',
-            'license_plate' => 'sometimes|required|string|max:20|regex:/^[A-Za-z0-9]+$/',
+            'license_plate' => 'sometimes|required|string|max:20',
+            'milage' => 'sometimes|numeric',
+            'registration' => 'sometimes|string|max:20',
+        ], [
+            'year.min' => 'The year must be greater than or equal to 1900.',
+            'year.max' => 'The year must be less than or equal to ' . date('Y') . '.',
+            'fuel_type.in' => 'The fuel type must be ' . implode(', ', $this->fuelTypes) . '.',
         ]);
-
-        $path = $vehicle->image;
-
-        if ($request->hasFile('image')) {
-            $path = $this->uploadPublicImage(
-                $request->file('image'),
-                'vehicles',
-                $vehicle->image
-            );
-        }
 
         $vehicle->update([
             'make' => $request->input('make', $vehicle->make),
             'model' => $request->input('model', $vehicle->model),
             'year' => $request->input('year', $vehicle->year),
-            'image' => $path,
             'fuel_type' => $request->input('fuel_type', $vehicle->fuel_type),
-            'address' => $request->input('address', $vehicle->address),
             'color' => $request->input('color', $vehicle->color),
-            'price' => $request->input('price', $vehicle->price),
             'license_plate' => $request->input('license_plate', $vehicle->license_plate),
+            'milage' => $request->input('milage', $vehicle->milage),
+            'registration' => $request->input('registration', $vehicle->registration),
         ]);
 
         return $this->apiResponse(
@@ -169,10 +154,6 @@ class VehicleController extends BaseController implements HasMiddleware
     {
         if ($vehicle->inspections()?->count() > 0) {
             throw new \Exception('Cannot update a vehicle that has inspections.', JsonResponse::HTTP_FORBIDDEN);
-        }
-
-        if ($vehicle->image) {
-            $this->removePublicImage($vehicle->image);
         }
 
         $vehicle->delete();

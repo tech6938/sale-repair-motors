@@ -119,20 +119,24 @@
 
     <table>
         <tr>
-            <td>License Plate:</td>
-            <td>{{ $vehicle->license_plate }}</td>
-        </tr>
-        <tr>
-            <td>Address:</td>
-            <td>{{ $vehicle->address }}</td>
+            <td>Fuel Type:</td>
+            <td>{{ ucwords($vehicle->fuel_type) }}</td>
         </tr>
         <tr>
             <td>Color:</td>
             <td>{{ $vehicle->color }}</td>
         </tr>
         <tr>
-            <td>Fuel Type:</td>
-            <td>{{ $vehicle->fuel_type }}</td>
+            <td>License Plate:</td>
+            <td>{{ $vehicle->license_plate }}</td>
+        </tr>
+        <tr>
+            <td>Milage:</td>
+            <td>{{ $vehicle->milage }}</td>
+        </tr>
+        <tr>
+            <td>Registration:</td>
+            <td>{{ $vehicle->registration }}</td>
         </tr>
         <tr>
             <td>Created At:</td>
