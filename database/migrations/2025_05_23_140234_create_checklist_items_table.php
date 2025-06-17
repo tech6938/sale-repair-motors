@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('inspection_checklist_id')->constrained('inspection_checklists')->cascadeOnDelete();
             $table->string('uuid', 16)->unique();
 
-            $table->string('title');
+            $table->string('title')->nullable();
             $table->text('description')->nullable();
             $table->string('item_type');
             $table->integer('display_order');

@@ -169,6 +169,13 @@ class InspectionController extends BaseController implements HasMiddleware
         }
 
         if ($item->item_type === ChecklistItem::ITEM_TYPE_BOOLEAN) {
+            // If boolean is required, it can only be 'yes'
+            if ($requiredNullable === 'required') {
+                return [
+                    'value' => [$requiredNullable, 'in:yes']
+                ];
+            }
+
             return [
                 'value' => [$requiredNullable, 'in:yes,no']
             ];
