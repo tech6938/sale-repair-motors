@@ -31,6 +31,8 @@ class Vehicle extends Model
         'license_plate',
         'milage',
         'registration',
+        'mechanical_fault',
+        'bodywork_damage',
     ];
 
     protected $casts = [

@@ -22,6 +22,8 @@ class VehicleResource extends JsonResource
             'license_plate' => $this->license_plate,
             'milage' => $this->milage,
             'registration' => $this->registration,
+            'mechanical_fault' => (bool) $this->mechanical_fault,
+            'bodywork_damage' => (bool) $this->bodywork_damage,
             'created_at' => $this->createdAt(),
             'updated_at' => strip_tags($this->updatedAt()),
             'inspections' => $this->inspections?->map(function ($inspection) {

@@ -119,6 +119,38 @@ class InspectionController extends BaseController implements HasMiddleware
                 'value' => $value,
             ]);
 
+        if (
+            $item->item_type === ChecklistItem::ITEM_TYPE_SELECT &&
+            (
+                str_contains(strtolower($item->title), 'mechanical fault') ||
+                str_contains(strtolower($item->description), 'mechanical fault')
+            )
+        ) {
+            $option = $item->itemOptions->first(function ($option) use ($value) {
+                return $option->uuid === $value;
+            });
+
+            $vehicle->update([
+                'mechanical_fault' => $option && strtolower($option->label) === 'yes'
+            ]);
+        }
+
+        if (
+            $item->item_type === ChecklistItem::ITEM_TYPE_SELECT &&
+            (
+                str_contains(strtolower($item->title), 'bodywork damage') ||
+                str_contains(strtolower($item->description), 'bodywork damage')
+            )
+        ) {
+            $option = $item->itemOptions->first(function ($option) use ($value) {
+                return $option->uuid === $value;
+            });
+
+            $vehicle->update([
+                'bodywork_damage' => $option && strtolower($option->label) === 'yes'
+            ]);
+        }
+
         // Update checklist and inspection status if needed
         $this->updateCompletionStatus($checklistResult, $inspection);
 

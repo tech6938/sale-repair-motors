@@ -25,6 +25,9 @@ return new class extends Migration
             $table->float('milage');
             $table->string('registration');
 
+            $table->boolean('mechanical_fault')->nullable();
+            $table->boolean('bodywork_damage')->nullable();
+
             $table->timestamps();
         });
     }
