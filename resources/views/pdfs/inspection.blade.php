@@ -185,7 +185,7 @@
                 @php $itemResult = $item->checklistItemResults->first(); @endphp
 
                 <tr>
-                    <td>{{ $item->title }}</td>
+                    <td>{{ $item->description ?? $item->title }}</td>
                     <td>
                         @if ($item->item_type === \App\Models\ChecklistItem::ITEM_TYPE_IMAGE)
                             @if ($itemResult?->value)
