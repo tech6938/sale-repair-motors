@@ -228,7 +228,22 @@
                         @endif
 
                         @if ($item->item_type === \App\Models\ChecklistItem::ITEM_TYPE_SELECT)
-                            {{ $itemResult?->formattedValue }}
+                            @if ($item?->itemOptions?->isNotEmpty())
+                                @foreach ($item->itemOptions as $option)
+                                    @php
+                                        $icon =
+                                            $itemResult?->formattedValue && $option->uuid === $itemResult->formattedValue
+                                                ? 'assets/images/check.jpg'
+                                                : 'assets/images/cross.jpg';
+                                    @endphp
+
+                                    <p>
+                                        <img src="{{ base64File($icon) }}" class="check-cross" /> {{ $option->label }}
+                                    </p>
+                                @endforeach
+                            @else
+                                <p>No option available for this section.</p>
+                            @endif
                         @endif
 
                         @if ($item->item_type === \App\Models\ChecklistItem::ITEM_TYPE_MULTISELECT)

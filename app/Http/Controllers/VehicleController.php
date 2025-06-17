@@ -39,15 +39,20 @@ class VehicleController extends Controller
     public function checklist(Vehicle $vehicle, InspectionChecklist $checklist)
     {
         $items = ChecklistItem::whereInspectionChecklistId($checklist->id)
-            ->whereHas(
-                'checklistItemResults.inspectionChecklistResult.inspection.vehicle',
-                fn($q) => $q->where('id', $vehicle->id)
-            )
-            ->with('checklistItemResults', fn($q) => $q->whereHas(
-                'inspectionChecklistResult.inspection.vehicle',
-                fn($q) => $q->where('id', $vehicle->id)
-            ))
+            ->where(function ($query) use ($vehicle) {
+                $query->whereIn('item_type', [ChecklistItem::ITEM_TYPE_SELECT, ChecklistItem::ITEM_TYPE_MULTISELECT])
+                    ->orWhereHas(
+                        'checklistItemResults.inspectionChecklistResult.inspection.vehicle',
+                        fn($q) => $q->where('id', $vehicle->id)
+                    );
+            })
             ->with('itemOptions')
+            ->with(['checklistItemResults' => function ($query) use ($vehicle) {
+                $query->whereHas(
+                    'inspectionChecklistResult.inspection.vehicle',
+                    fn($q) => $q->where('id', $vehicle->id)
+                );
+            }])
             ->ordered()
             ->get();
 
@@ -66,21 +71,25 @@ class VehicleController extends Controller
         }
 
         $checklists = InspectionChecklist::whereInspectionTypeId($inspection->inspectionType->id)
-            ->with(
-                'checklistItems',
-                function ($q) use ($vehicle) {
-                    $q->whereHas(
-                        'checklistItemResults.inspectionChecklistResult.inspection.vehicle',
-                        fn($q) => $q->where('id', $vehicle->id)
-                    )
-                        ->with('checklistItemResults', fn($q) => $q->whereHas(
-                            'inspectionChecklistResult.inspection.vehicle',
-                            fn($q) => $q->where('id', $vehicle->id)
-                        ))
+            ->with([
+                'checklistItems' => function ($q) use ($vehicle) {
+                    $q->where(function ($query) use ($vehicle) {
+                        $query->whereIn('item_type', [ChecklistItem::ITEM_TYPE_SELECT, ChecklistItem::ITEM_TYPE_MULTISELECT])
+                            ->orWhereHas(
+                                'checklistItemResults.inspectionChecklistResult.inspection.vehicle',
+                                fn($q) => $q->where('id', $vehicle->id)
+                            );
+                    })
                         ->with('itemOptions')
+                        ->with(['checklistItemResults' => function ($query) use ($vehicle) {
+                            $query->whereHas(
+                                'inspectionChecklistResult.inspection.vehicle',
+                                fn($q) => $q->where('id', $vehicle->id)
+                            );
+                        }])
                         ->ordered();
-                },
-            )
+                }
+            ])
             ->ordered()
             ->get();
 

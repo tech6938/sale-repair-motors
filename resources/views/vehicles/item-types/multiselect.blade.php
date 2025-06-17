@@ -8,9 +8,11 @@
     @endif
 
     @foreach ($item->itemOptions as $option)
+        @php $value = $item->checklistItemResults->first()?->formattedValue @endphp
+
         <div class="d-block pt-3">
             <div class="custom-control custom-checkbox">
-                <input type="checkbox" class="custom-control-input" @checked(in_array($option->uuid, $item->checklistItemResults->first()->formattedValue)) disabled>
+                <input type="checkbox" class="custom-control-input" @checked($value && in_array($option->uuid, $value)) disabled>
                 <label class="custom-control-label">{{ $option->label }}</label>
             </div>
         </div>
