@@ -49,7 +49,7 @@ function frontendDate(?string $date = null, ?string $format = 'd-m-Y'): string
  * If no datetime is provided, the current datetime is used.
  * Allows customization of the output format.
  */
-function frontendDateTime(?string $datetime = null, string $format = 'd-m-Y h:i A'): string
+function frontendDateTime(?string $datetime = null, string $format = 'd-M-Y h:i A'): string
 {
     return !empty($datetime)
         ? Carbon::parse($datetime)->format($format)
