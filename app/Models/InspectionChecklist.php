@@ -64,15 +64,18 @@ class InspectionChecklist extends Model
 
         $previousChecklist = InspectionChecklist::whereInspectionTypeId($this->inspectionType->id)
             ->where('display_order', $this->display_order - 1)
-            ->whereHas(
-                'inspectionChecklistResults',
-                fn($q) => $q->whereHas(
-                    'inspection.vehicle',
-                    fn($q) => $q->where('id', $vehicle->id)
-                )
-            )
+            ->with(['inspectionChecklistResults' => function ($query) use ($vehicle) {
+                $query->whereHas('inspection.vehicle', fn($q) => $q->where('id', $vehicle->id));
+            }])
             ->first();
 
-        return $previousChecklist?->inspectionChecklistResults()->first()?->status === InspectionChecklistResult::STATUS_COMPLETED;
+        if (empty($previousChecklist)) {
+            return false;
+        }
+
+        // Get the result specifically for this vehicle
+        $result = $previousChecklist->inspectionChecklistResults->first();
+
+        return $result?->status === InspectionChecklistResult::STATUS_COMPLETED;
     }
 }
