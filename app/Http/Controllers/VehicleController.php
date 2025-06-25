@@ -170,8 +170,7 @@ class VehicleController extends Controller
                     $query->orWhere('make', 'like', "%$word%")
                         ->orWhere('model', 'like', "%$word%")
                         ->orWhere('color', 'like', "%$word%")
-                        ->orWhere('year', 'like', "%$word%")
-                        ->orWhere('license_plate', 'like', "%$word%");
+                        ->orWhere('year', 'like', "%$word%");
                 }
             });
         });
@@ -219,8 +218,8 @@ class VehicleController extends Controller
                     </span>';
         });
 
-        $dt->addColumn('license_plate', function ($record) {
-            return $record->license_plate;
+        $dt->addColumn('registration', function ($record) {
+            return $record->registration;
         });
 
         $dt->addColumn('started_at', function ($record) {
@@ -254,7 +253,7 @@ class VehicleController extends Controller
 
         $dt->addIndexColumn();
 
-        $dt->rawColumns(['actions', 'manager', 'vehicle', 'license_plate', 'started_at', 'completed_at', 'created', 'updated']);
+        $dt->rawColumns(['actions', 'manager', 'vehicle', 'registration', 'started_at', 'completed_at', 'created', 'updated']);
 
         return $dt->make(true);
     }

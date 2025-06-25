@@ -127,10 +127,6 @@
             <td>{{ $vehicle->color }}</td>
         </tr>
         <tr>
-            <td>License Plate:</td>
-            <td>{{ $vehicle->license_plate }}</td>
-        </tr>
-        <tr>
             <td>Milage:</td>
             <td>{{ $vehicle->milage }}</td>
         </tr>

@@ -19,7 +19,6 @@ class VehicleResource extends JsonResource
             'title' => implode(' ', [$this->make, $this->model, $this->year]),
             'fuel_type' => $this->fuel_type,
             'color' => $this->color,
-            'license_plate' => $this->license_plate,
             'milage' => $this->milage,
             'registration' => $this->registration,
             'mechanical_fault' => (bool) $this->mechanical_fault,

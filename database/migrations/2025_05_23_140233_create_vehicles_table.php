@@ -21,7 +21,6 @@ return new class extends Migration
             $table->integer('year');
             $table->string('fuel_type');
             $table->string('color');
-            $table->string('license_plate', 20);
             $table->float('milage');
             $table->string('registration');
 

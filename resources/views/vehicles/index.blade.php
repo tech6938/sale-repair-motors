@@ -22,7 +22,7 @@
                                 <th><span class="sub-text">Manager</span></th>
                             @endif
                             <th><span class="sub-text">Vehicle</span></th>
-                            <th><span class="sub-text">License Plate</span></th>
+                            <th><span class="sub-text">Registration</span></th>
                             <th><span class="sub-text">Inspection Started At</span></th>
                             <th><span class="sub-text">Inspection Completed At</span></th>
                             <th><span class="sub-text">Vehicle Created</span></th>
@@ -49,8 +49,8 @@
                 name: 'vehicle'
             },
             {
-                data: 'license_plate',
-                name: 'license_plate'
+                data: 'registration',
+                name: 'registration'
             },
             {
                 data: 'started_at',

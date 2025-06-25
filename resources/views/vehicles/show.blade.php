@@ -78,14 +78,6 @@
                                         <li class="py-1 px-3">
                                             <div class="data-col">
                                                 <div class="data-label">
-                                                    <h6>License Plate</h6>
-                                                </div>
-                                                <div class="data-value">{{ $vehicle->license_plate }}</div>
-                                            </div>
-                                        </li>
-                                        <li class="py-1 px-3">
-                                            <div class="data-col">
-                                                <div class="data-label">
                                                     <h6>Milage</h6>
                                                 </div>
                                                 <div class="data-value">{{ $vehicle->milage }}</div>

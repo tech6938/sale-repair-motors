@@ -28,7 +28,6 @@ class Vehicle extends Model
         'year',
         'fuel_type',
         'color',
-        'license_plate',
         'milage',
         'registration',
         'mechanical_fault',
@@ -75,7 +74,6 @@ class Vehicle extends Model
                         ->orWhere('year', 'like', "%$word%")
                         ->orWhere('fuel_type', 'like', "%$word%")
                         ->orWhere('color', 'like', "%$word%")
-                        ->orWhere('license_plate', 'like', "%$word%")
                         ->orWhere('milage', 'like', "%$word%")
                         ->orWhere('registration', 'like', "%$word%");
                 }

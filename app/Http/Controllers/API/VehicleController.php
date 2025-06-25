@@ -59,7 +59,6 @@ class VehicleController extends BaseController implements HasMiddleware
             'year' => 'required|integer|min:1900|max:' . (int) date('Y'),
             'fuel_type' => 'required|string|in:' . implode(',', $this->fuelTypes),
             'color' => 'required|string|max:20',
-            'license_plate' => 'required|string|max:20',
             'milage' => 'required|numeric',
             'registration' => 'required|string|max:20',
         ], [
@@ -76,7 +75,6 @@ class VehicleController extends BaseController implements HasMiddleware
             'year' => $request->input('year'),
             'fuel_type' => $request->input('fuel_type'),
             'color' => $request->input('color'),
-            'license_plate' => $request->input('license_plate'),
             'milage' => $request->input('milage'),
             'registration' => $request->input('registration'),
         ]);
@@ -120,7 +118,6 @@ class VehicleController extends BaseController implements HasMiddleware
             'year' => 'sometimes|required|integer|min:1900|max:' . (int) date('Y'),
             'fuel_type' => 'sometimes|string|in:' . implode(',', $this->fuelTypes),
             'color' => 'sometimes|required|string|max:20',
-            'license_plate' => 'sometimes|required|string|max:20',
             'milage' => 'sometimes|numeric',
             'registration' => 'sometimes|string|max:20',
         ], [
@@ -135,7 +132,6 @@ class VehicleController extends BaseController implements HasMiddleware
             'year' => $request->input('year', $vehicle->year),
             'fuel_type' => $request->input('fuel_type', $vehicle->fuel_type),
             'color' => $request->input('color', $vehicle->color),
-            'license_plate' => $request->input('license_plate', $vehicle->license_plate),
             'milage' => $request->input('milage', $vehicle->milage),
             'registration' => $request->input('registration', $vehicle->registration),
         ]);
