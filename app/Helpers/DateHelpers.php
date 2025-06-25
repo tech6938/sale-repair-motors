@@ -37,7 +37,7 @@ function dbDateTime(?string $datetime = null): string
  * If no date is provided, the current date is returned.
  * Allows customization of the output format.
  */
-function frontendDate(?string $date = null, ?string $format = 'd-m-Y'): string
+function frontendDate(?string $date = null, ?string $format = 'd-M-Y'): string
 {
     return !empty($date)
         ? Carbon::parse($date)->format($format)
