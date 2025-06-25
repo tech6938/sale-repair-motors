@@ -65,5 +65,9 @@ Route::middleware('auth', 'suspended')->group(function () {
         Route::get('/{vehicle}', [Controllers\VehicleController::class, 'show'])->name('show');
         Route::get('/{vehicle}/export', [Controllers\VehicleController::class, 'export'])->name('export');
         Route::get('/{vehicle}/checklist/{checklist}', [Controllers\VehicleController::class, 'checklist'])->name('checklist');
+
+        // Only super admin can delete the submissions
+        Route::delete('/{vehicle}', [Controllers\VehicleController::class, 'destroy'])->name('destroy')
+            ->middleware('role:super_admin');
     });
 });

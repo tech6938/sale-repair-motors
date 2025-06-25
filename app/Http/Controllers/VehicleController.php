@@ -10,11 +10,16 @@ use App\Models\ChecklistItem;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Yajra\DataTables\DataTables;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\DB;
+use App\Models\ChecklistItemResult;
 use App\Models\InspectionChecklist;
 use App\Services\DataTableActionLinksService;
+use App\Traits\FileUploader;
 
 class VehicleController extends Controller
 {
+    use FileUploader;
+
     /**
      * Display a listing of the resource.
      */
@@ -59,6 +64,9 @@ class VehicleController extends Controller
         return view('vehicles.checklist', compact('vehicle', 'checklist', 'items'));
     }
 
+    /**
+     * Export the specified vehicle.
+     */
     public function export(Vehicle $vehicle)
     {
         $inspection = $vehicle->inspections()
@@ -144,6 +152,44 @@ class VehicleController extends Controller
             $vehicle->uuid,
             $inspection->completed_at->format('Y-m-d')
         ));
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(Vehicle $vehicle)
+    {
+        DB::beginTransaction();
+
+        $items = ChecklistItemResult::whereHas(
+            'inspectionChecklistResult.inspection.vehicle',
+            fn($q) => $q->where('id', $vehicle->id)
+        )->whereHas(
+            'checklistItem',
+            fn($q) => $q->whereIn('item_type', [
+                ChecklistItem::ITEM_TYPE_IMAGE,
+                ChecklistItem::ITEM_TYPE_MULTI_IMAGE,
+                ChecklistItem::ITEM_TYPE_VIDEO,
+            ])
+        )->get();
+
+        $vehicle->delete();
+
+        foreach ($items as $item) {
+            if (empty($item->value)) continue;
+
+            if (is_array($item->value)) {
+                foreach ($item->value as $filePath) {
+                    $this->removePublicImage($filePath);
+                }
+            } else {
+                $this->removePublicImage($item->value);
+            }
+        }
+
+        DB::commit();
+
+        return $this->jsonResponse(['message' => 'Vehicle deleted successfully.']);
     }
 
     /**
@@ -241,6 +287,7 @@ class VehicleController extends Controller
         $dt->addColumn('actions', function ($record) {
             $links = [
                 ['action' => 'view', 'syncResponse' => true],
+                ['action' => 'delete', 'shouldRender' => auth()->user()->isSuperAdmin()],
             ];
 
             return (new DataTableActionLinksService(
