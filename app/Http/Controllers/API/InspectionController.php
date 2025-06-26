@@ -154,6 +154,16 @@ class InspectionController extends BaseController implements HasMiddleware
         // Update checklist and inspection status if needed
         $this->updateCompletionStatus($checklistResult, $inspection);
 
+        // Refresh the inspection to get the latest status
+        $inspection->refresh();
+
+        if ($inspection->status === Inspection::STATUS_COMPLETED) {
+            auth()->user()->manager->sendFirebaseNotification(
+                'Inspection Completed!',
+                'A new inspection has been submitted in your account.',
+            );
+        }
+
         DB::commit();
 
         return $this->apiResponse(

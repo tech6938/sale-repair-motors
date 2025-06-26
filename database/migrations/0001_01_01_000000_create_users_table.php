@@ -29,6 +29,7 @@ return new class extends Migration
             // System fields
             $table->string('status', 12)->default(User::STATUS_ACTIVE);
             $table->text('admin_comments')->nullable();
+            $table->string('fcm_token')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

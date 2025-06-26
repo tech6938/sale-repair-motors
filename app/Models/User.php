@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Services\FcmService;
 use App\Models\Concerns\HasUuid;
 use Laravel\Sanctum\HasApiTokens;
 use App\Models\Concerns\Timestamps;
@@ -43,6 +44,7 @@ class User extends Authenticatable
         // System info
         'status',
         'admin_comments',
+        'fcm_token',
         'updated_at',
     ];
 
@@ -202,5 +204,17 @@ class User extends Authenticatable
     public function sendOtpEmailNotification($otp)
     {
         $this->notify(new OtpEmailNotification($otp));
+    }
+
+    public function sendFirebaseNotification(string $title, string $body, array $data = [])
+    {
+        if (empty($this->fcm_token)) return;
+
+        (new FcmService())->sendNotification($this->fcm_token, $title, $body, $data);
+    }
+
+    public function updateFcmToken(string $token): void
+    {
+        $this->update(['fcm_token' => $token]);
     }
 }

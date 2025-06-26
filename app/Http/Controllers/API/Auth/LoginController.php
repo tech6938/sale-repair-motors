@@ -17,6 +17,7 @@ class LoginController extends BaseController
         $validator = Validator::make($request->all(), [
             'email' => 'required|email|exists:users,email',
             'password' => 'required|string',
+            'fcm_token' => 'required|string|max:255',
         ], [
             'email.exists' => 'These credentials do not match our records.',
         ]);
@@ -35,6 +36,8 @@ class LoginController extends BaseController
         if (!auth()->attempt(['email' => $request->email, 'password' => $request->password])) {
             throw new UnauthorizedException('These credentials do not match our records.');
         }
+
+        $user->updateFcmToken($request->input('fcm_token'));
 
         return $this->apiResponse(
             'You are logged in successfully.',
