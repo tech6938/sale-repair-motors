@@ -57,7 +57,6 @@ class Vehicle extends Model
         )->when(
             auth()->user()->isAdmin(),
             fn($query) => $query->whereIn('user_id', auth()->user()->users()->pluck('id')->toArray())
-                ->whereHas('inspections', fn($query) => $query->where('status', Inspection::STATUS_COMPLETED))
         );
     }
 
