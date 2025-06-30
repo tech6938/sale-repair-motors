@@ -41,7 +41,7 @@ function frontendDate(?string $date = null, ?string $format = 'd-M-Y'): string
 {
     return !empty($date)
         ? Carbon::parse($date)->format($format)
-        : Carbon::now()->format($format);
+        : '<small><i>Not Yet</i></small>';
 }
 
 /**
@@ -53,5 +53,5 @@ function frontendDateTime(?string $datetime = null, string $format = 'd-M-Y h:i 
 {
     return !empty($datetime)
         ? Carbon::parse($datetime)->format($format)
-        : Carbon::now()->format($format);
+        : '<small><i>Not Yet</i></small>';
 }

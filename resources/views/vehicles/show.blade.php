@@ -118,7 +118,7 @@
                                                 <div class="data-label">
                                                     <h6>Inspection Started At</h6>
                                                 </div>
-                                                <div class="data-value">{{ frontendDateTime($vehicle->inspections->first()?->started_at) }}</div>
+                                                <div class="data-value">{!! frontendDateTime($vehicle->inspections->first()?->started_at) !!}</div>
                                             </div>
                                         </li>
                                         <li class="py-1 px-3">
@@ -126,7 +126,7 @@
                                                 <div class="data-label">
                                                     <h6>Inspection Completed At</h6>
                                                 </div>
-                                                <div class="data-value">{{ frontendDateTime($vehicle->inspections->first()?->completed_at) }}</div>
+                                                <div class="data-value">{!! frontendDateTime($vehicle->inspections->first()?->completed_at) !!}</div>
                                             </div>
                                         </li>
                                     </ul>

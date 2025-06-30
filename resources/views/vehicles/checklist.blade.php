@@ -13,7 +13,21 @@
 
 <div class="nk-data data-list">
     <div class="row g-gs">
+        @if ($items->count() == 0)
+            @include('vehicles.item-types.empty')
+        @endif
+
         @foreach ($items as $item)
+            @if (empty($item->checklistItemResults->first()))
+                @include('vehicles.item-types.empty')
+
+                @if ($item->item_type === 'multiselect')
+                    @break
+                @endif
+
+                @continue
+            @endif
+
             @if ($item->item_type == 'image')
                 @include('vehicles.item-types.image', ['item' => $item])
             @endif

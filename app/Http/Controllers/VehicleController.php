@@ -198,9 +198,6 @@ class VehicleController extends Controller
     public function dataTable(Request $request): JsonResponse
     {
         $vehicles = Vehicle::applyRoleFilter()
-            ->whereHas('inspections', function ($query) {
-                $query->where('status', Inspection::STATUS_COMPLETED);
-            })
             ->with('user', 'inspections');
 
         $dt = DataTables::of($vehicles);
