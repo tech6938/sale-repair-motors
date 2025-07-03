@@ -358,7 +358,7 @@ class InspectionChecklistSeeder extends Seeder
                     'description' => 'Explain the fault in details',
                     'item_type' => ChecklistItem::ITEM_TYPE_TEXT,
                     'display_order' => 2,
-                    'is_required' => true,
+                    'is_required' => false,
                     'created_at' => now(),
                 ],
                 [
