@@ -67,7 +67,6 @@ class VehicleController extends BaseController implements HasMiddleware
             'fuel_type.in' => 'The fuel type must be ' . implode(', ', $this->fuelTypes) . '.',
         ]);
 
-
         $vehicle = Vehicle::create([
             'user_id' => auth()->user()->id,
             'make' => $request->input('make'),
@@ -78,6 +77,17 @@ class VehicleController extends BaseController implements HasMiddleware
             'milage' => $request->input('milage'),
             'registration' => $request->input('registration'),
         ]);
+
+        auth()->user()->manager->sendFirebaseNotification(
+            'Inspection Started!',
+            sprintf(
+                'A new inspection has been started by %s on %s %s %s.',
+                auth()->user()->name,
+                $vehicle->make,
+                $vehicle->model,
+                $vehicle->year
+            ),
+        );
 
         return $this->apiResponse(
             'Vehicle created successfully.',

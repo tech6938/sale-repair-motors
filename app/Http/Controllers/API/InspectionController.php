@@ -157,19 +157,6 @@ class InspectionController extends BaseController implements HasMiddleware
         // Refresh the inspection to get the latest status
         $inspection->refresh();
 
-        if ($inspection->wasRecentlyCreated) {
-            auth()->user()->manager->sendFirebaseNotification(
-                'Inspection Started!',
-                sprintf(
-                    'A new inspection has been started by %s on %s %s %s.',
-                    auth()->user()->name,
-                    $vehicle->make,
-                    $vehicle->model,
-                    $vehicle->year
-                ),
-            );
-        }
-
         if ($inspection->status === Inspection::STATUS_COMPLETED) {
             auth()->user()->manager->sendFirebaseNotification(
                 'Inspection Completed!',
