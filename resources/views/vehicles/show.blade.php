@@ -145,7 +145,7 @@
             <div class="card-aside-wrap">
                 {{-- Checklists --}}
                 <div class="card-aside card-aside-left user-aside toggle-slide toggle-slide-left toggle-break-lg toggle-screen-lg" data-content="userAside" data-toggle-screen="lg"
-                    bn data-toggle-overlay="true">
+                    data-toggle-overlay="true">
                     <div class="card-inner-group" data-simplebar="init">
                         <div class="simplebar-wrapper" style="margin: 0px;">
                             <div class="simplebar-height-auto-observer-wrapper">
@@ -183,7 +183,22 @@
 
                 <div class="card-inner card-inner-lg">
                     <div class="tab-content">
-                        <div class="tab-pane active" id="async-view-container"></div>
+                        <div class="tab-pane active">
+                            <div class="nk-block-head nk-block-head-lg pb-0">
+                                <div class="nk-block-between">
+                                    <div class="nk-block-head-content">
+                                        <h4 class="nk-block-title">Checklist Details</h4>
+                                    </div>
+                                    <div class="nk-block-head-content align-self-start d-lg-none">
+                                        <a href="javascript:void(0);" class="toggle btn btn-icon btn-trigger mt-n1" data-target="userAside">
+                                            <em class="icon ni ni-menu-alt-r"></em>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="nk-data data-list" id="async-view-container"></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -196,5 +211,14 @@
         $(function() {
             $('.checklist').first().click();
         });
+
+        $(document).on('click', '.checklist', function() {
+            let overlay = $(document).find('.toggle-overlay[data-target="userAside"]');
+
+            if (overlay?.length > 0) {
+                overlay.remove();
+                $('.user-aside')?.removeClass('content-active');
+            }
+        })
     </script>
 @endpush
