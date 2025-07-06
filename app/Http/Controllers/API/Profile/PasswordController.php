@@ -13,7 +13,8 @@ class PasswordController extends BaseController
     /**
      * Update logged in user profile
      *
-     * @param Request $request
+     * @param Illuminate\Http\Request $request
+     * @return Illuminate\Http\JsonResponse
      */
     public function change(Request $request)
     {

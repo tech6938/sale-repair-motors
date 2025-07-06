@@ -1,7 +1,10 @@
 <?php
 
 /**
- * Generate a pseudo-random UUID string of hexadecimal characters.
+ * Generates a UUID of the given length in hexadecimal format.
+ *
+ * @param int $length The length of the UUID in bytes. Defaults to 6 bytes.
+ * @return string The generated UUID.
  */
 function getUuid(int $length = 6): string
 {
@@ -9,8 +12,11 @@ function getUuid(int $length = 6): string
 }
 
 /**
- * Truncates a given string to a maximum length and appends an ellipsis if
- * the string exceeds the maximum length.
+ * Add an ellipsis to a given string if it is longer than the specified maximum number of characters.
+ *
+ * @param string $text The string to add the ellipsis to.
+ * @param int $max The maximum number of characters to display before adding an ellipsis.
+ * @return string The string with an ellipsis added if it exceeds the maximum characters.
  */
 function addEllipsis(string $text, int $max = 35): string
 {
@@ -19,6 +25,11 @@ function addEllipsis(string $text, int $max = 35): string
 
 /**
  * Convert a given string from underscore notation to a human-readable format.
+ *
+ * If the given string is empty, an empty string is returned.
+ *
+ * @param string $string The string to humanize.
+ * @return string The humanized string.
  */
 function humanize(string $string): string
 {
@@ -29,6 +40,11 @@ function humanize(string $string): string
 
 /**
  * Convert a given string from a human-readable format to underscore notation.
+ *
+ * If the given string is empty, an empty string is returned.
+ *
+ * @param string $string The string to machinize.
+ * @return string The machinized string.
  */
 function machinize(string $string): string
 {
@@ -38,7 +54,16 @@ function machinize(string $string): string
 }
 
 /**
- * Format a given amount as a currency string.
+ * Formats a given amount as a currency string.
+ *
+ * If no amount is provided, defaults to 0.00. The function formats the amount
+ * according to the application's currency configuration, respecting the decimal
+ * places, decimal separator, and thousand separator. Optionally includes the
+ * currency symbol.
+ *
+ * @param float|null $amount The amount to format.
+ * @param bool $withCurrencySymbol Whether to include the currency symbol in the output.
+ * @return string|float The formatted currency string, or the amount as a float if the currency symbol is not included.
  */
 function currency(float|null $amount = null, $withCurrencySymbol = true): string|float
 {
@@ -61,7 +86,14 @@ function currency(float|null $amount = null, $withCurrencySymbol = true): string
 }
 
 /**
- * Returns the initials of a full name.
+ * Gets the initials from a given name.
+ *
+ * If the given name contains two words, the function returns the first letter
+ * of each word in uppercase. If the given name contains only one word, the
+ * function returns the first letter of the word in uppercase.
+ *
+ * @param string $name The name to get the initials from.
+ * @return string The initials of the given name.
  */
 function getNameInitials(string $name): string
 {

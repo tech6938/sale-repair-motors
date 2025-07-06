@@ -39,16 +39,40 @@ class Vehicle extends Model
         'milage' => 'float',
     ];
 
+    /**
+     * The user that owns the Vehicle
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
+    /**
+     * The inspections that belong to the Vehicle
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function inspections(): HasMany
     {
         return $this->hasMany(Inspection::class);
     }
 
+    /**
+     * Scope a query to only include vehicles that the authenticated user has access to.
+     *
+     * If the authenticated user is a staff user, this scope will filter the query to
+     * only include vehicles that the authenticated user owns (i.e. the user ID matches
+     * the authenticated user's ID).
+     *
+     * If the authenticated user is an admin user, this scope will filter the query to
+     * only include vehicles that the authenticated user has access to through their
+     * managed users.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
     public function scopeApplyRoleFilter(Builder $query): Builder
     {
         return $query->when(
@@ -60,6 +84,16 @@ class Vehicle extends Model
         );
     }
 
+    /**
+     * Scope a query to filter the results by a search query string.
+     *
+     * Applies a where clause to the query that searches for the given search
+     * query string in the following columns: make, model, year, fuel_type, color,
+     * milage, and registration.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
     public function scopeApplyRequestFilters(Builder $query)
     {
         if (request()->has('search')) {
@@ -82,6 +116,11 @@ class Vehicle extends Model
         return $query;
     }
 
+    /**
+     * Determine if the vehicle has a completed inspection.
+     *
+     * @return bool
+     */
     public function hasCompletedInspection(): bool
     {
         return $this->inspections()->where('status', Inspection::STATUS_COMPLETED)->exists();

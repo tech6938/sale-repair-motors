@@ -18,6 +18,11 @@ class ItemOption extends Model
         'label',
     ];
 
+    /**
+     * Get the checklist item that owns the ItemOption
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function checklistItem()
     {
         return $this->belongsTo(ChecklistItem::class);

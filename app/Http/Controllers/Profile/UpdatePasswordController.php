@@ -12,7 +12,9 @@ use App\Http\Requests\Profile\PasswordUpdateRequest;
 class UpdatePasswordController extends Controller
 {
     /**
-     * Display the user's password update form.
+     * Show the form for editing the user's password.
+     *
+     * @return \Illuminate\View\View
      */
     public function edit(): View
     {
@@ -20,9 +22,15 @@ class UpdatePasswordController extends Controller
     }
 
     /**
-     * Update the user's password.
+     * Update the authenticated user's password.
+     *
+     * Validates the request data and updates the user's password. If the provided
+     * old password is incorrect, it will return a 422 HTTP status code with an
+     * error message. If the request is invalid, it will return a 400 HTTP status
+     * code with the validation errors.
      *
      * @param  \App\Http\Requests\Profile\PasswordUpdateRequest  $request
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update(PasswordUpdateRequest $request): JsonResponse
     {

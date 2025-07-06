@@ -40,31 +40,64 @@ class ChecklistItem extends Model
         'max' => 'integer',
     ];
 
+    /**
+     * Get the checklist that owns the ChecklistItem
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function inspectionChecklist()
     {
         return $this->belongsTo(InspectionChecklist::class);
     }
 
+    /**
+     * Get the item options that belong to the ChecklistItem
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function itemOptions()
     {
         return $this->hasMany(ItemOption::class);
     }
 
+    /**
+     * Get the checklist item results that belong to the ChecklistItem
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function checklistItemResults()
     {
         return $this->hasMany(ChecklistItemResult::class);
     }
 
+    /**
+     * Scope a query to only include required checklist items.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
     public function scopeRequired($query)
     {
         return $query->where('is_required', true);
     }
 
+    /**
+     * Scope a query to only include optional checklist items.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
     public function scopeOptional($query)
     {
         return $query->where('is_required', false);
     }
 
+    /**
+     * Scope a query to order the checklist items by their display order.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
     public function scopeOrdered($query)
     {
         return $query->orderBy('display_order');

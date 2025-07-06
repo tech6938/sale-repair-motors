@@ -14,6 +14,11 @@ use Illuminate\Routing\Controllers\HasMiddleware;
 
 class AdminController extends BaseController implements HasMiddleware
 {
+    /**
+     * Specify the middleware that is used by this controller.
+     *
+     * @return array
+     */
     public static function middleware(): array
     {
         return [
@@ -24,7 +29,8 @@ class AdminController extends BaseController implements HasMiddleware
     /**
      * List all admins
      *
-     * @param Request $request
+     * @param Illuminate\Http\Request $request
+     * @return Illuminate\Http\JsonResponse
      */
     public function list()
     {
@@ -42,6 +48,9 @@ class AdminController extends BaseController implements HasMiddleware
 
     /**
      * Display the specified resource.
+     *
+     * @param App\Models\User $admin
+     * @return Illuminate\Http\JsonResponse
      */
     public function show(User $admin)
     {
@@ -55,7 +64,8 @@ class AdminController extends BaseController implements HasMiddleware
     /**
      * Store a newly created resource in storage.
      *
-     * @param Request $request
+     * @param Illuminate\Http\Request $request
+     * @return Illuminate\Http\JsonResponse
      */
     public function store(Request $request)
     {
@@ -85,7 +95,14 @@ class AdminController extends BaseController implements HasMiddleware
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified admin's suspension status and comments.
+     *
+     * Validates the request to ensure the suspension status and comments are provided correctly.
+     * Updates the admin's status based on the suspension input and sets admin comments if suspended.
+     *
+     * @param Illuminate\Http\Request $request
+     * @param App\Models\User $admin
+     * @return Illuminate\Http\JsonResponse
      */
     public function update(Request $request, User $admin)
     {
@@ -110,7 +127,12 @@ class AdminController extends BaseController implements HasMiddleware
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified admin from storage.
+     *
+     * Deletes the admin from the database and returns a success response.
+     *
+     * @param App\Models\User $admin
+     * @return Illuminate\Http\JsonResponse
      */
     public function destroy(User $admin)
     {

@@ -1,7 +1,15 @@
 <?php
 
 /**
- * Retrieve the URL for an image stored in the public disk.
+ * Retrieve the URL of an image by its file path.
+ *
+ * If the file exists in the public storage, its URL is returned.
+ * Can optionally return the URL of a thumbnail version of the image.
+ * If the file does not exist, a placeholder image URL is returned.
+ *
+ * @param string|null $path The file path of the image.
+ * @param bool|null $isThumbnail Whether to return the URL for a thumbnail. Defaults to false.
+ * @return string The URL of the image or a placeholder image.
  */
 function getImageUrlByPath(?string $path, ?bool $isThumbnail = false): string
 {

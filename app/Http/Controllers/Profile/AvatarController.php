@@ -14,11 +14,26 @@ class AvatarController extends Controller
 {
     use FileUploader;
 
+    /**
+     * Show the form for updating the authenticated user's avatar.
+     *
+     * @return \Illuminate\View\View
+     */
     public function edit(): View
     {
         return view('profile.modals.avatar');
     }
 
+    /**
+     * Update the authenticated user's avatar.
+     *
+     * Validates the request data and updates the user's avatar. If an avatar file is 
+     * provided, it is uploaded and the path is updated.
+     *
+     * @param Illuminate\Http\Request $request
+     * @return Illuminate\Http\JsonResponse
+     * @throws \Exception
+     */
     public function update(Request $request): JsonResponse
     {
         try {

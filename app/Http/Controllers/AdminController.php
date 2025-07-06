@@ -16,6 +16,8 @@ class AdminController extends Controller
 {
     /**
      * Display a listing of the resource.
+     *
+     * @return \Illuminate\View\View
      */
     public function index(): View
     {
@@ -23,7 +25,9 @@ class AdminController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Display the create admin modal.
+     *
+     * @return \Illuminate\View\View
      */
     public function create(): View
     {
@@ -31,7 +35,14 @@ class AdminController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created admin in storage.
+     *
+     * Validates the request data, creates a new admin record, assigns the admin role to the user,
+     * and returns a success response. If the request fails, it rolls back the transaction and
+     * returns the error message.
+     *
+     * @param AdminStoreRequest $request
+     * @return JsonResponse
      */
     public function store(AdminStoreRequest $request)
     {
@@ -57,6 +68,9 @@ class AdminController extends Controller
 
     /**
      * Display the specified resource.
+     *
+     * @param \App\Models\User $admin
+     * @return \Illuminate\View\View
      */
     public function show(User $admin): View
     {
@@ -65,6 +79,9 @@ class AdminController extends Controller
 
     /**
      * Show the form for editing the specified resource.
+     *
+     * @param \App\Models\User $admin
+     * @return \Illuminate\View\View
      */
     public function edit(User $admin): View
     {
@@ -72,7 +89,15 @@ class AdminController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified admin's status and comments.
+     *
+     * Validates the request to ensure the status and comments are provided correctly.
+     * Updates the admin's status based on the input and sets admin comments if necessary.
+     * Rolls back the transaction in case of an error and returns an appropriate response.
+     *
+     * @param \App\Http\Requests\Admins\AdminUpdateRequest $request
+     * @param \App\Models\User $admin
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update(AdminUpdateRequest $request, User $admin): JsonResponse
     {
@@ -94,7 +119,13 @@ class AdminController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified admin from storage.
+     *
+     * Deletes the admin from the database and returns a success response.
+     * Rolls back the transaction in case of an error and returns an appropriate response.
+     *
+     * @param \App\Models\User $admin
+     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy(User $admin)
     {
@@ -113,7 +144,10 @@ class AdminController extends Controller
     }
 
     /**
-     * Show admin comments for the resource.
+     * Display the comments for the specified admin.
+     *
+     * @param \App\Models\User $admin
+     * @return \Illuminate\View\View
      */
     public function comments(User $admin): View
     {
@@ -122,6 +156,9 @@ class AdminController extends Controller
 
     /**
      * Return the listing of the resource.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse
      */
     public function dataTable(Request $request): JsonResponse
     {

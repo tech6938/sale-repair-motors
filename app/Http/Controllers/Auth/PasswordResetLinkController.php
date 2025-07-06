@@ -12,6 +12,8 @@ class PasswordResetLinkController extends Controller
 {
     /**
      * Display the password reset link request view.
+     *
+     * @return \Illuminate\View\View
      */
     public function create(): View
     {
@@ -19,9 +21,14 @@ class PasswordResetLinkController extends Controller
     }
 
     /**
-     * Handle an incoming password reset link request.
+     * Handle a password reset link request.
      *
-     * @throws \Illuminate\Validation\ValidationException
+     * Validates the incoming request to ensure that the email field is present and formatted correctly.
+     * Attempts to send a password reset link to the provided email address. If successful, redirects to
+     * the login page with a success status. Otherwise, redirects back with the input and error messages.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request): RedirectResponse
     {

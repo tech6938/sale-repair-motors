@@ -14,7 +14,15 @@ class SettingController extends Controller
     ];
 
     /**
-     * Store a newly created resource in storage.
+     * Store user settings in the database.
+     *
+     * Iterates over a predefined list of allowed setting keys. For each key that is present
+     * in the request, it updates or creates a new setting entry for the authenticated user.
+     * If the process is successful, a success response is returned. In case of an exception, 
+     * the transaction is rolled back and an error response is returned.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(Request $request): JsonResponse
     {

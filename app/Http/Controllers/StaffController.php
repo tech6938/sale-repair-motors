@@ -15,7 +15,9 @@ use App\Http\Requests\Staffs\StaffUpdateRequest;
 class StaffController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Displays the list of staffs.
+     *
+     * @return \Illuminate\View\View
      */
     public function index(): View
     {
@@ -23,7 +25,9 @@ class StaffController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Display the create staff modal.
+     *
+     * @return \Illuminate\View\View
      */
     public function create(): View
     {
@@ -31,7 +35,14 @@ class StaffController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created staff in storage.
+     *
+     * Validates the request data, creates a new staff record, assigns the staff role to the user,
+     * and returns a success response. If the process fails, it rolls back the transaction and
+     * returns the error message.
+     *
+     * @param StaffStoreRequest $request
+     * @return JsonResponse
      */
     public function store(StaffStoreRequest $request)
     {
@@ -56,7 +67,10 @@ class StaffController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Display the details of the specified staff.
+     *
+     * @param \App\Models\User $staff
+     * @return \Illuminate\View\View
      */
     public function show(User $staff): View
     {
@@ -64,7 +78,10 @@ class StaffController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Displays the edit staff modal.
+     *
+     * @param \App\Models\User $staff
+     * @return \Illuminate\View\View
      */
     public function edit(User $staff): View
     {
@@ -72,7 +89,15 @@ class StaffController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Updates the specified staff in the database.
+     *
+     * Validates the request to ensure the suspension status and comments are provided correctly.
+     * Updates the staff's status based on the suspension input and sets staff comments if suspended.
+     * Rolls back the transaction in case of an error and returns an appropriate response.
+     *
+     * @param \App\Http\Requests\Staffs\StaffUpdateRequest $request
+     * @param \App\Models\User $staff
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update(StaffUpdateRequest $request, User $staff): JsonResponse
     {
@@ -94,7 +119,13 @@ class StaffController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Removes the specified staff from the database.
+     *
+     * Deletes the staff from the database and returns a success response.
+     * Rolls back the transaction in case of an error and returns an appropriate response.
+     *
+     * @param \App\Models\User $staff
+     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy(User $staff)
     {
@@ -113,7 +144,10 @@ class StaffController extends Controller
     }
 
     /**
-     * Show staff comments for the resource.
+     * Display the comments for the specified staff.
+     *
+     * @param \App\Models\User $staff
+     * @return \Illuminate\View\View
      */
     public function comments(User $staff): View
     {
@@ -121,7 +155,13 @@ class StaffController extends Controller
     }
 
     /**
-     * Return the listing of the resource.
+     * Returns the staff datatable.
+     *
+     * The edit link is only visible if the logged in user is not the staff user.
+     * The delete link is only visible if the logged in user is not the staff user.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse
      */
     public function dataTable(Request $request): JsonResponse
     {

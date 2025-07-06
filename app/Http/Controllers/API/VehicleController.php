@@ -20,6 +20,11 @@ class VehicleController extends BaseController implements HasMiddleware
         Vehicle::FUEL_TYPE_HYBRID,
     ];
 
+    /**
+     * Define the middleware for the VehicleController.
+     *
+     * @return array The middleware configurations for the controller.
+     */
     public static function middleware(): array
     {
         return [
@@ -29,9 +34,12 @@ class VehicleController extends BaseController implements HasMiddleware
     }
 
     /**
-     * List all vehicles
+     * Fetch a paginated list of vehicles.
      *
-     * @param Request $request
+     * Applies role and request filters to the vehicles query before paginating the results.
+     * Returns a JSON response with a VehicleCollection resource.
+     *
+     * @return Illuminate\Http\JsonResponse
      */
     public function list()
     {
@@ -47,9 +55,14 @@ class VehicleController extends BaseController implements HasMiddleware
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created vehicle in storage.
      *
-     * @param Request $request
+     * Validates the request data and creates a new vehicle record associated 
+     * with the authenticated user. Sends a notification to the manager 
+     * indicating that a new inspection has been started.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(Request $request)
     {
@@ -99,7 +112,8 @@ class VehicleController extends BaseController implements HasMiddleware
     /**
      * Display the specified resource.
      *
-     * @param  Vehicle $vehicle
+     * @param \App\Models\Vehicle $vehicle
+     * @return \Illuminate\Http\JsonResponse
      */
     public function show(Vehicle $vehicle)
     {
@@ -113,8 +127,13 @@ class VehicleController extends BaseController implements HasMiddleware
     /**
      * Update the specified resource in storage.
      *
-     * @param  Request  $request
-     * @param  Vehicle  $vehicle
+     * Validates the request data and updates the specified vehicle record.
+     * Only the authenticated user who created the vehicle can update the vehicle.
+     * Vehicles that have inspections cannot be updated.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Models\Vehicle $vehicle
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update(Request $request, Vehicle $vehicle)
     {
@@ -154,7 +173,16 @@ class VehicleController extends BaseController implements HasMiddleware
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified vehicle from storage.
+     *
+     * Checks if the vehicle has any associated inspections and throws an exception 
+     * if it does. Deletes the vehicle if no inspections are found and returns a 
+     * success response.
+     *
+     * @param \App\Models\Vehicle $vehicle
+     * @return \Illuminate\Http\JsonResponse
+     * 
+     * @throws \Exception If the vehicle has inspections.
      */
     public function destroy(Vehicle $vehicle)
     {

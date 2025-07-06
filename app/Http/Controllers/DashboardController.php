@@ -8,6 +8,11 @@ use App\Models\Vehicle;
 
 class DashboardController extends Controller
 {
+    /**
+     * Display the dashboard view.
+     *
+     * @return \Illuminate\View\View
+     */
     public function index()
     {
         return view('dashboard', [

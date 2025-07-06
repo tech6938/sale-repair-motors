@@ -12,6 +12,13 @@ use Illuminate\Validation\UnauthorizedException;
 
 class LoginController extends BaseController
 {
+    /**
+     * Login a user and return a token that can be used to authenticate the user on subsequent requests.
+     *
+     * @param Illuminate\Http\Request $request
+     * @return Illuminate\Http\JsonResponse
+     * @throws \Exception
+     */
     public function login(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -49,6 +56,11 @@ class LoginController extends BaseController
         );
     }
 
+    /**
+     * Log out the user from the application.
+     *
+     * @return Illuminate\Http\JsonResponse
+     */
     public function logout()
     {
         auth()->user()->currentAccessToken()->delete();

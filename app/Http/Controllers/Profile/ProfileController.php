@@ -11,13 +11,20 @@ use App\Http\Requests\Profile\ProfileUpdateRequest;
 
 class ProfileController extends Controller
 {
+    /**
+     * Display the profile index view.
+     *
+     * @return \Illuminate\View\View
+     */
     public function index(): View
     {
         return view('profile.index');
     }
 
     /**
-     * Display the user's profile form.
+     * Show the form for editing the user's profile information.
+     *
+     * @return \Illuminate\View\View
      */
     public function edit(): View
     {
@@ -25,7 +32,14 @@ class ProfileController extends Controller
     }
 
     /**
-     * Update the user's profile information.
+     * Update the authenticated user's profile information.
+     *
+     * Validates the request data and updates the user's profile fields
+     * including name, avatar, phone, and address. If an avatar file is
+     * provided, it is uploaded and the path is updated.
+     *
+     * @param  \App\Http\Requests\Profile\ProfileUpdateRequest  $request
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update(ProfileUpdateRequest $request): JsonResponse
     {

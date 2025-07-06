@@ -12,6 +12,12 @@ use Illuminate\Validation\UnauthorizedException;
 
 class ForgotPasswordController extends BaseController
 {
+    /**
+     * Sends an OTP to a user's email.
+     *
+     * @param Illuminate\Http\Request $request
+     * @return Illuminate\Http\JsonResponse
+     */
     public function sendOtp(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -40,6 +46,12 @@ class ForgotPasswordController extends BaseController
         );
     }
 
+    /**
+     * Resets the password for a user using an OTP.
+     *
+     * @param Illuminate\Http\Request $request
+     * @return Illuminate\Http\JsonResponse
+     */
     public function updatePassword(Request $request)
     {
         $validator = Validator::make($request->all(), [

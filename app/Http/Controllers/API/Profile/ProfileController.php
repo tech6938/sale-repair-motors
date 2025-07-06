@@ -13,7 +13,9 @@ class ProfileController extends BaseController
     use FileUploader;
 
     /**
-     * Return logged in user profile details
+     * Fetch the authenticated user's profile
+     *
+     * @return Illuminate\Http\JsonResponse
      */
     public function view()
     {
@@ -25,9 +27,14 @@ class ProfileController extends BaseController
     }
 
     /**
-     * Update logged in user profile
+     * Update the authenticated user's profile information.
      *
-     * @param Request $request
+     * Validates the request data and updates the user's profile fields
+     * including name, avatar, phone, and address. If an avatar file is 
+     * provided, it is uploaded and the path is updated.
+     *
+     * @param Illuminate\Http\Request $request
+     * @return Illuminate\Http\JsonResponse
      */
     public function update(Request $request)
     {

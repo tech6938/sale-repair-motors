@@ -23,6 +23,11 @@ class InspectionController extends BaseController implements HasMiddleware
 {
     use FileUploader;
 
+    /**
+     * Get the middleware for the controller.
+     *
+     * @return array
+     */
     public static function middleware(): array
     {
         return [
@@ -31,6 +36,12 @@ class InspectionController extends BaseController implements HasMiddleware
         ];
     }
 
+    /**
+     * Fetch all checklists for a given vehicle.
+     *
+     * @param \App\Models\Vehicle $vehicle
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function checklists(Vehicle $vehicle)
     {
         $inspectionType = InspectionType::whereHas('inspectionChecklists')->firstOrFail();
@@ -53,6 +64,15 @@ class InspectionController extends BaseController implements HasMiddleware
         );
     }
 
+    /**
+     * Fetch all items for a given checklist of a vehicle.
+     *
+     * @param \App\Models\Vehicle $vehicle
+     * @param \App\Models\InspectionChecklist $checklist
+     * @return \Illuminate\Http\JsonResponse
+     *
+     * @throws \Exception
+     */
     public function items(Vehicle $vehicle, InspectionChecklist $checklist)
     {
         if (! $checklist->isPreviousChecklistCompleted($vehicle)) {
@@ -78,6 +98,16 @@ class InspectionController extends BaseController implements HasMiddleware
         );
     }
 
+    /**
+     * Store a new inspection item.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Models\Vehicle $vehicle
+     * @param \App\Models\ChecklistItem $item
+     * @return \Illuminate\Http\JsonResponse
+     *
+     * @throws \Exception
+     */
     public function store(Request $request, Vehicle $vehicle, ChecklistItem $item)
     {
         if ($vehicle->hasCompletedInspection()) {
@@ -172,6 +202,12 @@ class InspectionController extends BaseController implements HasMiddleware
         );
     }
 
+    /**
+     * Returns the validation rules for a given checklist item.
+     *
+     * @param \App\Models\ChecklistItem  $item
+     * @return array
+     */
     private function getValidationRules(ChecklistItem $item): array
     {
         $requiredNullable = $item->is_required ? 'required' : 'nullable';
@@ -238,6 +274,14 @@ class InspectionController extends BaseController implements HasMiddleware
         return ['value' => 'nullable'];
     }
 
+    /**
+     * Processes the given value for the given checklist item and vehicle.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Models\Vehicle $vehicle
+     * @param \App\Models\ChecklistItem $item
+     * @return mixed
+     */
     private function processValue(Request $request, Vehicle $vehicle, ChecklistItem $item)
     {
         $previousValue = ChecklistItemResult::whereHas('checklistItem', fn($q) => $q->where('id', $item->id))
@@ -313,6 +357,16 @@ class InspectionController extends BaseController implements HasMiddleware
         return $request->input('value');
     }
 
+    /**
+     * Updates the completion status of a checklist result and its associated inspection.
+     *
+     * If all required checklist items are completed, marks the checklist result as completed.
+     * Additionally, if all checklists in the inspection are completed, marks the inspection 
+     * as completed.
+     *
+     * @param \App\Models\InspectionChecklistResult $checklistResult
+     * @param \App\Models\Inspection $inspection
+     */
     private function updateCompletionStatus(InspectionChecklistResult $checklistResult, Inspection $inspection)
     {
         // Update checklist result status if all required items are completed

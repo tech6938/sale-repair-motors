@@ -23,21 +23,43 @@ class InspectionType extends Model
         'is_active' => 'boolean',
     ];
 
+    /**
+     * Get the inspection checklists associated with this inspection type.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function inspectionChecklists()
     {
         return $this->hasMany(InspectionChecklist::class);
     }
 
+    /**
+     * Get the inspections associated with this inspection type.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function inspections()
     {
         return $this->hasMany(Inspection::class);
     }
 
+    /**
+     * Scope a query to only include active inspection types.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
     public function scopeActive($query)
     {
         return $query->where('is_active', true);
     }
 
+    /**
+     * Scope a query to only include inactive inspection types.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
     public function scopeInactive($query)
     {
         return $query->where('is_active', false);

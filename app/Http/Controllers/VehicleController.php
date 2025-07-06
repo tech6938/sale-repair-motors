@@ -21,7 +21,9 @@ class VehicleController extends Controller
     use FileUploader;
 
     /**
-     * Display a listing of the resource.
+     * Display the vehicles management index view.
+     *
+     * @return \Illuminate\View\View
      */
     public function index(): View
     {
@@ -29,7 +31,10 @@ class VehicleController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Display the specified vehicle's details and associated checklists.
+     *
+     * @param \App\Models\Vehicle $vehicle
+     * @return \Illuminate\View\View
      */
     public function show(Vehicle $vehicle)
     {
@@ -39,7 +44,11 @@ class VehicleController extends Controller
     }
 
     /**
-     * Display the checklist for the specified vehicle.
+     * Display the specified vehicle's checklist items for the given checklist.
+     *
+     * @param \App\Models\Vehicle $vehicle
+     * @param \App\Models\InspectionChecklist $checklist
+     * @return \Illuminate\View\View
      */
     public function checklist(Vehicle $vehicle, InspectionChecklist $checklist)
     {
@@ -65,7 +74,10 @@ class VehicleController extends Controller
     }
 
     /**
-     * Export the specified vehicle.
+     * Generates a PDF report for the given vehicle's latest completed inspection.
+     * 
+     * @param \App\Models\Vehicle $vehicle
+     * @return \Illuminate\Http\Response
      */
     public function export(Vehicle $vehicle)
     {
@@ -155,7 +167,12 @@ class VehicleController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified vehicle from storage.
+     *
+     * Removes the vehicle, and any associated media items.
+     *
+     * @param \App\Models\Vehicle $vehicle
+     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy(Vehicle $vehicle)
     {
@@ -193,7 +210,13 @@ class VehicleController extends Controller
     }
 
     /**
-     * Return the listing of the resource.
+     * Returns the vehicle datatable.
+     *
+     * The edit link is only visible if the logged in user is not the vehicle owner.
+     * The delete link is only visible if the logged in user is not the vehicle owner.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse
      */
     public function dataTable(Request $request): JsonResponse
     {

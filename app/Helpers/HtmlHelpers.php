@@ -1,8 +1,11 @@
 <?php
 
 /**
- * Return HTML indicating that the given value is unavailable if it is empty,
- * otherwise return the value itself.
+ * Returns the given value if it is not empty, otherwise returns a string
+ * indicating that the value is unavailable.
+ *
+ * @param mixed $value The value to check.
+ * @return string The value, or a string indicating that the value is unavailable.
  */
 function canEmpty(mixed $value = null): string
 {
@@ -10,7 +13,9 @@ function canEmpty(mixed $value = null): string
 }
 
 /**
- * Returns a random CSS class name for background color styling.
+ * Returns a random Bootstrap color class.
+ *
+ * @return string A random Bootstrap color class.
  */
 function getRandomColorClass(): string
 {
@@ -20,7 +25,14 @@ function getRandomColorClass(): string
 }
 
 /**
- * Returns HTML for displaying the user's avatar.
+ * Returns an HTML string containing the avatar for the given user.
+ *
+ * If the user has an avatar, the avatar image will be displayed.
+ * If the user does not have an avatar, the first letter of the user's name
+ * will be used to generate an avatar.
+ *
+ * @param null|App\Models\User $user The user for which to generate the avatar.
+ * @return string The HTML string containing the avatar for the given user.
  */
 function getAvatarHtml(null|App\Models\User $user = null): string
 {

@@ -1,7 +1,11 @@
 <?php
 
 /**
- * Decodes a given string as JSON if possible, otherwise returns the string unchanged.
+ * Attempt to decode a given value as JSON, but if the decoding fails, return
+ * the original value.
+ *
+ * @param mixed $data The value to decode.
+ * @return mixed The decoded value, or the original value if decoding fails.
  */
 function optionalJsonDecode($data)
 {
@@ -19,7 +23,12 @@ function optionalJsonDecode($data)
 }
 
 /**
- * Convert a file to base64 data URI format.
+ * Get a file from the public storage or public directory as a base64-encoded
+ * string. If the file is not found in either location, return null.
+ *
+ * @param string $path The path to the file to retrieve.
+ *
+ * @return string|null The base64-encoded file, or null if not found.
  */
 function base64File(string $path): ?string
 {
