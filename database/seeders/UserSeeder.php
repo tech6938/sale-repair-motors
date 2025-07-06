@@ -18,8 +18,6 @@ class UserSeeder extends Seeder
         $this->password = Hash::make('12345678');
 
         $this->createSuperAdmin();
-        $this->createAdmins();
-        $this->createStaffs();
     }
 
     /**
@@ -31,8 +29,8 @@ class UserSeeder extends Seeder
             'user_id' => 1,
             'uuid' => '8f7783ec56',
             'name' => 'Super Admin',
-            'email' => 'superadmin@domain.com',
-            'password' => '12345678',
+            'email' => 'sales@statusmotorgroup.com',
+            'password' => 'uj4dg)£j7y5fg£&j!n',
             'status' => User::STATUS_ACTIVE,
             'created_at' => now(),
         ]);
