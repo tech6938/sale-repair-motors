@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 use App\Models\VehicleAssign;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
-use App\Http\Resources\User\UserResource;
 use App\Http\Controllers\API\BaseController;
 use Illuminate\Routing\Controllers\Middleware;
 use App\Http\Resources\Vehicle\VehicleResource;
