@@ -58,7 +58,7 @@
                     <li class="nk-menu-item">
                         <a href="{{ route('vehicles.index') }}" class="nk-menu-link">
                             <span class="nk-menu-icon"><em class="icon ni ni-truck"></em></span>
-                            <span class="nk-menu-text">Vehicleee</span>
+                            <span class="nk-menu-text">Vehiclee</span>
                         </a>
                     </li>
                 </ul>
