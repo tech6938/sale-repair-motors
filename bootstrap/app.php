@@ -32,9 +32,9 @@ return Application::configure(basePath: dirname(__DIR__))
         );
 
         $middleware->api(
-            prepend: [
-                \App\Http\Middleware\ApiKey::class,
-            ],
+            // prepend: [
+            //     \App\Http\Middleware\ApiKey::class,
+            // ],
             append: [
                 \App\Http\Middleware\ApiUser::class,
             ]

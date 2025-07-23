@@ -24,16 +24,25 @@ class LoginController extends BaseController
         $validator = Validator::make($request->all(), [
             'email' => 'required|email|exists:users,email',
             'password' => 'required|string',
-            'fcm_token' => 'required|string|max:255',
+            // 'fcm_token' => 'required|string|max:255',
         ], [
             'email.exists' => 'These credentials do not match our records.',
         ]);
+
 
         if ($validator->fails()) {
             throw new \Exception($validator->messages()->first(), JsonResponse::HTTP_BAD_REQUEST);
         }
 
-        $user = User::whereEmail($request->input('email'))->notSuperAdmin()->firstOrFail();
+        $allowedRoles = [
+            User::ROLE_ADMIN,
+            User::ROLE_ADMIN_STAFF,
+            User::ROLE_STAFF,
+        ];
+
+        $user = User::where('email', $request->email)
+            ->whereHas('roles', fn($q) => $q->whereIn('name', $allowedRoles))
+            ->firstOrFail();
 
         // We can handle these checks manually here since we don't have an auth user at this point
         if ($user->isSuspended()) {
@@ -44,7 +53,7 @@ class LoginController extends BaseController
             throw new UnauthorizedException('These credentials do not match our records.');
         }
 
-        $user->updateFcmToken($request->input('fcm_token'));
+        // $user->updateFcmToken($request->input('fcm_token'));
 
         return $this->apiResponse(
             'You are logged in successfully.',

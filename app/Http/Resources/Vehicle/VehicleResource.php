@@ -14,6 +14,7 @@ class VehicleResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        // dd($request->inspections);
         return [
             'id' => $this->uuid,
             'title' => implode(' ', [$this->make, $this->model, $this->year]),

@@ -57,8 +57,8 @@ class VehicleController extends BaseController implements HasMiddleware
     /**
      * Store a newly created vehicle in storage.
      *
-     * Validates the request data and creates a new vehicle record associated 
-     * with the authenticated user. Sends a notification to the manager 
+     * Validates the request data and creates a new vehicle record associated
+     * with the authenticated user. Sends a notification to the manager
      * indicating that a new inspection has been started.
      *
      * @param \Illuminate\Http\Request $request
@@ -137,6 +137,7 @@ class VehicleController extends BaseController implements HasMiddleware
      */
     public function update(Request $request, Vehicle $vehicle)
     {
+        // dd($vehicle->inspections());
         if ($vehicle->inspections()?->count() > 0) {
             throw new \Exception('Cannot update a vehicle that has inspections.', JsonResponse::HTTP_FORBIDDEN);
         }
@@ -175,13 +176,13 @@ class VehicleController extends BaseController implements HasMiddleware
     /**
      * Remove the specified vehicle from storage.
      *
-     * Checks if the vehicle has any associated inspections and throws an exception 
-     * if it does. Deletes the vehicle if no inspections are found and returns a 
+     * Checks if the vehicle has any associated inspections and throws an exception
+     * if it does. Deletes the vehicle if no inspections are found and returns a
      * success response.
      *
      * @param \App\Models\Vehicle $vehicle
      * @return \Illuminate\Http\JsonResponse
-     * 
+     *
      * @throws \Exception If the vehicle has inspections.
      */
     public function destroy(Vehicle $vehicle)

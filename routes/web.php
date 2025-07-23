@@ -57,10 +57,17 @@ Route::middleware(['auth', 'suspended'])->group(function () {
     });
 
     // Admins
-    Route::prefix('admins')->name('admins.')->group(function () {
+    Route::prefix('admins')->middleware('role:super_admin')->name('admins.')->group(function () {
         Route::post('comments/{admin}', [Controllers\AdminController::class, 'comments'])->name('comments');
         Route::get('datatable', [Controllers\AdminController::class, 'dataTable'])->name('datatable');
         Route::resource('/', Controllers\AdminController::class)->parameters(['' => 'admin']);
+    });
+
+    // Manager's Staffs
+    Route::prefix('managers-staffs')->name('managers-staffs.')->group(function () {
+        Route::post('comments/{admin}', [Controllers\ManagerStaffController::class, 'comments'])->name('comments');
+        Route::get('datatable', [Controllers\ManagerStaffController::class, 'dataTable'])->name('datatable');
+        Route::resource('/', Controllers\ManagerStaffController::class)->parameters(['' => 'manager']);
     });
 
     // Staffs

@@ -26,7 +26,8 @@ class User extends Authenticatable
     public const STATUS_SUSPENDED = 'suspended';
 
     public const ROLE_SUPER_ADMIN = 'super_admin';
-    public const ROLE_ADMIN = 'admin';
+    public const ROLE_ADMIN = 'admin'; //he is also a manager
+    public const ROLE_ADMIN_STAFF = 'manager_staff';
     public const ROLE_STAFF = 'staff';
 
     protected $fillable = [
@@ -63,6 +64,7 @@ class User extends Authenticatable
      * Boot the model and add a creating event listener to set the user_id
      * of the model being created to the currently authenticated user's id.
      */
+
     protected static function boot()
     {
         parent::boot();
@@ -236,7 +238,17 @@ class User extends Authenticatable
      */
     public function scopeStaff(Builder $query)
     {
-        return $query->whereHas('roles', fn($q) => $q->where('name', self::ROLE_STAFF));
+        return $query->whereHas('roles', fn($q) => $q->where('name', [
+            self::ROLE_STAFF,
+            self::ROLE_ADMIN_STAFF,
+        ]));
+    }
+
+    public function scopeManagerStaff(Builder $query)
+    {
+        return $query->whereHas('roles', function ($q) {
+            $q->where('name', self::ROLE_ADMIN_STAFF);
+        });
     }
 
     /**
@@ -247,8 +259,13 @@ class User extends Authenticatable
      */
     public function scopeNotSuperAdmin(Builder $query)
     {
-        return $query->whereHas('roles', fn($q) => $q->whereIn('name', [self::ROLE_ADMIN, self::ROLE_STAFF]));
+        return $query->whereDoesntHave(
+            'roles',
+            fn($q) =>
+            $q->where('name', self::ROLE_SUPER_ADMIN)
+        );
     }
+
 
     /**
      * Scope a query to filter the results by a search query string.

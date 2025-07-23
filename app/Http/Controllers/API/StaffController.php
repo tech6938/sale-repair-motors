@@ -34,7 +34,7 @@ class StaffController extends BaseController implements HasMiddleware
      */
     public function list()
     {
-        $staffs = User::applyRoleFilter()
+        return $staffs = User::applyRoleFilter()
             ->staff()
             ->applyRequestFilters()
             ->paginate(request()->input('page_size', $this->perPage));
@@ -83,7 +83,7 @@ class StaffController extends BaseController implements HasMiddleware
             'password' => $request->input('password'),
         ]);
 
-        $staff->assignRole(User::ROLE_STAFF);
+        $staff = $staff->assignRole(User::ROLE_STAFF);
 
         DB::commit();
 

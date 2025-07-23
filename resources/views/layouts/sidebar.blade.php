@@ -30,18 +30,31 @@
                             <span class="nk-menu-text">Dashboard</span>
                         </a>
                     </li>
+                    @if(auth()->user()->isSuperAdmin())
+
                     <li class="nk-menu-item">
                         <a href="{{ route('admins.index') }}" class="nk-menu-link">
                             <span class="nk-menu-icon"><em class="icon ni ni-users-fill"></em></span>
                             <span class="nk-menu-text">Admins</span>
                         </a>
                     </li>
+                    @endif
+
+                    <li class="nk-menu-item">
+                        <a href="{{ route('managers-staffs.index') }}" class="nk-menu-link">
+                            <span class="nk-menu-icon"><em class="icon ni ni-user-list-fill"></em></span>
+                            <span class="nk-menu-text">Preperation Staff</span>
+                        </a>
+                    </li>
+
+
                     <li class="nk-menu-item">
                         <a href="{{ route('staffs.index') }}" class="nk-menu-link">
                             <span class="nk-menu-icon"><em class="icon ni ni-user-list-fill"></em></span>
                             <span class="nk-menu-text">Staffs</span>
                         </a>
                     </li>
+
                     <li class="nk-menu-item">
                         <a href="{{ route('vehicles.index') }}" class="nk-menu-link">
                             <span class="nk-menu-icon"><em class="icon ni ni-truck"></em></span>

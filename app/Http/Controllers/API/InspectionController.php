@@ -75,6 +75,7 @@ class InspectionController extends BaseController implements HasMiddleware
      */
     public function items(Vehicle $vehicle, InspectionChecklist $checklist)
     {
+        // dd($vehicle, $checklist);
         if (! $checklist->isPreviousChecklistCompleted($vehicle)) {
             throw new \Exception('Please complete the previous checklist before proceeding.');
         }
@@ -199,6 +200,7 @@ class InspectionController extends BaseController implements HasMiddleware
         return $this->apiResponse(
             'Inspection item saved successfully.',
             JsonResponse::HTTP_OK,
+            $checklistResult->checklistItemResults()->where('checklist_item_id', $item->id)->first()
         );
     }
 
@@ -361,7 +363,7 @@ class InspectionController extends BaseController implements HasMiddleware
      * Updates the completion status of a checklist result and its associated inspection.
      *
      * If all required checklist items are completed, marks the checklist result as completed.
-     * Additionally, if all checklists in the inspection are completed, marks the inspection 
+     * Additionally, if all checklists in the inspection are completed, marks the inspection
      * as completed.
      *
      * @param \App\Models\InspectionChecklistResult $checklistResult
