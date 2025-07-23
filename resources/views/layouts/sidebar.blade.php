@@ -35,7 +35,7 @@
                     <li class="nk-menu-item">
                         <a href="{{ route('admins.index') }}" class="nk-menu-link">
                             <span class="nk-menu-icon"><em class="icon ni ni-users-fill"></em></span>
-                            <span class="nk-menu-text">Admins</span>
+                            <span class="nk-menu-text">Preparation Team Manager</span>
                         </a>
                     </li>
                     @endif
@@ -58,7 +58,7 @@
                     <li class="nk-menu-item">
                         <a href="{{ route('vehicles.index') }}" class="nk-menu-link">
                             <span class="nk-menu-icon"><em class="icon ni ni-truck"></em></span>
-                            <span class="nk-menu-text">Vehicles</span>
+                            <span class="nk-menu-text">Vehiclessss</span>
                         </a>
                     </li>
                 </ul>

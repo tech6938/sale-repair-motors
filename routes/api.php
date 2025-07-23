@@ -10,6 +10,7 @@ use App\Http\Controllers\API\Profile\ProfileController;
 use App\Http\Controllers\API\Profile\PasswordController;
 use App\Http\Controllers\API\Auth\ForgotPasswordController;
 use App\Http\Controllers\API\ManagerStaffController;
+use App\Http\Controllers\VehicleAssignController;
 
 Route::middleware(['guest', 'throttle:50,1'])->group(function () {
     // Login
@@ -80,6 +81,11 @@ Route::middleware(['auth:sanctum', 'suspended'])->group(function () {
             Route::get('/checklists', 'checklists');
             Route::get('/checklists/{checklist}', 'items');
             Route::post('/checklists-items/{checklistItem}', 'store');
+        });
+
+        // Vehicle assign
+        Route::prefix('/assign')->controller(VehicleAssignController::class)->group(function () {
+            Route::post('/store', 'store');
         });
     });
 });

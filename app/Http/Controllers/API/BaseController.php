@@ -7,7 +7,7 @@ use Illuminate\Http\JsonResponse;
 
 class BaseController extends Controller
 {
-    public int $perPage = 10;
+    public int $perPage = 5;
 
     /**
      * Return API raw response
