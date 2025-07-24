@@ -1,12 +1,12 @@
 @extends('layouts.app')
 
-@section('title', 'Prepration Staffs Management')
+@section('title', 'Preparation Staffs Management')
 
 @section('content')
     <div class="nk-block-head nk-block-head-sm">
         <div class="nk-block-between">
             <div class="nk-block-head-content">
-                <h3 class="nk-block-title page-title">Prepration Staffs Management</h3>
+                <h3 class="nk-block-title page-title">Preparation Staffs Management</h3>
             </div>
             <div class="nk-block-head-content">
                 <div class="toggle-wrap nk-block-tools-toggle">
