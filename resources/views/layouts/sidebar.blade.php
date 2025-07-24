@@ -60,13 +60,6 @@
                     </li>
 
                     <li class="nk-menu-item">
-                        <a href="{{ route('vehicles.index') }}" class="nk-menu-link">
-                            <span class="nk-menu-icon"><em class="icon ni ni-user-list-fill"></em></span>
-                            <span class="nk-menu-text">Vehicles</span>
-                        </a>
-                    </li>
-
-                    <li class="nk-menu-item">
                         <a href="#" class="nk-menu-link" onclick="toggleDropdown(event)">
                             <span class="nk-menu-icon"><em class="icon ni ni-truck"></em></span>
                             <span class="nk-menu-text">Vehicle</span>

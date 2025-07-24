@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\DB;
 use App\Services\DataTableActionLinksService;
 use App\Http\Requests\Staffs\StaffStoreRequest;
 use App\Http\Requests\Staffs\StaffUpdateRequest;
+use App\Models\ManagerAssign;
 
 class PreprationStaffController extends Controller
 {
@@ -58,6 +59,10 @@ class PreprationStaffController extends Controller
             ]);
 
             $staff->assignRole(User::ROLE_PREPARATION_STAFF);
+            ManagerAssign::create([
+                'manager_id' => $request->input('prepration_manager_id'),
+                'staff_id' => $staff->id,
+            ]);
 
             DB::commit();
 
@@ -74,7 +79,7 @@ class PreprationStaffController extends Controller
      * @param \App\Models\User $staff
      * @return \Illuminate\View\View
      */
-    public function show(User $staff): View
+    public function show(User $manager): View
     {
         return view('prepration-staff.modals.show', compact('staff'));
     }

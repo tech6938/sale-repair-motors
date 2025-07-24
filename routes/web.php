@@ -67,7 +67,7 @@ Route::middleware(['auth', 'suspended'])->group(function () {
     Route::prefix('prepration-managers')->name('prepration-managers.')->group(function () {
         Route::post('comments/{admin}', [Controllers\PreprationManagerController::class, 'comments'])->name('comments');
         Route::get('datatable', [Controllers\PreprationManagerController::class, 'dataTable'])->name('datatable');
-        Route::resource('/', Controllers\PreprationManagerController::class)->parameters(['' => 'manager']);
+        Route::resource('/', Controllers\PreprationManagerController::class)->parameters(['manager' => 'manager']);
     });
 
     // Prepration Staffs
