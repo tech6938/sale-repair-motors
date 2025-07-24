@@ -35,8 +35,7 @@
                             <span class="nk-menu-icon"><em class="icon ni ni-users-fill"></em></span>
                             <span class="nk-menu-text">Admin</span>
                         </a>
-                    </li> 
-                    
+                    </li>                     
                     
                     <li class="nk-menu-item">
                         <a href="{{ route('staffs.index') }}" class="nk-menu-link">
@@ -61,14 +60,17 @@
                         </a>
                     </li>
 
-                    <li class="nk-menu-item">
+                @endif
+
+                @if(auth()->user()->isPreparationManager())
+                <li class="nk-menu-item">
                         <a href="{{ route('prepration-staffs.index') }}" class="nk-menu-link">
                             <span class="nk-menu-icon"><em class="icon ni ni-user-list-fill"></em></span>
                             <span class="nk-menu-text">Assigned Vehicles</span>
                         </a>
                     </li>
 
-                @endif
+                    @endif
 
                     @if(auth()->user()->isSuperAdmin() || auth()->user()->isAdmin())
                     <li class="nk-menu-item">
