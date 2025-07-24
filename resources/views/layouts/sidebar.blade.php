@@ -28,22 +28,31 @@
                             <span class="nk-menu-text">Dashboard</span>
                         </a>
                     </li>
-                    @if(auth()->user()->isSuperAdmin())
+                    @if(auth()->user()->isSuperAdmin() || auth()->user()->isAdmin())
 
                     <li class="nk-menu-item">
                         <a href="{{ route('admins.index') }}" class="nk-menu-link">
                             <span class="nk-menu-icon"><em class="icon ni ni-users-fill"></em></span>
                             <span class="nk-menu-text">Admin</span>
                         </a>
+                    </li> 
+                    
+                    
+                    <li class="nk-menu-item">
+                        <a href="{{ route('staffs.index') }}" class="nk-menu-link">
+                            <span class="nk-menu-icon"><em class="icon ni ni-user-list-fill"></em></span>
+                            <span class="nk-menu-text">Staff</span>
+                        </a>
                     </li>
-
+                    @endif
+                    
+                @if(auth()->user()->isSuperAdmin() || auth()->user()->isPreparationManager())
                     <li class="nk-menu-item">
                         <a href="{{ route('prepration-managers.index') }}" class="nk-menu-link">
                             <span class="nk-menu-icon"><em class="icon ni ni-user-list-fill"></em></span>
                             <span class="nk-menu-text">Preperation Manager</span>
                         </a>
                     </li>
-                    @endif
 
                     <li class="nk-menu-item">
                         <a href="{{ route('prepration-staffs.index') }}" class="nk-menu-link">
@@ -53,12 +62,15 @@
                     </li>
 
                     <li class="nk-menu-item">
-                        <a href="{{ route('staffs.index') }}" class="nk-menu-link">
+                        <a href="{{ route('prepration-staffs.index') }}" class="nk-menu-link">
                             <span class="nk-menu-icon"><em class="icon ni ni-user-list-fill"></em></span>
-                            <span class="nk-menu-text">Staff</span>
+                            <span class="nk-menu-text">Assigned Vehicles</span>
                         </a>
                     </li>
 
+                @endif
+
+                    @if(auth()->user()->isSuperAdmin() || auth()->user()->isAdmin())
                     <li class="nk-menu-item">
                         <a href="#" class="nk-menu-link" onclick="toggleDropdown(event)">
                             <span class="nk-menu-icon"><em class="icon ni ni-truck"></em></span>
@@ -72,6 +84,8 @@
                             <li><a class="nk-menu-link" href="{{ route('vehicles.index') }}">Ready for Sale</a></li>
                         </ul>
                     </li>
+
+                    @endif
                 </ul>
 
             </div>
