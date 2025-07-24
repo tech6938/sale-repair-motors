@@ -79,9 +79,9 @@ class PreprationStaffController extends Controller
      * @param \App\Models\User $staff
      * @return \Illuminate\View\View
      */
-    public function show(User $manager): View
+    public function show(User $staffs): View
     {
-        return view('prepration-staff.modals.show', compact('manager'));
+        return view('prepration-staff.modals.show', compact('staffs'));
     }
 
     /**
@@ -90,9 +90,9 @@ class PreprationStaffController extends Controller
      * @param \App\Models\User $staff
      * @return \Illuminate\View\View
      */
-    public function edit(User $staff): View
+    public function edit(User $staffs): View
     {
-        return view('prepration-staff.modals.edit', compact('staff'));
+        return view('prepration-staff.modals.edit', compact('staffs'));
     }
 
     /**
@@ -106,12 +106,12 @@ class PreprationStaffController extends Controller
      * @param \App\Models\User $staff
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(StaffUpdateRequest $request, User $staff): JsonResponse
+    public function update(StaffUpdateRequest $request, User $staffs): JsonResponse
     {
         try {
             DB::beginTransaction();
 
-            $staff->update([
+            $staffs->update([
                 'status' => empty($request->input('status')) ? User::STATUS_SUSPENDED : User::STATUS_ACTIVE,
                 'staff_comments' => empty($request->input('status')) ? $request->input('comments') : null
             ]);
@@ -134,12 +134,12 @@ class PreprationStaffController extends Controller
      * @param \App\Models\User $staff
      * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy(User $staff)
+    public function destroy(User $staffs)
     {
         try {
             DB::beginTransaction();
 
-            $staff->delete();
+            $staffs->delete();
 
             DB::commit();
 
@@ -156,9 +156,9 @@ class PreprationStaffController extends Controller
      * @param \App\Models\User $staff
      * @return \Illuminate\View\View
      */
-    public function comments(User $staff): View
+    public function comments(User $staffs): View
     {
-        return view('staffs.modals.comments', compact('staff'));
+        return view('prepration-staff.modals.comments', compact('staffs'));
     }
 
     /**

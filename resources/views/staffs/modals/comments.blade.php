@@ -3,7 +3,7 @@
 <div class="row gy-4">
     <div class="col-md-12">
         <div class="form-group">
-            <p>{!! canEmpty($managers->admin_comments) !!}</p>
+            <p>{!! canEmpty($staff->admin_comments) !!}</p>
         </div>
     </div>
 </div>
