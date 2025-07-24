@@ -17,7 +17,7 @@ class WebUser
     public function handle(Request $request, Closure $next): Response
     {
         if (
-            $request->user() && !$request->user()->isSuperAdmin() && !$request->user()->isAdmin()
+            $request->user() && !$request->user()->isSuperAdmin() && !$request->user()->isAdmin() && !$request->user()->isPreparationManager()
         ) {
             auth()->guard('web')->logout();
 
