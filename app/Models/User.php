@@ -27,8 +27,9 @@ class User extends Authenticatable
 
     public const ROLE_SUPER_ADMIN = 'super_admin';
     public const ROLE_ADMIN = 'admin'; //he is also a manager
-    public const ROLE_ADMIN_STAFF = 'manager_staff';
     public const ROLE_STAFF = 'staff';
+    public const ROLE_PREPARATION_MANAGER = 'preparation_manager';
+    public const ROLE_PREPARATION_STAFF = 'preparation_staf';
 
     protected $fillable = [
         'uuid',

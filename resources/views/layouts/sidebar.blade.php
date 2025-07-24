@@ -35,7 +35,7 @@
                     <li class="nk-menu-item">
                         <a href="{{ route('admins.index') }}" class="nk-menu-link">
                             <span class="nk-menu-icon"><em class="icon ni ni-users-fill"></em></span>
-                            <span class="nk-menu-text">Preparation Team Manager</span>
+                            <span class="nk-menu-text">Admin</span>
                         </a>
                     </li>
                     @endif
@@ -43,7 +43,14 @@
                     <li class="nk-menu-item">
                         <a href="{{ route('managers-staffs.index') }}" class="nk-menu-link">
                             <span class="nk-menu-icon"><em class="icon ni ni-user-list-fill"></em></span>
-                            <span class="nk-menu-text">Preperation Staff</span>
+                            <span class="nk-menu-text">Staff</span>
+                        </a>
+                    </li>
+
+                    <li class="nk-menu-item">
+                        <a href="{{ route('managers-staffs.index') }}" class="nk-menu-link">
+                            <span class="nk-menu-icon"><em class="icon ni ni-user-list-fill"></em></span>
+                            <span class="nk-menu-text">Preperation Manager</span>
                         </a>
                     </li>
 
@@ -51,7 +58,7 @@
                     <li class="nk-menu-item">
                         <a href="{{ route('staffs.index') }}" class="nk-menu-link">
                             <span class="nk-menu-icon"><em class="icon ni ni-user-list-fill"></em></span>
-                            <span class="nk-menu-text">Staffs</span>
+                            <span class="nk-menu-text">Preperation Staff</span>
                         </a>
                     </li>
 
