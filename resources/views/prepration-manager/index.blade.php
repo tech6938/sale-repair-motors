@@ -38,7 +38,7 @@
                         <tr class="nk-tb-item nk-tb-head">
                             <th><span class="sub-text">#</span></th>
                             @if (auth()->user()->isSuperAdmin())
-                                <th><span class="sub-text">Manager's Staff</span></th>
+                                <th><span class="sub-text">Manager</span></th>
                             @endif
                             <th><span class="sub-text">Name</span></th>
                             <th><span class="sub-text">Phone</span></th>

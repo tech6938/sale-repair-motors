@@ -73,9 +73,9 @@ class PreprationManagerController extends Controller
      * @param \App\Models\User $staff
      * @return \Illuminate\View\View
      */
-    public function show(User $staff): View
+    public function show(User $managers): View
     {
-        return view('prepration-manager.modals.show', compact('staff'));
+        return view('prepration-manager.modals.show', compact('managers'));
     }
 
     /**
@@ -84,9 +84,9 @@ class PreprationManagerController extends Controller
      * @param \App\Models\User $staff
      * @return \Illuminate\View\View
      */
-    public function edit(User $staff): View
+    public function edit(User $managers): View
     {
-        return view('prepration-manager.modals.edit', compact('staff'));
+        return view('prepration-manager.modals.edit', compact('managers'));
     }
 
     /**
@@ -100,12 +100,12 @@ class PreprationManagerController extends Controller
      * @param \App\Models\User $staff
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(StaffUpdateRequest $request, User $staff): JsonResponse
+    public function update(StaffUpdateRequest $request, User $managers): JsonResponse
     {
         try {
             DB::beginTransaction();
 
-            $staff->update([
+            $managers->update([
                 'status' => empty($request->input('status')) ? User::STATUS_SUSPENDED : User::STATUS_ACTIVE,
                 'staff_comments' => empty($request->input('status')) ? $request->input('comments') : null
             ]);
@@ -128,12 +128,12 @@ class PreprationManagerController extends Controller
      * @param \App\Models\User $staff
      * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy(User $staff)
+    public function destroy(User $managers)
     {
         try {
             DB::beginTransaction();
 
-            $staff->delete();
+            $managers->delete();
 
             DB::commit();
 
@@ -150,9 +150,9 @@ class PreprationManagerController extends Controller
      * @param \App\Models\User $staff
      * @return \Illuminate\View\View
      */
-    public function comments(User $staff): View
+    public function comments(User $managers): View
     {
-        return view('staffs.modals.comments', compact('staff'));
+        return view('staffs.modals.comments', compact('managers'));
     }
 
     /**
@@ -222,7 +222,7 @@ class PreprationManagerController extends Controller
                         </div>
                         <div class="user-info">
                             <span class="tb-lead text-danger">
-                                <a href="' . route('staffs.show', $record->uuid) . '" async-modal async-modal-size="lg">
+                                <a href="' . route('prepration-managers.show', $record->uuid) . '" async-modal async-modal-size="lg">
                                     ' . $record->name . '
                                 </a>
                             </span>
@@ -246,10 +246,10 @@ class PreprationManagerController extends Controller
         $dt->addColumn('comments', function ($record) {
             return empty($record->staff_comments)
                 ? canEmpty(null)
-                : '<a href="' . route('staffs.comments', $record->uuid) . '" class="btn btn-icon btn-sm btn-light" async-modal
+                : '<a href="' . route('prepration-managers.comments', $record->uuid) . '" class="btn btn-icon btn-sm btn-light" async-modal
                         data-bs-toggle="tooltip" title="View Comments" data-method="post">
                         <em class="icon ni ni-comments"></em>
-                   </a>';
+                </a>';
         });
 
         $dt->addColumn('created', function ($record) {
@@ -269,8 +269,8 @@ class PreprationManagerController extends Controller
 
             return (new DataTableActionLinksService(
                 model: $record,
-                routeNamespace: 'staffs',
-                datatableId: '#staffs-dt',
+                routeNamespace: 'prepration-managers',
+                datatableId: '#prepration-managers-dt',
                 isLocked: $record->id == auth()->user()->id
             ))->byArray($links);
         });

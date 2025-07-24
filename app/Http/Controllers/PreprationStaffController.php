@@ -81,7 +81,7 @@ class PreprationStaffController extends Controller
      */
     public function show(User $manager): View
     {
-        return view('prepration-staff.modals.show', compact('staff'));
+        return view('prepration-staff.modals.show', compact('manager'));
     }
 
     /**
@@ -212,7 +212,7 @@ class PreprationStaffController extends Controller
                         </div>
                         <div class="user-info">
                             <span class="tb-lead text-danger">
-                                <a href="' . route('admins.show', $record->manager->uuid) . '" async-modal async-modal-size="lg">
+                                <a href="' . route('prepration-staffs.show', $record->manager->uuid) . '" async-modal async-modal-size="lg">
                                     ' . $record->manager->name . '
                                 </a>
                             </span>
@@ -229,7 +229,7 @@ class PreprationStaffController extends Controller
                         </div>
                         <div class="user-info">
                             <span class="tb-lead text-danger">
-                                <a href="' . route('staffs.show', $record->uuid) . '" async-modal async-modal-size="lg">
+                                <a href="' . route('prepration-staffs.show', $record->uuid) . '" async-modal async-modal-size="lg">
                                     ' . $record->name . '
                                 </a>
                             </span>
@@ -253,10 +253,10 @@ class PreprationStaffController extends Controller
         $dt->addColumn('comments', function ($record) {
             return empty($record->staff_comments)
                 ? canEmpty(null)
-                : '<a href="' . route('staffs.comments', $record->uuid) . '" class="btn btn-icon btn-sm btn-light" async-modal
+                : '<a href="' . route('prepration-staffs.comments', $record->uuid) . '" class="btn btn-icon btn-sm btn-light" async-modal
                         data-bs-toggle="tooltip" title="View Comments" data-method="post">
                         <em class="icon ni ni-comments"></em>
-                   </a>';
+                </a>';
         });
 
         $dt->addColumn('created', function ($record) {
@@ -276,8 +276,8 @@ class PreprationStaffController extends Controller
 
             return (new DataTableActionLinksService(
                 model: $record,
-                routeNamespace: 'staffs',
-                datatableId: '#staffs-dt',
+                routeNamespace: 'prepration-staffs',
+                datatableId: '#prepration-staffs-dt',
                 isLocked: $record->id == auth()->user()->id
             ))->byArray($links);
         });
