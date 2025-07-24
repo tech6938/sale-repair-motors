@@ -22,6 +22,19 @@
 
         <div class="col-md-12">
             <div class="form-group">
+                <label class="form-label" for="prepration_manager">Preparation Manager <span class="text-danger">*</span></label>
+                <select class="form-control" id="prepration_manager" name="prepration_manager_id" required>
+                    <option value="">Select Preparation Manager</option>
+                    @foreach($manager as $member)
+                    <option value="{{ $member->id }}">{{ $member->name }}</option>
+                    @endforeach
+                </select>
+                <span class="invalid-feedback" role="alert"></span>
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            <div class="form-group">
                 <label class="form-label" for="password">Password <span class="text-danger">*</span></label>
                 <input type="password" class="form-control" id="password" name="password" placeholder="Enter new password" required>
                 <span class="invalid-feedback" role="alert"></span>

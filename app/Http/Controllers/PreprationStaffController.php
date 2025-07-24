@@ -31,7 +31,8 @@ class PreprationStaffController extends Controller
      */
     public function create(): View
     {
-        return view('prepration-staff.modals.create');
+        $manager = User::applyRoleFilter()->preprationManager()->get();
+        return view('prepration-staff.modals.create', compact('manager'));
     }
 
     /**

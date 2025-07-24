@@ -31,8 +31,7 @@ class PreprationManagerController extends Controller
      */
     public function create(): View
     {
-        $staff = User::applyRoleFilter()->preprationStaff()->get();
-        return view('prepration-manager.modals.create', compact('staff'));
+        return view('prepration-manager.modals.create');
     }
 
     /**
@@ -48,14 +47,12 @@ class PreprationManagerController extends Controller
 
     public function store(StaffStoreRequest $request)
     {
-        // dd($request->all());
         try {
             DB::beginTransaction();
 
             $staff = User::create([
                 'name' => $request->input('name'),
                 'email' => $request->input('email'),
-                'prepration_staff_id' => $request->input('prepration_staff_id'),
                 'password' => $request->input('password'),
             ]);
 
