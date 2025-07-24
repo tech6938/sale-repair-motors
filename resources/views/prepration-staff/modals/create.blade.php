@@ -1,6 +1,6 @@
 <h5 class="title pb-3">Create New Admin</h5>
 
-<form action="{{ route('managers-staffs.store') }}" method="post" async-form on-async-modal data-datatable="#admins-dt">
+<form action="{{ route('prepration-staffs.store') }}" method="post" async-form on-async-modal data-datatable="#admins-dt">
     @csrf
 
     <div class="row gy-4">

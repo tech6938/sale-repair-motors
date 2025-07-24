@@ -26,7 +26,7 @@ class User extends Authenticatable
     public const STATUS_SUSPENDED = 'suspended';
 
     public const ROLE_SUPER_ADMIN = 'super_admin';
-    public const ROLE_ADMIN = 'admin'; 
+    public const ROLE_ADMIN = 'admin';
     public const ROLE_STAFF = 'staff';
     public const ROLE_PREPARATION_MANAGER = 'preparation_manager';
     public const ROLE_PREPARATION_STAFF = 'preparation_staff';
@@ -241,14 +241,19 @@ class User extends Authenticatable
     {
         return $query->whereHas('roles', fn($q) => $q->where('name', [
             self::ROLE_STAFF,
-            self::ROLE_ADMIN_STAFF,
         ]));
     }
 
-    public function scopeManagerStaff(Builder $query)
+    public function scopePreprationManager(Builder $query)
     {
         return $query->whereHas('roles', function ($q) {
-            $q->where('name', self::ROLE_ADMIN_STAFF);
+            $q->where('name', self::ROLE_PREPARATION_MANAGER);
+        });
+    }
+    public function scopePreprationStaff(Builder $query)
+    {
+        return $query->whereHas('roles', function ($q) {
+            $q->where('name', self::ROLE_PREPARATION_STAFF);
         });
     }
 

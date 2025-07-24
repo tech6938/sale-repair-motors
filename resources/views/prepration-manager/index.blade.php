@@ -6,7 +6,7 @@
     <div class="nk-block-head nk-block-head-sm">
         <div class="nk-block-between">
             <div class="nk-block-head-content">
-                <h3 class="nk-block-title page-title">Manager Staffs Management</h3>
+                <h3 class="nk-block-title page-title">Prepration Managers Management</h3>
             </div>
             <div class="nk-block-head-content">
                 <div class="toggle-wrap nk-block-tools-toggle">
@@ -17,7 +17,7 @@
                         <ul class="nk-block-tools g-3">
                             <li class="nk-block-tools-opt">
                                 <div class="form-group">
-                                    <a href="{{ route('managers-staffs.create') }}" class="form-control btn btn-primary" async-modal>
+                                    <a href="{{ route('prepration-managers.create') }}" class="form-control btn btn-primary" async-modal>
                                         <em class="icon ni ni-plus"></em>
                                         <span>Create New Manager</span>
                                     </a>
@@ -118,7 +118,7 @@
             ordering: false,
             autoWidth: true,
             ajax: {
-                url: "{{ route('managers-staffs.datatable') }}",
+                url: "{{ route('prepration-managers.datatable') }}",
             },
             columns: columns,
         });

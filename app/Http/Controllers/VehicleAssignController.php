@@ -8,6 +8,7 @@ use App\Models\VehicleAssign;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\API\BaseController;
+use App\Http\Resources\VehicleAssignResource;
 use Illuminate\Routing\Controllers\Middleware;
 use App\Http\Resources\Vehicle\VehicleResource;
 use Illuminate\Routing\Controllers\HasMiddleware;
@@ -34,25 +35,33 @@ class VehicleAssignController extends BaseController implements HasMiddleware
      */
     public function store(Request $request)
     {
+        // return $request->user_id[0];
+        // $validate = $request->validate([
+        //     'vehicle_id' => 'required|exists:vehicles,uuid',
+        //     'user_id' => 'required|array|min:1|max:2',
+        //     'user_id.*' => 'required|exists:users,uuid',
+        // ]);
         $validate = $request->validate([
             'vehicle_id' => 'required|exists:vehicles,uuid',
             'user_id' => 'required|array|min:1|max:2',
-            'user_id.*' => 'required|uuid|exists:users,uuid',
+            'user_id.*' => 'required|exists:users,uuid',
         ]);
 
         DB::beginTransaction();
 
-        foreach ($validate['user_ids'] as $user_id) {
+        foreach ($validate['user_id'] as $user_id) {
             $vehicle = VehicleAssign::create([
                 'vehicle_id' => $validate['vehicle_id'],
                 'user_id'    => $user_id,
             ]);
         }
 
+        DB::commit();
+
         return $this->apiResponse(
             'Vehicle Assigned successfully.',
             JsonResponse::HTTP_CREATED,
-            new VehicleResource($vehicle)
+            new VehicleAssignResource($vehicle)
         );
     }
 }

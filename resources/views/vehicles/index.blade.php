@@ -13,7 +13,7 @@
 
     <div class="nk-block">
         <div class="card card-bordered card-preview">
-            <div class="card-inner">
+            <div class="card-inner overflow-x-scroll">
                 <table id="vehicles-dt" class="table nowrap nk-tb-list nk-tb-ulist dataTable no-footer" width="100%">
                     <thead>
                         <tr class="nk-tb-item nk-tb-head">

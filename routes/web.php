@@ -63,11 +63,18 @@ Route::middleware(['auth', 'suspended'])->group(function () {
         Route::resource('/', Controllers\AdminController::class)->parameters(['' => 'admin']);
     });
 
-    // Manager's Staffs
-    Route::prefix('managers-staffs')->name('managers-staffs.')->group(function () {
-        Route::post('comments/{admin}', [Controllers\ManagerStaffController::class, 'comments'])->name('comments');
-        Route::get('datatable', [Controllers\ManagerStaffController::class, 'dataTable'])->name('datatable');
-        Route::resource('/', Controllers\ManagerStaffController::class)->parameters(['' => 'manager']);
+    // Prepration Managers
+    Route::prefix('prepration-managers')->name('prepration-managers.')->group(function () {
+        Route::post('comments/{admin}', [Controllers\PreprationManagerController::class, 'comments'])->name('comments');
+        Route::get('datatable', [Controllers\PreprationManagerController::class, 'dataTable'])->name('datatable');
+        Route::resource('/', Controllers\PreprationManagerController::class)->parameters(['' => 'manager']);
+    });
+
+    // Prepration Staffs
+    Route::prefix('prepration-staffs')->name('prepration-staffs.')->group(function () {
+        Route::post('comments/{staff}', [Controllers\PreprationStaffController::class, 'comments'])->name('comments');
+        Route::get('datatable', [Controllers\PreprationStaffController::class, 'dataTable'])->name('datatable');
+        Route::resource('/', Controllers\PreprationStaffController::class)->parameters(['' => 'staff']);
     });
 
     // Staffs

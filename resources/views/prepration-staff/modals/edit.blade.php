@@ -1,6 +1,6 @@
 <h5 class="title pb-3">Update Manager's Staff</h5>
 
-<form action="{{ route('managers-staffs.update', $admin->uuid) }}" method="post" async-form on-async-modal data-datatable="#admins-dt">
+<form action="{{ route('prepration-staffs.update', $admin->uuid) }}" method="post" async-form on-async-modal data-datatable="#admins-dt">
     @csrf
 
     @method('put')
