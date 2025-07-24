@@ -28,7 +28,7 @@ class UserResource extends JsonResource
             'status' => $this->status,
             'created_at' => $this->createdAt(),
             'updated_at' => strip_tags($this->updatedAt()),
-            'role' => $this->isAdmin() ? User::ROLE_ADMIN  : ($this->isStaff()? User::ROLE_STAFF : User::ROLE_ADMIN_STAFF),
+            'role' => $this->isAdmin() ? User::ROLE_ADMIN  : ($this->isStaff()? User::ROLE_STAFF : User::ROLE_PREPARATION_MANAGER),
         ];
 
         if (auth()->user()->isAdmin()) {

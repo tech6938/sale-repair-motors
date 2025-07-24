@@ -21,9 +21,11 @@ class LoginController extends BaseController
      */
     public function login(Request $request)
     {
+        // return 'yes';
         $validator = Validator::make($request->all(), [
             'email' => 'required|email|exists:users,email',
             'password' => 'required|string',
+            'role' => 'nullable|string',
             // 'fcm_token' => 'required|string|max:255',
         ], [
             'email.exists' => 'These credentials do not match our records.',
@@ -34,11 +36,19 @@ class LoginController extends BaseController
             throw new \Exception($validator->messages()->first(), JsonResponse::HTTP_BAD_REQUEST);
         }
 
+      
+
         $allowedRoles = [
             User::ROLE_ADMIN,
-            User::ROLE_ADMIN_STAFF,
             User::ROLE_STAFF,
         ];
+
+        // return $request->role;
+
+        if($request->role){
+            $allowedRoles = [User::ROLE_PREPARATION_STAFF,User::ROLE_PREPARATION_MANAGER,
+        ];
+        }
 
         $user = User::where('email', $request->email)
             ->whereHas('roles', fn($q) => $q->whereIn('name', $allowedRoles))
