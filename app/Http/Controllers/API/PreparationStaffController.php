@@ -17,6 +17,7 @@ class PreparationStaffController extends Controller
     try {
         DB::beginTransaction();
 
+        // test
         // Create the user (staff)
         $staff = User::create([
             'name' => $request->input('name'),
