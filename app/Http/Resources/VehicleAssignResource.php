@@ -14,9 +14,6 @@ class VehicleAssignResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return [
-            'user_id'    => $this->user_id,
-            'vehicle_id' => $this->vehicle_id,
-        ];
+        return parent::toArray($request);
     }
 }

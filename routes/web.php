@@ -70,6 +70,7 @@ Route::middleware(['auth', 'suspended'])->group(function () {
         Route::resource('/', Controllers\PreprationManagerController::class)->parameters(['' => 'managers']);
     });
 
+
     // Prepration Staffs
     Route::prefix('prepration-staffs')->name('prepration-staffs.')->group(function () {
         Route::post('comments/{staff}', [Controllers\PreprationStaffController::class, 'comments'])->name('comments');
@@ -82,6 +83,12 @@ Route::middleware(['auth', 'suspended'])->group(function () {
         Route::post('comments/{staff}', [Controllers\StaffController::class, 'comments'])->name('comments');
         Route::get('datatable', [Controllers\StaffController::class, 'dataTable'])->name('datatable');
         Route::resource('/', Controllers\StaffController::class)->parameters(['' => 'staff']);
+    });
+    // Vehicles Assign to managers
+    Route::prefix('vehicles-assign')->name('vehicles-assign.')->group(function () {
+        Route::post('comments/{assign}', [Controllers\VehicleAssignController::class, 'comments'])->name('comments');
+        Route::get('datatable', [Controllers\VehicleAssignController::class, 'dataTable'])->name('datatable');
+        Route::resource('/', Controllers\VehicleAssignController::class)->parameters(['' => 'assign']);
     });
 
     // Vehicles

@@ -35,8 +35,8 @@
                             <span class="nk-menu-icon"><em class="icon ni ni-users-fill"></em></span>
                             <span class="nk-menu-text">Admin</span>
                         </a>
-                    </li>                     
-                    
+                    </li>
+
                     <li class="nk-menu-item">
                         <a href="{{ route('staffs.index') }}" class="nk-menu-link">
                             <span class="nk-menu-icon"><em class="icon ni ni-user-list-fill"></em></span>
@@ -44,8 +44,8 @@
                         </a>
                     </li>
                     @endif
-                    
-                @if(auth()->user()->isSuperAdmin() || auth()->user()->isPreparationManager())
+
+                    @if(auth()->user()->isSuperAdmin() || auth()->user()->isPreparationManager())
                     <li class="nk-menu-item">
                         <a href="{{ route('prepration-managers.index') }}" class="nk-menu-link">
                             <span class="nk-menu-icon"><em class="icon ni ni-user-list-fill"></em></span>
@@ -60,13 +60,22 @@
                         </a>
                     </li>
 
-                @endif
+                    @endif
 
-                @if(auth()->user()->isPreparationManager())
-                <li class="nk-menu-item">
+                    @if(auth()->user()->isPreparationManager())
+                    <li class="nk-menu-item">
                         <a href="{{ route('prepration-staffs.index') }}" class="nk-menu-link">
                             <span class="nk-menu-icon"><em class="icon ni ni-user-list-fill"></em></span>
                             <span class="nk-menu-text">Assigned Vehicles</span>
+                        </a>
+                    </li>
+
+                    @endif
+                @if(auth()->user()->isSuperAdmin())
+                    <li class="nk-menu-item">
+                        <a href="{{ route('vehicles-assign.index') }}" class="nk-menu-link">
+                            <span class="nk-menu-icon"><em class="icon ni ni-user-list-fill"></em></span>
+                            <span class="nk-menu-text">Assign Vehicles</span>
                         </a>
                     </li>
 
@@ -81,7 +90,7 @@
                         </a>
 
                         <ul class="dropdown-submenu submenudrop" style="display: none; padding-left: 30px; background-color:#EBEEF2;">
-                            <li><a class="nk-menu-link" href="{{ route('vehicles.index') }}">All</a></li>
+                            <li><a class="nk-menu-link" href="{{ route('vehicles.index') }}">New Vehicles</a></li>
                             <li><a class="nk-menu-link" href="{{ route('vehicles.index') }}">Ready for Picture</a></li>
                             <li><a class="nk-menu-link" href="{{ route('vehicles.index') }}">Ready for Sale</a></li>
                         </ul>
@@ -96,11 +105,12 @@
 </div>
 @push('scripts')
 <script>
-        function toggleDropdown(event) {
+    function toggleDropdown(event) {
         event.preventDefault();
         const submenudrop = event.currentTarget.nextElementSibling;
         submenudrop.style.display = submenudrop.style.display === "block" ? "none" : "block";
     }
+
 </script>
 
 @endpush

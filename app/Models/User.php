@@ -250,6 +250,7 @@ class User extends Authenticatable
             $q->where('name', self::ROLE_PREPARATION_MANAGER);
         });
     }
+
     public function scopePreprationStaff(Builder $query)
     {
         return $query->whereHas('roles', function ($q) {
