@@ -15,6 +15,18 @@ class UserResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        if ($this->isAdmin()) {
+    $role = User::ROLE_ADMIN;
+} elseif ($this->isStaff()) {
+    $role = User::ROLE_STAFF;
+} elseif ($this->isPreparationManager()) {
+    $role = User::ROLE_PREPARATION_MANAGER;
+} elseif ($this->isPreparationStaff()) {
+    $role = User::ROLE_PREPARATION_STAFF;
+} else {
+    $role = '';
+}
+
         $data = [
             'id' => $this->uuid,
             'name' => $this->name,
@@ -28,7 +40,7 @@ class UserResource extends JsonResource
             'status' => $this->status,
             'created_at' => $this->createdAt(),
             'updated_at' => strip_tags($this->updatedAt()),
-            'role' => $this->isAdmin() ? User::ROLE_ADMIN  : ($this->isStaff()? User::ROLE_STAFF : User::ROLE_PREPARATION_MANAGER),
+            'role' => $role,
         ];
 
         if (auth()->user()->isAdmin()) {

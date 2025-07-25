@@ -1,6 +1,6 @@
-<h5 class="title pb-3">Update Manager's Staff</h5>
+<h5 class="title pb-3">Update Staff</h5>
 
-<form action="{{ route('prepration-staffs.update', $admin->uuid) }}" method="post" async-form on-async-modal data-datatable="#admins-dt">
+<form action="{{ route('prepration-staffs.update', $staffs->uuid) }}" method="post" async-form on-async-modal data-datatable="#staffss-dt">
     @csrf
 
     @method('put')
@@ -8,7 +8,7 @@
     <div class="row gy-4">
         <div class="col-md-6">
             <div class="custom-control custom-switch checked">
-                <input type="checkbox" class="custom-control-input" name="status" id="status" value="true" @checked($admin->isActive())>
+                <input type="checkbox" class="custom-control-input" name="status" id="status" value="true" @checked($staffs->isActive())>
                 <label class="custom-control-label" for="status">Active</label>
             </div>
             <span class="invalid-feedback" role="alert"></span>
@@ -17,7 +17,7 @@
         <div class="col-md-12">
             <div class="form-group">
                 <label class="form-label" for="comments">Comments</label>
-                <textarea class="form-control" id="comments" name="comments" placeholder="Enter your comments here. Typically for suspension.">{{ $admin->admin_comments }}</textarea>
+                <textarea class="form-control" id="comments" name="comments" placeholder="Enter your comments here. Typically for suspension.">{{ $staffs->prepration_staff_comments }}</textarea>
                 <span class="invalid-feedback" role="alert"></span>
             </div>
         </div>
