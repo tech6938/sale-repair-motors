@@ -10,4 +10,10 @@ class ManagerAssign extends Model
         'manager_id',
         'staff_id',
     ];
+
+    public function staff()
+    {
+        return $this->belongsTo(User::class, 'staff_id');
+    }
+
 }

@@ -125,4 +125,9 @@ class Vehicle extends Model
     {
         return $this->inspections()->where('status', Inspection::STATUS_COMPLETED)->exists();
     }
+
+    public function staffAssignments()
+    {
+        return $this->hasMany(VehicleAssign::class);
+    }
 }

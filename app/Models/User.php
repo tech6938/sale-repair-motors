@@ -410,4 +410,14 @@ class User extends Authenticatable
     {
         $this->update(['fcm_token' => $token]);
     }
+
+    public function assignedVehiclesAsManager()
+    {
+        return $this->hasMany(VehicleAssign::class, 'preparation_manager_id');
+    }
+
+    public function assignedVehiclesAsStaff()
+    {
+        return $this->hasMany(VehicleAssign::class, 'preparation_staff_id');
+    }
 }

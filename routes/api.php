@@ -10,7 +10,7 @@ use App\Http\Controllers\API\Profile\ProfileController;
 use App\Http\Controllers\API\Profile\PasswordController;
 use App\Http\Controllers\API\Auth\ForgotPasswordController;
 use App\Http\Controllers\API\ManagerStaffController;
-use App\Http\Controllers\VehicleAssignController;
+use App\Http\Controllers\API\VehicleAssignController;
 use App\Http\Controllers\API\PreparationStaffController;
 
 Route::middleware(['guest', 'throttle:50,1'])->group(function () {
@@ -91,6 +91,12 @@ Route::middleware(['auth:sanctum', 'suspended'])->group(function () {
     });
 
     Route::prefix('preparation_staff')->name('preparation_staff.')->group(function () {
-        Route::post('/', [PreparationStaffController::class, 'create_staff']);
+        Route::post('/create', [PreparationStaffController::class, 'create_staff']);
+        Route::post('/all', [PreparationStaffController::class, 'all_staff']);
+    });
+
+    Route::prefix('assign_vehicle_to_staff')->name('assign_vehicle_to_staff.')->group(function () {
+        Route::post('/assign', [VehicleAssignController::class, 'assign']);
+        Route::post('/all', [PreparationStaffController::class, 'all_staff']);
     });
 });
