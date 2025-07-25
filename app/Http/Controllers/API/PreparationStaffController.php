@@ -46,7 +46,7 @@ class PreparationStaffController extends Controller
             'message' => 'Preparation Staff has been created successfully.',
         ]);
     } catch (\Exception $e) {
-        DB::rollBack(); // test
+        DB::rollBack(); // tes
         return $this->jsonResponse($e->getMessage(), $e->getCode());
     }
 }
