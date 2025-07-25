@@ -20,6 +20,8 @@
             </div>
         </div>
 
+    @if(! auth()->user()->isPreparationManager())
+
         <div class="col-md-12">
             <div class="form-group">
                 <label class="form-label" for="prepration_manager">Preparation Manager <span class="text-danger">*</span></label>
@@ -32,6 +34,8 @@
                 <span class="invalid-feedback" role="alert"></span>
             </div>
         </div>
+
+    @endif
 
         <div class="col-md-12">
             <div class="form-group">

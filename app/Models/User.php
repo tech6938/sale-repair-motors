@@ -348,6 +348,11 @@ class User extends Authenticatable
         return $this->hasRole(self::ROLE_PREPARATION_MANAGER);
     }
 
+    public function isPreparationStaff()
+    {
+        return $this->hasRole(self::ROLE_PREPARATION_STAFF);
+    }
+
     /**
      * Determine if the user is a staff member.
      *

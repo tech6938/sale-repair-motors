@@ -59,10 +59,17 @@ class PreprationStaffController extends Controller
             ]);
 
             $staff->assignRole(User::ROLE_PREPARATION_STAFF);
+            if(auth()->user()->isPreparationManager()){
             ManagerAssign::create([
-                'manager_id' => $request->input('prepration_manager_id'),
+                'manager_id' => auth()->id(),
                 'staff_id' => $staff->id,
             ]);
+            }else{
+               ManagerAssign::create([
+                'manager_id' => $request->input('prepration_manager_id'),
+                'staff_id' => $staff->id,
+            ]); 
+            }
 
             DB::commit();
 
