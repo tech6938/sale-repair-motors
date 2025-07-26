@@ -88,7 +88,9 @@ Route::middleware(['auth', 'suspended'])->group(function () {
     Route::prefix('vehicles-assign')->name('vehicles-assign.')->group(function () {
         Route::post('comments/{assign}', [Controllers\VehicleAssignController::class, 'comments'])->name('comments');
         Route::get('datatable', [Controllers\VehicleAssignController::class, 'dataTable'])->name('datatable');
-        Route::resource('/', Controllers\VehicleAssignController::class)->parameters(['' => 'assign']);
+        Route::resource('/', Controllers\VehicleAssignController::class)->parameters(['' => 'assign'])->only([
+            'index', 'create', 'store', 'edit', 'update'
+        ]);
     });
 
     // Vehicles

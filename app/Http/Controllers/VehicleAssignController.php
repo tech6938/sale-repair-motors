@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Vehicle;
+use Illuminate\View\View;
 use Illuminate\Http\Request;
 use App\Models\VehicleAssign;
 use Yajra\DataTables\DataTables;
@@ -28,8 +29,14 @@ class VehicleAssignController extends BaseController implements HasMiddleware
         ];
     }
 
-    public function index()
+    // public function index(): View
+    // {
+    //     $assigns = VehicleAssign::with(['vehicle', 'preparationManager'])->latest()->get();
+    //     return view('vehicle-to-manager.index', compact('assigns'));
+    // }
+    public function index(): View
     {
+        // $assigns = VehicleAssign::with(['vehicle', 'preparationManager'])->latest()->get();
         return view('vehicle-to-manager.index');
     }
 
@@ -71,13 +78,22 @@ class VehicleAssignController extends BaseController implements HasMiddleware
     {
         $managers = User::preprationManager()->get();
         $vehicles = Vehicle::get();
-        // echo  "<pre>" . print_r($managers->toArray(), true);
         return view('vehicle-to-manager.modals.create', compact('managers', 'vehicles'));
     }
 
+    public function show(User $assign): View
+    {
+        echo "<pre>" . print_r($assign->toArray(), true) . "</pre>";
+        return view('vehicle-to-manager.modals.show', compact('assign'));
+    }
+
+
+    // DataTable for vehicles assign
     public function dataTable(Request $request): JsonResponse
     {
-        $dt = DataTables::of(VehicleAssign::with(['vehicle', 'preparationManagers', 'manager'])->latest());
+        // print_r($request->all());
+        $dt = DataTables::of(VehicleAssign::with(['vehicle', 'preparationManager'])->latest());
+        // echo  "<pre>" . print_r($dt->toArray(), true);
 
         $dt->filter(function ($query) use ($request) {
             if (empty($request->input('search'))) return;
@@ -92,59 +108,46 @@ class VehicleAssignController extends BaseController implements HasMiddleware
                             ->orWhere('make', 'like', "%$word%")
                             ->orWhere('year', 'like', "%$word%");
                     })
-                        ->orWhereHas('preparationManagers', function ($q) use ($word) {
-                            $q->where('name', 'like', "%$word%")
-                                ->orWhere('email', 'like', "%$word%");
-                        })
-                        ->orWhereHas('manager', function ($q) use ($word) {
+                        ->orWhereHas('preparationManager', function ($q) use ($word) {
                             $q->where('name', 'like', "%$word%")
                                 ->orWhere('email', 'like', "%$word%");
                         });
+
                 }
             });
         });
 
         // Add manager column for super admin
         if (auth()->user()->isSuperAdmin()) {
-            $dt->addColumn('manager', function ($record) {
-                if (!$record->manager) return '-';
+            // $dt->addColumn('manager', function ($record) {
+            //     if (!$record->preparationManager) return '-';
 
-                return '<div class="user-card">
-                <div class="user-avatar ' . getRandomColorClass() . '">
-                    ' . getAvatarHtml($record->manager) . '
-                </div>
-                <div class="user-info">
-                    <span class="tb-lead">' . $record->manager->name . '</span>
-                    <span>' . $record->manager->email . '</span>
-                </div>
-            </div>';
-            });
+            //     return '<div class="user-card">
+            //     <div class="user-avatar ' . getRandomColorClass() . '">
+            //         ' . getAvatarHtml($record->preparationManager) . '
+            //     </div>
+            //     <div class="user-info">
+            //         <span class="tb-lead">' . $record->preparationManager->name . '</span>
+            //         <span>' . $record->preparationManager->email . '</span>
+            //     </div>
+            // </div>';
+            // });
         }
 
-        // Preparation Managers column (showing both managers)
-        $dt->addColumn('preparation_managers', function ($record) {
-            if ($record->preparationManagers->isEmpty()) return '-';
+        $dt->addColumn('preparation_manager', function ($record) {
+            if (!$record->preparationManager) return '-';
 
-            $managersHtml = '';
-            foreach ($record->preparationManagers as $manager) {
-                $managersHtml .= '<div class="user-card mb-2">
-                <div class="user-avatar ' . getRandomColorClass() . ' d-none d-sm-flex">
-                    ' . getAvatarHtml($manager) . '
-                </div>
-                <div class="user-info">
-                    <span class="tb-lead text-danger">
-                        <a href="' . route('preparation-managers.show', $manager->uuid) . '" async-modal async-modal-size="lg">
-                            ' . $manager->name . '
-                        </a>
-                    </span>
-                    <span>' . $manager->email . '</span>
-                </div>
-            </div>';
-            }
-            return $managersHtml;
+            return '<div class="user-card">
+            <div class="user-avatar ' . getRandomColorClass() . '">
+                ' . getAvatarHtml($record->preparationManager) . '
+            </div>
+            <div class="user-info">
+                <span class="tb-lead">' . $record->preparationManager->name . '</span>
+                <span>' . $record->preparationManager->email . '</span>
+            </div>
+        </div>';
         });
 
-        // Vehicle column
         $dt->addColumn('vehicle', function ($record) {
             if (!$record->vehicle) return '-';
 
@@ -154,7 +157,7 @@ class VehicleAssignController extends BaseController implements HasMiddleware
             </div>
             <div>
                 <span class="tb-lead">' . $record->vehicle->model . '</span>
-                <div class="small text-muted">' . $record->vehicle->make . ' ' . $record->vehicle->year . '</div>
+                <div class="small text-muted">' . $record->vehicle->make . ' · ' . $record->vehicle->registration . '</div>
             </div>
         </div>';
         });
@@ -169,13 +172,13 @@ class VehicleAssignController extends BaseController implements HasMiddleware
             return (new DataTableActionLinksService(
                 model: $record,
                 routeNamespace: 'vehicles-assign',
-                datatableId: '#admins-dt'
+                datatableId: '#vehicles-assign-dt'
             ))->byArray($links);
         });
 
         $dt->addIndexColumn();
 
-        $dt->rawColumns(['actions', 'manager', 'preparation_managers', 'vehicle']);
+        $dt->rawColumns(['actions', 'preparation_manager', 'vehicle']);
 
         return $dt->make(true);
     }

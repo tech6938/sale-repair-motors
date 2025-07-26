@@ -6,43 +6,43 @@
         <div class="profile-ud-item">
             <div class="profile-ud wider">
                 <span class="profile-ud-label">Name</span>
-                <span class="profile-ud-value">{!! canEmpty($staffs->name) !!}</span>
+                <span class="profile-ud-value">{!! canEmpty($assign->name) !!}</span>
             </div>
         </div>
         <div class="profile-ud-item">
             <div class="profile-ud wider">
                 <span class="profile-ud-label">Email</span>
-                <span class="profile-ud-value">{!! canEmpty($staffs->email) !!}</span>
+                <span class="profile-ud-value">{!! canEmpty($assign->email) !!}</span>
             </div>
         </div>
         <div class="profile-ud-item">
             <div class="profile-ud wider">
                 <span class="profile-ud-label">Phone</span>
-                <span class="profile-ud-value">{!! canEmpty($staffs->phone) !!}</span>
+                <span class="profile-ud-value">{!! canEmpty($assign->phone) !!}</span>
             </div>
         </div>
         <div class="profile-ud-item">
             <div class="profile-ud wider">
                 <span class="profile-ud-label">Address</span>
-                <span class="profile-ud-value">{!! canEmpty($staffs->address) !!}</span>
+                <span class="profile-ud-value">{!! canEmpty($assign->address) !!}</span>
             </div>
         </div>
         <div class="profile-ud-item">
             <div class="profile-ud wider">
                 <span class="profile-ud-label">Status</span>
-                <span class="profile-ud-value">{!! $staffs->status_badge !!}</span>
+                <span class="profile-ud-value">{!! $assign->status_badge !!}</span>
             </div>
         </div>
         <div class="profile-ud-item">
             <div class="profile-ud wider">
                 <span class="profile-ud-label">Date Created</span>
-                <span class="profile-ud-value">{!! $staffs->createdAt(isHumanTime: false) !!}</span>
+                <span class="profile-ud-value">{!! $assign->createdAt(isHumanTime: false) !!}</span>
             </div>
         </div>
         <div class="profile-ud-item">
             <div class="profile-ud wider">
                 <span class="profile-ud-label">Date Updated</span>
-                <span class="profile-ud-value">{!! $staffs->updatedAt(isHumanTime: false) !!}</span>
+                <span class="profile-ud-value">{!! $assign->updatedAt(isHumanTime: false) !!}</span>
             </div>
         </div>
     </div>

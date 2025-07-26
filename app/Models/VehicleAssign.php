@@ -10,7 +10,12 @@ class VehicleAssign extends Model
 
     protected  $guarded = [];
 
-     public function vehicle()
+    public function getRouteKeyName()
+    {
+        return 'uuid';
+    }
+
+    public function vehicle()
     {
         return $this->belongsTo(Vehicle::class);
     }

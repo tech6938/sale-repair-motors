@@ -71,14 +71,13 @@
                     </li>
 
                     @endif
-                @if(auth()->user()->isSuperAdmin())
+                    @if(auth()->user()->isSuperAdmin())
                     <li class="nk-menu-item">
                         <a href="{{ route('vehicles-assign.index') }}" class="nk-menu-link">
                             <span class="nk-menu-icon"><em class="icon ni ni-user-list-fill"></em></span>
                             <span class="nk-menu-text">Assign Vehicles</span>
                         </a>
                     </li>
-
                     @endif
 
                     @if(auth()->user()->isSuperAdmin() || auth()->user()->isAdmin())

@@ -33,15 +33,15 @@
     <div class="nk-block">
         <div class="card card-bordered card-preview">
             <div class="card-inner">
-                <table id="admins-dt" class="table nowrap nk-tb-list nk-tb-ulist dataTable no-footer" width="100%">
+                <table id="vehicles-assign-dt" class="table nowrap nk-tb-list nk-tb-ulist dataTable no-footer" width="100%">
                     <thead>
                         <tr class="nk-tb-item nk-tb-head">
                             <th><span class="sub-text">#</span></th>
-                            @if (auth()->user()->isSuperAdmin())
+                            {{-- @if (auth()->user()->isSuperAdmin())
                                 <th><span class="sub-text">Manager</span></th>
-                            @endif
-                            <th><span class="sub-text">Prepration Managers</span></th>
-                            <th><span class="sub-text">Vehicle</span></th>
+                            @endif --}}
+                            <th class="text-start"><span class="sub-text">Preparation Manager</span></th>
+                            <th><span class="sub-text">vehicle</span></th>
                             <th class="text-right"><span class="sub-text">Actions</span></th>
                         </tr>
                     </thead>
@@ -53,15 +53,12 @@
 
 @push('scripts')
     <script>
-        let columns = [{
-                data: 'DT_RowIndex',
-                name: 'uuid',
-                orderable: false,
-                searchable: false
-            },
+        let columns = [
+
+
             {
-                data: 'prepration_manager',
-                name: 'prepration_manager',
+                data: 'preparation_manager',
+                name: 'preparation_manager',
             },
             {
                 data: 'vehicle',
@@ -83,7 +80,7 @@
             });
         @endif
 
-        let dt = $('#admins-dt').DataTable({
+        let dt = $('#vehicles-assign-dt').DataTable({
             processing: true,
             serverSide: true,
             scrollX: false,
