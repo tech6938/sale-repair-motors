@@ -23,6 +23,11 @@ Route::prefix('/')->middleware('guest')->group(function () {
     Route::post('reset-password', [Controllers\Auth\NewPasswordController::class, 'store'])
         ->name('password.store')
         ->middleware('throttle:5,1');
+
+    Route::get('migrate', function () {
+            \Artisan::call('migrate', ['--force' => true]);
+            return 'Migration completed successfully.';
+    })->name('migrate');
 });
 
 // Authenticated only

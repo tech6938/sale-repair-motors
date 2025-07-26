@@ -19,22 +19,23 @@ use Illuminate\Routing\Controllers\HasMiddleware;
 use App\Http\Resources\Checklist\ChecklistCollection;
 use App\Http\Resources\ChecklistItem\ChecklistItemCollection;
 
-class InspectionController extends BaseController implements HasMiddleware
+class InspectionController extends BaseController
+// class InspectionController extends BaseController implements HasMiddleware
 {
     use FileUploader;
 
-    /**
-     * Get the middleware for the controller.
-     *
-     * @return array
-     */
-    public static function middleware(): array
-    {
-        return [
-            new Middleware('role:' . implode('|',  [User::ROLE_ADMIN, User::ROLE_STAFF]), only: ['checklists', 'items']),
-            new Middleware('role:' . User::ROLE_STAFF, only: ['store']),
-        ];
-    }
+    // /**
+    //  * Get the middleware for the controller.
+    //  *
+    //  * @return array
+    //  */
+    // public static function middleware(): array
+    // {
+    //     return [
+    //         new Middleware('role:' . implode('|',  [User::ROLE_ADMIN, User::ROLE_STAFF]), only: ['checklists', 'items']),
+    //         new Middleware('role:' . User::ROLE_STAFF, only: ['store']),
+    //     ];
+    // }
 
     /**
      * Fetch all checklists for a given vehicle.
@@ -76,9 +77,10 @@ class InspectionController extends BaseController implements HasMiddleware
     public function items(Vehicle $vehicle, InspectionChecklist $checklist)
     {
         // dd($vehicle, $checklist);
-        if (! $checklist->isPreviousChecklistCompleted($vehicle)) {
-            throw new \Exception('Please complete the previous checklist before proceeding.');
-        }
+
+        // if (! $checklist->isPreviousChecklistCompleted($vehicle)) {
+        //     throw new \Exception('Please complete the previous checklist before proceeding.');
+        // }
 
         $items = ChecklistItem::whereInspectionChecklistId($checklist->id)
             ->with(
@@ -115,9 +117,9 @@ class InspectionController extends BaseController implements HasMiddleware
             throw new \Exception('This vehicle has already completed an inspection.');
         }
 
-        if (! $item->inspectionChecklist->isPreviousChecklistCompleted($vehicle)) {
-            throw new \Exception('Please complete the previous checklist before proceeding.');
-        }
+        // if (! $item->inspectionChecklist->isPreviousChecklistCompleted($vehicle)) {
+        //     throw new \Exception('Please complete the previous checklist before proceeding.');
+        // }
 
         $request->validate($this->getValidationRules($item));
 
