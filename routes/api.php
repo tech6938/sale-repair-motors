@@ -93,10 +93,7 @@ Route::middleware(['auth:sanctum', 'suspended'])->group(function () {
     Route::prefix('preparation_staff')->name('preparation_staff.')->group(function () {
         Route::post('/create', [PreparationStaffController::class, 'create_staff']);
         Route::post('/all', [PreparationStaffController::class, 'all_staff']);
-    });
-
-    Route::prefix('assign_vehicle_to_staff')->name('assign_vehicle_to_staff.')->group(function () {
-        Route::post('/assign', [VehicleAssignController::class, 'assign']);
+        Route::post('/assignVehicle', [VehicleAssignController::class, 'assignToStaff']);
     });
 
     Route::post('/manager_vehicles/all', [VehicleAssignController::class, 'getVehiclesForManager']);
